@@ -11,11 +11,13 @@ parser = Argumentos(DESCRICAO)
 # modificações na imagem
 parser.add_argument('-a', '--angulo', type=racional,
                     help='rotação da imagem, em graus')
-parser.add_argument('-e', '--escala', type=racional, # TODO: https://docs.python.org/3/library/argparse.html#mutual-exclusion
+parser.add_argument('-e', '--escala', type=racional,
                     help='escala de redimensionamento')
 parser.add_argument('-d', '--dim', type=natural, nargs=2,
                     help='dimensões da imagem resultante')
-# TODO: cor de fundo
+# TODO: tratar escala negativa!
+# TODO: https://docs.python.org/3/library/argparse.html#mutual-exclusion
+# TODO: opção de cor de fundo
 # entrada e saída
 parser.add_argument('imagem', metavar='IMAGEM', type=imagem_entrada, default='-',
                     help='imagem de entrada')
