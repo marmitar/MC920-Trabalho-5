@@ -73,8 +73,23 @@ def racional(texto: str) -> float:
         num = float(texto)
         # checa por NaN e Inf
         if not isfinite(num):
-            raise ArgumentTypeError('argumento não representa um número finito')
+            raise ArgumentTypeError('número inválido ou infinito')
         return num
 
     except ValueError as err:
         raise ArgumentTypeError(str(err)) from err
+
+
+def natural(texto: str) -> Tuple[int, int]:
+    """
+    Tratamento de argumentos de inteiro positivo.
+    """
+    try:
+        num = int(texto, base=10)
+        # checa negativo e zero
+        if num <= 0:
+            raise ArgumentTypeError('inteiro inválido')
+
+    except ValueError as err:
+        raise ArgumentTypeError(str(err)) from err
+
