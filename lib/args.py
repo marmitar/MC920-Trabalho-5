@@ -80,7 +80,7 @@ def racional(texto: str) -> float:
         raise ArgumentTypeError(str(err)) from err
 
 
-def natural(texto: str) -> Tuple[int, int]:
+def natural(texto: str) -> int:
     """
     Tratamento de argumentos de inteiro positivo.
     """
@@ -89,6 +89,7 @@ def natural(texto: str) -> Tuple[int, int]:
         # checa negativo e zero
         if num <= 0:
             raise ArgumentTypeError('inteiro inválido')
+        return num
 
     except ValueError as err:
         raise ArgumentTypeError(str(err)) from err
