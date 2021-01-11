@@ -12,7 +12,7 @@ parser = Argumentos(DESCRICAO)
 parser.add_argument('-a', '--angulo', type=racional,
                     help='rotação da imagem, em graus')
 parser.add_argument('-e', '--escala', type=racional, # TODO: e XOU d
-                    help='rotação da imagem, em graus')
+                    help='escala de redimensionamento')
 parser.add_argument('-d', '--dim', type=racional, # TODO: 2 valores
                     help='dimensões da imagem resultante')
 # entrada e saída
