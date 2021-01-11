@@ -1,6 +1,7 @@
 """
 Funções de IO com as imagens.
 """
+from sys import stdout
 import numpy as np
 import cv2
 from .tipos import Image
@@ -63,23 +64,20 @@ def decode(buffer: bytes) -> Image:
 
 def imgwrite(img: Image, caminho: str) -> None:
     """
-    Escreve.
+    Escreve imagem em um arquivo.
 
     Parâmetros
     ----------
-    buffer: bytes
-        Dados do arquivo da imagem.
-
-    Retorno
-    -------
     img: ndarray
-        Matriz representando a imagem lida.
+        Matriz representando uma imagem.
+    caminho: str
+        Nome do arquivo para escrita.
 
     Erro
     ----
     ValueError
         Problema de escrita no caminho especificado ou
-        codificação da imagem.
+        na codificação da imagem.
     """
     if not cv2.imwrite(caminho, img):
         raise ValueError('problema de escrita ou codificação')

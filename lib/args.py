@@ -1,13 +1,13 @@
 """
 Tratamento de argumentos da linha de comando.
 """
-from sys import stdin, stdout
+from sys import stdin
 from math import isfinite
 from warnings import warn
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from typing import Tuple, Callable, Optional, Sequence
 from .tipos import Image
-from .inout import encode, decode, imgwrite
+from .inout import decode
 
 
 class Argumentos(ArgumentParser):
@@ -34,7 +34,7 @@ class Argumentos(ArgumentParser):
             return super().parse_args(args)
 
 
-def imagem_entrada(arquivo: str) -> Tuple[Image, str]:
+def imagem(arquivo: str) -> Tuple[Image, str]:
     """
     Leitura e decodificação de imagem.
     """
@@ -48,21 +48,6 @@ def imagem_entrada(arquivo: str) -> Tuple[Image, str]:
 
     except (OSError, ValueError) as err:
         raise ArgumentTypeError(str(err)) from err
-
-
-def imagem_saida(arquivo: str) -> Callable[[Image, str], None]:
-    """
-    Retorna função para codificação e escrita de imagem.
-    """
-    def saida(img: Image, _entrada: str) -> None:
-        # argumento especial
-        if arquivo == '-':
-            stdout.buffer.write(encode(img))
-        # arquivos comuns
-        else:
-            imgwrite(img, arquivo)
-
-    return saida
 
 
 def racional(texto: str) -> float:

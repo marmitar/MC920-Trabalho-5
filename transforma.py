@@ -1,8 +1,9 @@
 """
 Ferramenta de rotação e escalonamento de imagens.
 """
-from lib.args import Argumentos, imagem_entrada, imagem_saida, racional, natural
-from lib.inout import imgshow
+from sys import stdout
+from lib.args import Argumentos, imagem, racional, natural
+from lib.inout import imgshow, imgwrite, encode
 
 
 DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
@@ -19,9 +20,9 @@ parser.add_argument('-d', '--dim', type=natural, nargs=2,
 # TODO: https://docs.python.org/3/library/argparse.html#mutual-exclusion
 # TODO: opção de cor de fundo
 # entrada e saída
-parser.add_argument('imagem', metavar='IMAGEM', type=imagem_entrada, default='-',
+parser.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
                     help='imagem de entrada')
-parser.add_argument('-o', '--output', dest='saida', type=imagem_saida, default=imgshow,
+parser.add_argument('-o', '--output', dest='saida',
                     help='salva resultado em arquivo (padrão: exibe em nova janela)')
 
 
@@ -34,4 +35,11 @@ if __name__ == '__main__':
     raise NotImplementedError(args)
 
     # exibição do resultado
-    args.saida(img, arquivo)
+    if args.saida is None:
+        imgshow(img, arquivo)
+    # imprime o buffer PNG
+    elif args.saida == '-':
+        stdout.buffer.write(encode(img))
+    # ou escrita em arquivo
+    else:
+        imgwrite(img, args.saida)
