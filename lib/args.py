@@ -50,15 +50,20 @@ def imagem(arquivo: str) -> Tuple[Image, str]:
         raise ArgumentTypeError(str(err)) from err
 
 
-def racional(texto: str) -> float:
+# marcador de infito
+inf = float('inf')
+
+def racional(texto: str, *, min: float=-inf, max: float=inf) -> float:
     """
-    Tratamento de argumentos de ponto flutuante.
+    Tratamento de argumentos de ponto flutuante dentro de um limite.
     """
     try:
         num = float(texto)
         # checa por NaN e Inf
         if not isfinite(num):
             raise ArgumentTypeError('número inválido ou infinito')
+        elif not min < num < max:
+            raise ArgumentTypeError('número fora do limite válido')
         return num
 
     except ValueError as err:
