@@ -7,14 +7,16 @@ import cv2
 from .tipos import Image
 
 
-def encode(img: Image) -> bytes:
+def encode(img: Image, ext: str='PNG') -> bytes:
     """
-    Codifica imagem em buffer PNG.
+    Codifica imagem em buffer para arquivo de imagem.
 
     Parâmetros
     ----------
     img: ndarray
         Matriz representando a imagem.
+    ext: str, opcional
+        Entensão do arquivo. Padrão: PNG.
 
     Retorno
     -------
@@ -26,7 +28,7 @@ def encode(img: Image) -> bytes:
     ValueError
         A entrada não representa uma imagem.
     """
-    ok, buf = cv2.imencode('.png', img)
+    ok, buf = cv2.imencode('.'+ext, img)
     # problemas de codificação
     if not ok:
         raise ValueError('não foi possível codificar em PNG')
