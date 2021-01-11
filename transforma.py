@@ -20,7 +20,6 @@ parser.add_argument('iamgem', metavar='IMAGEM', type=imagem_entrada, default='-'
                     help='imagem de entrada')
 parser.add_argument('-o', '--output', dest='saida', type=imagem_saida, default=imgshow,
                     help='salva resultado em arquivo (padrão: exibe em nova janela)')
-# arquivo a ser codificado
 
 
 if __name__ == '__main__':
