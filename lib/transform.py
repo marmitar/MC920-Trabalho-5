@@ -6,7 +6,10 @@ import numpy as np
 from .inout import Image
 
 
-def escalonamento(Sx: float, Sy: Optional[float]=None) -> np.ndarray: # TODO: saída
+Matriz = np.ndarray
+
+
+def escalonamento(Sx: float, Sy: Optional[float]=None) -> Matriz:
     """
     Matriz de mudança de escala.
     """
@@ -21,7 +24,7 @@ def escalonamento(Sx: float, Sy: Optional[float]=None) -> np.ndarray: # TODO: sa
     ], dtype=float64)
 
 
-def translacao(Tx: float, Ty: Optional[float]=None) -> np.ndarray: # TODO: saída
+def translacao(Tx: float, Ty: Optional[float]=None) -> Matriz:
     """
     Matriz de translação.
     """
@@ -36,7 +39,7 @@ def translacao(Tx: float, Ty: Optional[float]=None) -> np.ndarray: # TODO: saíd
     ], dtype=float64)
 
 
-def rotacao(theta: float, graus: bool=True) -> np.ndarray: # TODO: saída
+def rotacao(theta: float, graus: bool=True) -> Matriz:
     """
     Matriz de rotação.
     """
@@ -51,3 +54,10 @@ def rotacao(theta: float, graus: bool=True) -> np.ndarray: # TODO: saída
         [St, Ct,  0],
         [ 0,  0,  1]
     ], dtype=float64)
+
+
+def inversa(mat: Matriz) -> Matriz:
+    """
+    Matriz da transformação inversa.
+    """
+    return np.linalg.pinv(mat)
