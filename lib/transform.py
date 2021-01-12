@@ -21,7 +21,7 @@ def escalonamento(Sx: float, Sy: Optional[float]=None) -> Matriz:
         [Sx,  0,  0],
         [ 0, Sy,  0],
         [ 0,  0,  1]
-    ], dtype=float64)
+    ], dtype=float)
 
 
 def translacao(Tx: float, Ty: Optional[float]=None) -> Matriz:
@@ -36,12 +36,12 @@ def translacao(Tx: float, Ty: Optional[float]=None) -> Matriz:
         [ 1,  0, Tx],
         [ 0,  1, Ty],
         [ 0,  0,  1]
-    ], dtype=float64)
+    ], dtype=float)
 
 
 def rotacao(theta: float, graus: bool=True) -> Matriz:
     """
-    Matriz de rotação.
+    Matriz de rotação por um ângulo `theta`.
     """
     # transformação para radianos
     if graus:
@@ -50,10 +50,10 @@ def rotacao(theta: float, graus: bool=True) -> Matriz:
     Ct, St = np.cos(theta), np.sin(theta)
 
     return np.asarray([
-        [Ct,-St,  0]
+        [Ct,-St,  0],
         [St, Ct,  0],
         [ 0,  0,  1]
-    ], dtype=float64)
+    ], dtype=float)
 
 
 def inversa(mat: Matriz) -> Matriz:
@@ -61,3 +61,32 @@ def inversa(mat: Matriz) -> Matriz:
     Matriz da transformação inversa.
     """
     return np.linalg.pinv(mat)
+
+
+Pixels = np.ndarray
+
+def indices(altura: int, largura: int) -> Pixels:
+    """
+    Lista de cordenadas homogêneas com `(0, 0)` no centro
+    para uma imagem de dimensões `largura` x `altura`.
+
+    Parâmetros
+    ----------
+    altura, largura: int
+        Dimensões da imagem.
+
+    Retorno
+    -------
+    pixels: ndarray
+        Matriz `3 X (largura . altura)` com uma coluna
+        com as coordenadas homogêneas `(X, Y, W)` de
+        cada ponto da imagem.
+    """
+    x = np.arange(largura, dtype=float) - ((largura - 1) / 2)
+    y = np.arange(altura, dtype=float) - ((altura - 1) / 2)
+
+    x = np.tile(x, altura)
+    y = np.repeat(y, largura)
+    w = np.ones(altura * largura, dtype=float)
+
+    return np.concatenate(([x], [y], [w]))
