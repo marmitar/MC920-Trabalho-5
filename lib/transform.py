@@ -67,8 +67,8 @@ Pixels = np.ndarray
 
 def indices(altura: int, largura: int) -> Pixels:
     """
-    Lista de cordenadas homogêneas com `(0, 0)` no centro
-    para uma imagem de dimensões `largura` x `altura`.
+    Lista de cordenadas homogêneas de todos os pixels
+    em uma imagem de dimensões `largura` x `altura`.
 
     Parâmetros
     ----------
@@ -82,8 +82,8 @@ def indices(altura: int, largura: int) -> Pixels:
         com as coordenadas homogêneas `(X, Y, W)` de
         cada ponto da imagem.
     """
-    x = np.arange(largura, dtype=float) - ((largura - 1) / 2)
-    y = np.arange(altura, dtype=float) - ((altura - 1) / 2)
+    x = np.arange(largura, dtype=float)
+    y = np.arange(altura, dtype=float)
 
     x = np.tile(x, altura)
     y = np.repeat(y, largura)
