@@ -82,11 +82,11 @@ def indices(altura: int, largura: int) -> Pixels:
         com as coordenadas homogêneas `(X, Y, W)` de
         cada ponto da imagem.
     """
-    x = np.arange(largura, dtype=float)
-    y = np.arange(altura, dtype=float)
+    x = np.arange(largura, dtype=int)
+    y = np.arange(altura, dtype=int)
 
     x = np.tile(x, altura)
     y = np.repeat(y, largura)
-    w = np.ones(altura * largura, dtype=float)
+    w = np.ones(altura * largura, dtype=int)
 
     return np.concatenate(([x], [y], [w]))
