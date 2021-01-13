@@ -1,7 +1,7 @@
 """
 Operações de transformação linear em imagens.
 """
-from typing import Optional
+from typing import Optional, Tuple
 import numpy as np
 from .inout import Image
 
@@ -125,3 +125,34 @@ def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int, int, int]:
     # dimensões novas
     W, H = xmax - xmin, ymax - ymin
     return W, H, xmin, ymin
+
+
+def correcao(entrada: Tuple[int, int], T: Matriz, saida: Optional[Tuple[int, int]]=None) -> Matriz:
+    """
+    Retorna uma transformação de correção para que a saída
+    tenha o mínimo na origem `(0, 0)` e, se especificadas,
+    que a caixa delimitadora da saída tenha as dimensões
+    esperadas.
+
+    Parâmetros
+    ----------
+    entrada: (int, int)
+        Dimensões da imagem de entrada.
+    T: ndarray
+        Matriz das transformações a serem aplicadas.
+    saida: (int, int), opcional
+        Dimensões fixas para a imagem de saída.
+
+    Retorno
+    -------
+    C: ndarray
+        Transformação corretiva.
+    """
+    Wi, Hi, xmin, ymin = outerdim(T, *entrada)
+    C = translacao(-xmin, -ymin)
+
+    if saida is not None:
+        Wo, Ho = saida
+        C = C @ escalonamento(Wo / Wi, Ho / Hi)
+
+    return C
