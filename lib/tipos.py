@@ -5,7 +5,7 @@ from typing import (
     TYPE_CHECKING, overload,
     Type, Union, Tuple
 )
-from numpy import ndarray, uint8, bool as npbool
+from numpy import ndarray, uint8, int64, float64
 
 if TYPE_CHECKING:
     # Python 3.8+
@@ -14,48 +14,66 @@ else:
     from collections import defaultdict
     # Python 3.7-
     Literal = defaultdict(lambda: 'tipo')
-    Image = 'Image' # pylint: disable=invalid-name
+    Imagem = 'Imagem' # pylint: disable=invalid-name
 
 
-class Image(ndarray): # type: ignore # pylint: disable=function-redefined
+class Transformacao(ndarray): # type: ignore # pylint: disable=function-redefined
+    """
+    Matrizes de transformação em coordenadas homogêneas.
+    """
+    dtype: Type[float64] = float64
+    ndim: Literal[2] = 2
+    shape: Tuple[Literal[3], Literal[3]] = (3, 3)
+
+
+class Indices(ndarray): # type: ignore # pylint: disable=function-redefined
+    """
+    Lista de índices da imagem em coordenadas homogêneas.
+    """
+    dtype: Union[Type[int64], Type[float64]]
+    ndim: Literal[3] = 3
+    shape: Tuple[int, int, Literal[3]]
+
+
+class Imagem(ndarray): # type: ignore # pylint: disable=function-redefined
     """
     Matrizes que representam imagens em OpenCV e bibliotecas similares.
     """
     dtype: Type[uint8] = uint8
     ndim: Literal[2] = 2
-    shape: Tuple[int, int, Literal[2]]
+    shape: Tuple[int, int]
 
-    def copy(self) -> Image:
+    def copy(self) -> Imagem:
         ...
 
     @overload
-    def __add__(self, other: Union[Image, int]) -> Image: ...
+    def __add__(self, other: Union[Imagem, int]) -> Imagem: ...
     @overload
     def __add__(self, other: Union[ndarray, float]) -> ndarray: ...
     def __add__(self, other: Union[ndarray, float]) -> ndarray:
         ...
 
     @overload
-    def __sub__(self, other: Union[Image, int]) -> Image: ...
+    def __sub__(self, other: Union[Imagem, int]) -> Imagem: ...
     @overload
     def __sub__(self, other: Union[ndarray, float]) -> ndarray: ...
     def __sub__(self, other: Union[ndarray, float]) -> ndarray:
         ...
 
-    def __neg__(self) -> Image:
+    def __neg__(self) -> Imagem:
         ...
 
-    def __pos__(self) -> Image:
+    def __pos__(self) -> Imagem:
         ...
 
-    def __abs__(self) -> Image:
+    def __abs__(self) -> Imagem:
         ...
 
-    def __invert__(self) -> Image:
+    def __invert__(self) -> Imagem:
         ...
 
     @overload
-    def __mul__(self, other: Union[Image, int]) -> Image: ...
+    def __mul__(self, other: Union[Imagem, int]) -> Imagem: ...
     @overload
     def __mul__(self, other: Union[ndarray, float]) -> ndarray: ...
     def __mul__(self, other: Union[ndarray, float]) -> ndarray:
@@ -65,14 +83,14 @@ class Image(ndarray): # type: ignore # pylint: disable=function-redefined
         ...
 
     @overload
-    def __pow__(self, other: Union[Image, int]) -> Image: ...
+    def __pow__(self, other: Union[Imagem, int]) -> Imagem: ...
     @overload
     def __pow__(self, other: Union[ndarray, float]) -> ndarray: ...
     def __pow__(self, other: Union[ndarray, float]) -> ndarray:
         ...
 
     @overload
-    def __floordiv__(self, other: Union[Image, int]) -> Image: ...
+    def __floordiv__(self, other: Union[Imagem, int]) -> Imagem: ...
     @overload
     def __floordiv__(self, other: ndarray) -> ndarray: ...
     def __floordiv__(self, other: Union[ndarray, int]) -> ndarray:
@@ -82,23 +100,23 @@ class Image(ndarray): # type: ignore # pylint: disable=function-redefined
         ...
 
     @overload
-    def __mod__(self, other: Union[Image, int]) -> Image: ...
+    def __mod__(self, other: Union[Imagem, int]) -> Imagem: ...
     @overload
     def __mod__(self, other: Union[ndarray, float]) -> ndarray: ...
     def __mod__(self, other: Union[ndarray, float]) -> ndarray:
         ...
 
-    def __rshift__(self, other: Union[Image, int]) -> Image:
+    def __rshift__(self, other: Union[Imagem, int]) -> Imagem:
         ...
 
-    def __lshift__(self, other: Union[Image, int]) -> Image:
+    def __lshift__(self, other: Union[Imagem, int]) -> Imagem:
         ...
 
-    def __and__(self, other: Union[Image, int]) -> Image:
+    def __and__(self, other: Union[Imagem, int]) -> Imagem:
         ...
 
-    def __xor__(self, other: Union[Image, int]) -> Image:
+    def __xor__(self, other: Union[Imagem, int]) -> Imagem:
         ...
 
-    def __or__(self, other: Union[Image, int]) -> Image:
+    def __or__(self, other: Union[Imagem, int]) -> Imagem:
         ...
