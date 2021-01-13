@@ -65,14 +65,14 @@ def inversa(mat: Matriz) -> Matriz:
 
 Pixels = np.ndarray
 
-def indices(altura: int, largura: int) -> Pixels:
+def indices(largura: int, altura: int) -> Pixels:
     """
     Lista de cordenadas homogêneas de todos os pixels
     em uma imagem de dimensões `largura` x `altura`.
 
     Parâmetros
     ----------
-    altura, largura: int
+    largura, altura: int
         Dimensões da imagem.
 
     Retorno
@@ -87,12 +87,12 @@ def indices(altura: int, largura: int) -> Pixels:
 
     x = np.tile(x, altura)
     y = np.repeat(y, largura)
-    w = np.ones(altura * largura, dtype=int)
+    w = np.ones(largura * altura, dtype=int)
 
     return np.concatenate(([x], [y], [w]))
 
 
-def outerdim(T: Matriz, altura: int, largura: int) -> Tuple[int, int]:
+def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int]:
     """
     Retorna informações da caixa delimitadora da
     imagem de saída.
@@ -101,17 +101,17 @@ def outerdim(T: Matriz, altura: int, largura: int) -> Tuple[int, int]:
     ----------
     T: ndarray
         Matriz das transformações a serem aplicadas.
-    altura, largura: int
+    largura, altura: int
         Dimensões da imagem de entrada.
 
     Retorno
     -------
-    H, W: int
+    W, H: int
         Dimensões do resultado.
     xmin, ymin: int
         Limites inferiores da imagem transformada.
     """
-    H, W = altura, largura
+    W, H = largura, altura
     dim = T @ np.asarray([
         [0, W, 0, W],
         [0, 0, H, H],
@@ -120,5 +120,5 @@ def outerdim(T: Matriz, altura: int, largura: int) -> Tuple[int, int]:
 
     xmax, ymax = np.max(dim[0]), np.max(dim[1])
     xmin, ymin = np.min(dim[0]), np.min(dim[1])
-    H, W = ymax - ymin, xmax - xmin
-    return H, W, xmin, ymin
+    W, H = xmax - xmin, ymax - ymin
+    return W, H, xmin, ymin
