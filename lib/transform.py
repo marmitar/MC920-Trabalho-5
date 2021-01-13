@@ -94,7 +94,7 @@ def indices(largura: int, altura: int) -> Pixels:
     return np.concatenate(([x], [y], [w]))
 
 
-def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int]:
+def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int, int, int]:
     """
     Retorna informações da caixa delimitadora da
     imagem de saída.
