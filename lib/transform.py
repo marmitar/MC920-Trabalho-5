@@ -9,6 +9,13 @@ from .inout import Image
 Matriz = np.ndarray
 
 
+def identidade() -> Matriz:
+    """
+    Matriz identidade.
+    """
+    return np.eye(3, dtype=float)
+
+
 def escalonamento(Sx: float, Sy: Optional[float]=None) -> Matriz:
     """
     Matriz de mudança de escala.
