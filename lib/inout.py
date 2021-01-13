@@ -4,10 +4,10 @@ Funções de IO com as imagens.
 from sys import stdout
 import numpy as np
 import cv2
-from .tipos import Image
+from .tipos import Imagem
 
 
-def encode(img: Image, ext: str='PNG') -> bytes:
+def encode(img: Imagem, ext: str='PNG') -> bytes:
     """
     Codifica imagem em buffer para arquivo de imagem.
 
@@ -36,7 +36,7 @@ def encode(img: Image, ext: str='PNG') -> bytes:
     return buf.tobytes()
 
 
-def decode(buffer: bytes) -> Image:
+def decode(buffer: bytes) -> Imagemm:
     """
     Decodifica imagem colorida de um buffer PNG.
 
@@ -64,7 +64,7 @@ def decode(buffer: bytes) -> Image:
     return img
 
 
-def imgwrite(img: Image, caminho: str) -> None:
+def imgwrite(img: Imagem, caminho: str) -> None:
     """
     Escreve imagem em um arquivo.
 
@@ -85,7 +85,7 @@ def imgwrite(img: Image, caminho: str) -> None:
         raise ValueError('problema de escrita ou codificação')
 
 
-def imgshow(img: Image, nome: str="", delay: int=250) -> None:
+def imgshow(img: Imagem, nome: str="", delay: int=250) -> None:
     """
     Apresenta a imagem em uma janela com um nome.
 

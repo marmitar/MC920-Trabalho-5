@@ -3,20 +3,17 @@ Operações de transformação linear em imagens.
 """
 from typing import Optional, Tuple
 import numpy as np
-from .inout import Image
+from .tipos import Transformacao, Indices
 
 
-Matriz = np.ndarray
-
-
-def identidade() -> Matriz:
+def identidade() -> Transformacao:
     """
     Matriz identidade.
     """
     return np.eye(3, dtype=float)
 
 
-def escalonamento(Sx: float, Sy: Optional[float]=None) -> Matriz:
+def escalonamento(Sx: float, Sy: Optional[float]=None) -> Transformacao:
     """
     Matriz de mudança de escala.
     """
@@ -31,7 +28,7 @@ def escalonamento(Sx: float, Sy: Optional[float]=None) -> Matriz:
     ], dtype=float)
 
 
-def translacao(Tx: float, Ty: Optional[float]=None) -> Matriz:
+def translacao(Tx: float, Ty: Optional[float]=None) -> Transformacao:
     """
     Matriz de translação.
     """
@@ -46,7 +43,7 @@ def translacao(Tx: float, Ty: Optional[float]=None) -> Matriz:
     ], dtype=float)
 
 
-def rotacao(theta: float, graus: bool=True) -> Matriz:
+def rotacao(theta: float, graus: bool=True) -> Transformacao:
     """
     Matriz de rotação por um ângulo `theta`.
     """
@@ -63,16 +60,14 @@ def rotacao(theta: float, graus: bool=True) -> Matriz:
     ], dtype=float)
 
 
-def inversa(mat: Matriz) -> Matriz:
+def inversa(mat:Transformacao) ->Transformacao:
     """
     Matriz da transformação inversa.
     """
     return np.linalg.pinv(mat)
 
 
-Pixels = np.ndarray
-
-def indices(largura: int, altura: int) -> Pixels:
+def indices(largura: int, altura: int) -> Indices:
     """
     Lista de cordenadas homogêneas de todos os pixels
     em uma imagem de dimensões `largura` x `altura`.
@@ -101,7 +96,7 @@ def indices(largura: int, altura: int) -> Pixels:
     return np.concatenate(([x], [y], [w]))
 
 
-def outerdim(T: Matriz, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+def outerdim(T: Transformacao, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     """
     Retorna informações da caixa delimitadora da
     imagem de saída.
@@ -134,7 +129,7 @@ def outerdim(T: Matriz, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[
     return (W, H), (xmin, ymin)
 
 
-def resultado(entrada: Tuple[int, int], T: Matriz, saida: Optional[Tuple[int, int]]=None) -> Tuple[Matriz, Tuple[int, int]]:
+def resultado(entrada: Tuple[int, int], T: Transformacao, saida: Optional[Tuple[int, int]]=None) -> Tuple[Transformacao, Tuple[int, int]]:
     """
     Retorna uma transformação de correção para que a saída
     tenha o mínimo na origem `(0, 0)` e, se especificadas,

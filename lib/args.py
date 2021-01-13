@@ -6,7 +6,7 @@ from math import isfinite
 from warnings import warn
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from typing import Tuple, Callable, Optional, Sequence
-from .tipos import Image
+from .tipos import Imagem
 from .inout import decode
 
 
@@ -34,7 +34,7 @@ class Argumentos(ArgumentParser):
             return super().parse_args(args)
 
 
-def imagem(arquivo: str) -> Tuple[Image, str]:
+def imagem(arquivo: str) -> Tuple[Imagem, str]:
     """
     Leitura e decodificação de imagem.
     """
