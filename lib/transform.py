@@ -101,7 +101,7 @@ def indices(largura: int, altura: int) -> Pixels:
     return np.concatenate(([x], [y], [w]))
 
 
-def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int, int, int]:
+def outerdim(T: Matriz, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     """
     Retorna informações da caixa delimitadora da
     imagem de saída.
@@ -110,17 +110,17 @@ def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int, int, int]:
     ----------
     T: ndarray
         Matriz das transformações a serem aplicadas.
-    largura, altura: int
+    shape: (int, int)
         Dimensões da imagem de entrada.
 
     Retorno
     -------
-    W, H: int
+    dim: (int, int)
         Dimensões do resultado.
-    xmin, ymin: int
+    origem: (int, int)
         Limites inferiores da imagem transformada.
     """
-    W, H = largura, altura
+    W, H = shape
     dim = T @ np.asarray([
         [0, W, 0, W],
         [0, 0, H, H],
@@ -131,15 +131,15 @@ def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int, int, int]:
     xmin, ymin = np.min(dim[0]), np.min(dim[1])
     # dimensões novas
     W, H = xmax - xmin, ymax - ymin
-    return W, H, xmin, ymin
+    return (W, H), (xmin, ymin)
 
 
-def correcao(entrada: Tuple[int, int], T: Matriz, saida: Optional[Tuple[int, int]]=None) -> Matriz:
+def resultado(entrada: Tuple[int, int], T: Matriz, saida: Optional[Tuple[int, int]]=None) -> Tuple[Matriz, Tuple[int, int]]:
     """
     Retorna uma transformação de correção para que a saída
     tenha o mínimo na origem `(0, 0)` e, se especificadas,
     que a caixa delimitadora da saída tenha as dimensões
-    esperadas.
+    esperadas. Retorna também as dimensões da
 
     Parâmetros
     ----------
@@ -154,12 +154,17 @@ def correcao(entrada: Tuple[int, int], T: Matriz, saida: Optional[Tuple[int, int
     -------
     C: ndarray
         Transformação total com correção embutida.
+    shape: (int, int)
+        Dimensões da imagem de saída.
     """
-    Wi, Hi, xmin, ymin = outerdim(T, *entrada)
+    (Wi, Hi), (xmin, ymin) = outerdim(T, *entrada)
     C = translacao(-xmin, -ymin)
 
     if saida is not None:
         Wo, Ho = saida
         C = C @ escalonamento(Wo / Wi, Ho / Hi)
+        shape = Wo, Ho
+    else:
+        shape = Wi, Hi
 
-    return C @ T
+    return C @ T, shape
