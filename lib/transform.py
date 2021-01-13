@@ -146,7 +146,7 @@ def correcao(entrada: Tuple[int, int], T: Matriz, saida: Optional[Tuple[int, int
     Retorno
     -------
     C: ndarray
-        Transformação corretiva.
+        Transformação total com correção embutida.
     """
     Wi, Hi, xmin, ymin = outerdim(T, *entrada)
     C = translacao(-xmin, -ymin)
@@ -155,4 +155,4 @@ def correcao(entrada: Tuple[int, int], T: Matriz, saida: Optional[Tuple[int, int
         Wo, Ho = saida
         C = C @ escalonamento(Wo / Wi, Ho / Hi)
 
-    return C
+    return C @ T
