@@ -82,11 +82,13 @@ def indices(largura: int, altura: int) -> Pixels:
         com as coordenadas homogêneas `(X, Y, W)` de
         cada ponto da imagem.
     """
+    # valores de x e y
     x = np.arange(largura, dtype=int)
     y = np.arange(altura, dtype=int)
-
+    # repetidos de formas diferentes
     x = np.tile(x, altura)
     y = np.repeat(y, largura)
+    # dimensão de translação
     w = np.ones(largura * altura, dtype=int)
 
     return np.concatenate(([x], [y], [w]))
@@ -117,8 +119,9 @@ def outerdim(T: Matriz, largura: int, altura: int) -> Tuple[int, int]:
         [0, 0, H, H],
         [1, 1, 1, 1]
     ])
-
+    # limites transformados
     xmax, ymax = np.max(dim[0]), np.max(dim[1])
     xmin, ymin = np.min(dim[0]), np.min(dim[1])
+    # dimensões novas
     W, H = xmax - xmin, ymax - ymin
     return W, H, xmin, ymin
