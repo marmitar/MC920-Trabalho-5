@@ -23,6 +23,8 @@ parser.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
                     help='imagem de entrada')
 parser.add_argument('-o', '--output', dest='saida',
                     help='salva resultado em arquivo (padrão: exibe em nova janela)')
+parser.add_argument('-v', '--verboso', dest='verboso',
+                    help='mostra detalhes das operações')
 
 
 if __name__ == '__main__':
