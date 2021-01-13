@@ -36,7 +36,7 @@ def encode(img: Imagem, ext: str='PNG') -> bytes:
     return buf.tobytes()
 
 
-def decode(buffer: bytes) -> Imagemm:
+def decode(buffer: bytes) -> Imagem:
     """
     Decodifica imagem colorida de um buffer PNG.
 
