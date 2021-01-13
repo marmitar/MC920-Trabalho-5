@@ -90,3 +90,34 @@ def indices(altura: int, largura: int) -> Pixels:
     w = np.ones(altura * largura, dtype=int)
 
     return np.concatenate(([x], [y], [w]))
+
+
+def outerdim(T: Matriz, altura: int, largura: int) -> Tuple[int, int]:
+    """
+    Retorna dimensões da imagem de saída.
+
+    Parâmetros
+    ----------
+    T: ndarray
+        Matriz das transformações a serem aplicadas.
+    altura, largura: int
+        Dimensões da imagem de entrada.
+
+    Retorno
+    -------
+    H, W: int
+        Dimensões do resultado.
+    xmin, ymin: int
+        Limites inferiores da imagem transformada.
+    """
+    H, W = altura, largura
+    dim = T @ np.asarray([
+        [0, W, 0, W],
+        [0, 0, H, H],
+        [1, 1, 1, 1]
+    ])
+
+    xmax, ymax = np.max(dim[0]), np.max(dim[1])
+    xmin, ymin = np.min(dim[0]), np.min(dim[1])
+    H, W = ymax - ymin, xmax - xmin
+    return H, W, xmin, ymin
