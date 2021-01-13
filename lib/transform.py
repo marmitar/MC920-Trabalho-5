@@ -94,7 +94,8 @@ def indices(altura: int, largura: int) -> Pixels:
 
 def outerdim(T: Matriz, altura: int, largura: int) -> Tuple[int, int]:
     """
-    Retorna dimensões da imagem de saída.
+    Retorna informações da caixa delimitadora da
+    imagem de saída.
 
     Parâmetros
     ----------
