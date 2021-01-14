@@ -64,4 +64,4 @@ def limites(T: OpLin, shape: Tuple[int, int]) -> Tuple[Ponto, Ponto]:
     xmax, ymax = np.max(dim[0]), np.max(dim[1])
     xmin, ymin = np.min(dim[0]), np.min(dim[1])
 
-    return (xmin, ymin), (xmax, ymax),
+    return (xmin, ymin), (xmax, ymax)
