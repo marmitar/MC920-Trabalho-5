@@ -29,7 +29,7 @@ def indices(shape: Tuple[int, int]) -> Indices:
     # dimensão de translação
     w = np.ones_like(x, dtype=int)
 
-    return np.stack((x, y, w), axis=2)
+    return np.stack((x, y, w), axis=0)
 
 
 # Um ponto na imagem
@@ -83,7 +83,7 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
     out: ndarray
         Matriz de coordenadas transformadas.
     """
-    return np.tensordot(op, ind, axes=(-1,-1))
+    return np.tensordot(op, ind, axes=1)
 
 
 def acesso(img: Imagem, ind: Indices, fundo: int=0) -> Imagem:
@@ -108,14 +108,14 @@ def acesso(img: Imagem, ind: Indices, fundo: int=0) -> Imagem:
     # força inteiro, se necesserário
     ind = ind.astype(int, copy=False)
     # coordenadas de cada ponto
-    x, y = ind[...,0], ind[..., 1]
+    x, y = ind[0], ind[1]
     # pontos que estão dentra da imagem de entrada
     dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
 
     # imagem de saída
-    out = np.zeros(ind.shape[:2], dtype=np.uint8)
+    out = np.zeros(ind.shape[1:], dtype=np.uint8)
     # acessos válidos
-    out[dentro] = img[ind[dentro, 0], ind[dentro, 1]]
+    out[dentro] = img[ind[0, dentro], ind[1, dentro]]
     # e inválido
     out[~dentro] = fundo
 

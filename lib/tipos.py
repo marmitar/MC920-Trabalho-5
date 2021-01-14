@@ -35,7 +35,7 @@ class Indices(ndarray): # type: ignore # pylint: disable=function-redefined
     """
     dtype: Union[Type[int64], Type[float64]]
     ndim: Literal[3] = 3
-    shape: Tuple[int, int, Literal[3]]
+    shape: Tuple[Literal[3], int, int]
 
 
 class Imagem(ndarray): # type: ignore # pylint: disable=function-redefined
