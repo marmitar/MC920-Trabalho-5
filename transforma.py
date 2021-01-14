@@ -8,6 +8,7 @@ from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural
 from lib.inout import imgshow, imgwrite, encode
 from lib.dim import limites, indices, aplica
+from lib.interp import vizinho
 from lib.ops import (
     identidade, escalonamento, rotacao, translacao,
     redimensionamento, inversa
@@ -75,8 +76,8 @@ if __name__ == '__main__':
     ind = indices(dim)
     ind = aplica(inversa(T), ind)
 
-    # TODO
-    raise NotImplementedError(args)
+    # interpolação para o resultado
+    img = vizinho(img, ind)
 
     # exibição do resultado
     if args.saida is None:
