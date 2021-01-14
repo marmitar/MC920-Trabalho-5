@@ -33,6 +33,8 @@ parser.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
 parser.add_argument('-o', '--output', dest='saida',
                     help='salva resultado em arquivo (padrão: exibe em nova janela)')
 
+# # # # #
+# MAIN  #
 
 def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]:
     """
