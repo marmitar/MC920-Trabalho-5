@@ -17,6 +17,10 @@ else:
     Imagem = 'Imagem' # pylint: disable=invalid-name
 
 
+# Modos de cores para escala de cinza, BGR e BGRA
+Color = Union[int, Tuple[int, int, int], Tuple[int, int, int, int]]
+
+
 class OpLin(ndarray): # type: ignore # pylint: disable=function-redefined
     """
     Matrizes de transformação linear em coordenadas homogêneas.

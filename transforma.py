@@ -5,7 +5,7 @@ from sys import stdout
 from argparse import Namespace
 from typing import Tuple
 from lib.tipos import Imagem, OpLin
-from lib.args import Argumentos, imagem, racional, natural
+from lib.args import Argumentos, imagem, racional, natural, cor
 from lib.inout import imgshow, imgwrite, encode
 from lib.dim import limites, indices, aplica
 from lib.interp import vizinho
@@ -28,8 +28,9 @@ escala.add_argument('-e', '--escala', type=racional(min=0),
                     help='escala de redimensionamento')
 escala.add_argument('-d', '--dim', metavar=('ALTURA', 'LARGURA'), type=natural(min=0), nargs=2,
                     help='dimensões da imagem resultante')
-# TODO: opção de cor de fundo
 # TODO: método de interpolação
+escala.add_argument('-c', '--cor', type=cor, default=0,
+                    help='cor de fundo da imagem transformada (reconhece opções do Matplotlib)')
 # entrada e saída
 parser.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
                     help='imagem de entrada')

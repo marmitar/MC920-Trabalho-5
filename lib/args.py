@@ -6,7 +6,8 @@ from sys import stdin
 from warnings import warn
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from typing import Tuple, Optional, Sequence, Callable
-from .tipos import Imagem
+from matplotlib import colors
+from .tipos import Imagem, Color
 from .inout import decode
 
 
@@ -119,3 +120,29 @@ def natural(*, min: float=-inf, max: float=inf) -> Callable[[str], int]:
 
         return num
     return parse
+
+
+def cor(texto: str) -> Color:
+    """
+    Opções de cor reconhecidas pelo Matplotlib.
+    """
+    # opção especial
+    if texto == 'transparente':
+        return (0, 0, 0, 0)
+
+    try:
+        # conversão RGBA
+        rgba = colors.to_rgba(texto)
+        r, g, b, a = map(lambda c: int(255 * c), rgba)
+    except ValueError as err:
+        raise ArgumentTypeError(str(err))
+
+    # canal alfa necessário
+    if a != 255:
+        return b, g, r, a
+    # RGB necessário
+    elif r != g or g != b:
+        return b, g, r
+    # pode ser grayscale
+    else:
+        return a
