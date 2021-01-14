@@ -25,7 +25,7 @@ def indices(shape: Tuple[int, int]) -> Indices:
     # valores de x e y
     x = np.arange(shape[0], dtype=int)
     y = np.arange(shape[1], dtype=int)
-    x, y = np.meshgrid(x, y, copy=False)
+    y, x = np.meshgrid(y, x, copy=False)
     # dimensão de translação
     w = np.ones_like(x, dtype=int)
 
