@@ -28,7 +28,10 @@ class OpLin(ndarray): # type: ignore # pylint: disable=function-redefined
 
 class Indices(ndarray): # type: ignore # pylint: disable=function-redefined
     """
-    Lista de índices da imagem em coordenadas homogêneas.
+    Matriz de índices da imagem em coordenadas homogêneas.
+
+    Composta por um vetor `(X, Y, Z)` da imagem original para
+    cada posição `(i, j)` da nova imagem.
     """
     dtype: Union[Type[int64], Type[float64]]
     ndim: Literal[3] = 3
