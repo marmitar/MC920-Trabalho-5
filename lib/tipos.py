@@ -47,8 +47,9 @@ class Imagem(ndarray): # type: ignore # pylint: disable=function-redefined
     Matrizes que representam imagens em OpenCV e bibliotecas similares.
     """
     dtype: Type[uint8] = uint8
-    ndim: Literal[2] = 2
-    shape: Tuple[int, int]
+    ndim: Union[Literal[2], Literal[3]]
+    # escala de cinza, BGR, ou BGRA
+    shape: Union[Tuple[int, int], Tuple[int, int, Union[Literal[3], Literal[4]]]]
 
     def copy(self) -> Imagem:
         ...

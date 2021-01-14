@@ -7,7 +7,7 @@ from typing import Tuple
 from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural, cor
 from lib.inout import imgshow, imgwrite, encode
-from lib.dim import limites, indices, aplica
+from lib.dim import limites, indices, aplica, ajusta_canais
 from lib.interp import vizinho
 from lib.ops import (
     escalonamento, rotacao, translacao,
@@ -89,7 +89,8 @@ if __name__ == '__main__':
     ind = aplica(inversa(T), ind)
 
     # interpolação para o resultado
-    img = vizinho(img, ind)
+    img = ajusta_canais(img, args.cor)
+    img = vizinho(img, ind, args.cor)
 
     # exibição do resultado
     if args.saida is None:

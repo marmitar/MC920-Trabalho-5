@@ -3,11 +3,11 @@ Interpolação para o resultado das operações lineares
 em imagens.
 """
 import numpy as np
-from .tipos import Indices, Imagem
+from .tipos import Indices, Imagem, Color
 from .dim import acesso
 
 
-def vizinho(img: Imagem, ind: Indices, fundo: int=0) -> Imagem:
+def vizinho(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação pelo vizinho mais próximo.
 

@@ -3,7 +3,7 @@ Análise de índices e dimensões da imagem.
 """
 from typing import Tuple
 import numpy as np
-from .tipos import OpLin, Indices, Imagem
+from .tipos import OpLin, Indices, Imagem, Color
 
 
 def indices(shape: Tuple[int, int]) -> Indices:
@@ -91,7 +91,19 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
     return res
 
 
-def acesso(img: Imagem, ind: Indices, fundo: int=0) -> Imagem:
+def dim_resultado(ind: Indices, fundo: Color) -> Tuple[int, ...]:
+    """
+    Dimensões do resultado para uma cor de fundo.
+    """
+    # escala de cinza
+    if isinstance(fundo, int):
+        return ind.shape[1:]
+    # BGR ou BGRA
+    else:
+        return ind.shape[1:] + (len(fundo),)
+
+
+def acesso(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Acesso na imagem pela matriz de índices.
 
@@ -118,10 +130,38 @@ def acesso(img: Imagem, ind: Indices, fundo: int=0) -> Imagem:
     dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
 
     # imagem de saída
-    out = np.zeros(ind.shape[1:], dtype=np.uint8)
+    out = np.zeros(dim_resultado(img, fundo), dtype=np.uint8)
     # acessos válidos
     out[dentro] = img[ind[0, dentro], ind[1, dentro]]
     # e inválido
     out[~dentro] = fundo
 
     return out
+
+
+def ajusta_canais(img: Imagem, cor: Color) -> Imagem:
+    """
+    Ajusta imagem para os canais necessários para a cor.
+
+    Parâmetros
+    ----------
+    img: ndarray
+        Imagem em escala de cinza.
+    cor: int, (int, int, int), (int, int, int, int)
+        Cor em escala de cinza, BGR ou BGRA.
+
+    Retorno
+    -------
+    out: ndarray
+        Imagem expandida para canais necessários.
+    """
+    # escala de cinza
+    if isinstance(cor, int):
+        return img
+    # BGR
+    elif len(cor) == 3:
+        return np.stack((img, img, img), axis=2)
+    # BGRA
+    else:
+        alpha = 255 * np.ones_like(img)
+        return np.stack((img, img, img, alpha), axis=2)
