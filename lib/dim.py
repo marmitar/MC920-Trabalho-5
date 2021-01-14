@@ -92,7 +92,7 @@ def resultado(entrada: Tuple[int, int], T: LinOp, saida: Optional[Tuple[int, int
     shape: (int, int)
         Dimensões da imagem de saída.
     """
-    (Wi, Hi), (xmin, ymin) = outerdim(T, *entrada)
+    (Wi, Hi), (xmin, ymin) = outerdim(T, entrada)
     C = translacao(-xmin, -ymin)
 
     if saida is not None:
