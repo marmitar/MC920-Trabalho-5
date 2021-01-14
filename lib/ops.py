@@ -96,14 +96,6 @@ def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
         [ 0, 0, 1]
     ], dtype=float)
 
-    # translação para Z = D
-    T = np.asarray([
-        [1, 0, 0, 0],
-        [0, 1, 0, 0],
-        [0, 0, 1, D],
-        [0, 0, 0, 1]
-    ], dtype=float)
-
     # seno e cosseno
     Cb, Sb = np.cos(beta), np.sin(beta)
     # rotação em torno de y
@@ -114,14 +106,22 @@ def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
         [0,  0,  0, 1]
     ], dtype=float)
 
+    # translação para Z = D
+    T = np.asarray([
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, D],
+        [0, 0, 0, 1]
+    ], dtype=float)
+
     # projeção com f = -1
     P = np.asarray([
         [ 1, 0, 0, 0],
-        [ 0, 1, 0, 1],
+        [ 0, 1, 0, 0],
         [ 0, 0, 1, 1]
     ], dtype=float)
 
     # correção de escala da projeção
     E = escalonamento(D + 1)
 
-    return E @ P @ R @ T @ M
+    return E @ P @ T @ R @ M
