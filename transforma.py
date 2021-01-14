@@ -45,19 +45,19 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     T = identidade()
     # rotacao
     if args.angulo is not None:
-        T = T @ rotacao(args.angulo, graus=True)
+        T = rotacao(args.angulo, graus=True) @ T
     # escalonamento
     if args.escala is not None:
-        T = T @ escalonamento(args.escala)
+        T = escalonamento(args.escala) @ T
 
     # correção da origem
     (xmin, ymin), (xmax, ymax) = limites(T, img.shape)
     Wi, Hi = xmax - xmin, ymax - ymin
-    T = T @ translacao(-xmin, -ymin)
+    T = translacao(-xmin, -ymin) @ T
 
     # redimensionamento para saída fixa
     if args.dim is not None:
-        T = T @ redimensionamento((Wi, Hi), args.dim)
+        T = redimensionamento((Wi, Hi), args.dim) @ T
         return T, args.dim
     # sem redimensionamento
     else:
