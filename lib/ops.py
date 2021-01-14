@@ -79,10 +79,10 @@ def rotacao(theta: float, graus: bool=True) -> OpLin:
 def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
     """
     Matriz de rotação em torno do eixo y por um ângulo
-    `beta`, projetado novamente no plano xy.
+    `beta`, projetado de volta para o plano xy.
 
-    A imagem é considerada a uma distância `Z = D`
-    e o foco em `Z = -1`.
+    A imagem é considerada à uma distância `Z = D`
+    e o foco está em `Z = -1`.
     """
     # transformação para radianos
     if graus:
@@ -90,10 +90,10 @@ def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
 
     # criação do eixo Z
     M = np.asarray([
-        [ 1, 0, 0],
-        [ 0, 1, 0],
-        [ 0, 0, 0],
-        [ 0, 0, 1]
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0],
+        [0, 0, 1]
     ], dtype=float)
 
     # seno e cosseno
@@ -116,9 +116,9 @@ def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
 
     # projeção com f = -1
     P = np.asarray([
-        [ 1, 0, 0, 0],
-        [ 0, 1, 0, 0],
-        [ 0, 0, 1, 1]
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 1]
     ], dtype=float)
 
     # correção de escala da projeção
