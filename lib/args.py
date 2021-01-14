@@ -5,7 +5,7 @@ from sys import stdin
 from math import isfinite
 from warnings import warn
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from typing import Tuple, Callable, Optional, Sequence
+from typing import Tuple, Optional, Sequence
 from .tipos import Imagem
 from .inout import decode
 
@@ -22,7 +22,7 @@ class Argumentos(ArgumentParser):
     def __init__(self, descricao: str):
         super().__init__(allow_abbrev=False, description=descricao)
 
-    def parse_intermixed_args(self, args: Optional[Sequence[str]]=None) -> Namespace:
+    def parse_intermixed_args(self, args: Optional[Sequence[str]]=None, namespace: Optional[Namespace]=None) -> Namespace:
         """
         Parser de argumentos com ordem mistas.
         Só funciona em Python 3.7 ou superior.
