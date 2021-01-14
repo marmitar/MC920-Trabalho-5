@@ -15,7 +15,7 @@ Dim = Tuple[int, int]
 def indices(shape: Dim) -> Indices:
     """
     Lista de cordenadas homogêneas de todos os pixels
-    em uma imagem de dimensões `largura` x `altura`.
+    em uma imagem de dimensões com o dado formato.
 
     Parâmetros
     ----------
