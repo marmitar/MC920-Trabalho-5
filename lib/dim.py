@@ -10,7 +10,6 @@ from .tipos import OpLin, Indices
 
 def indices(largura: int, altura: int) -> Indices:
     """
-    TODO: update doc, comment
     Lista de cordenadas homogêneas de todos os pixels
     em uma imagem de dimensões `largura` x `altura`.
 
@@ -21,15 +20,13 @@ def indices(largura: int, altura: int) -> Indices:
 
     Retorno
     -------
-    pixels: ndarray
-        Matriz `3 X (largura . altura)` com uma coluna
-        com as coordenadas homogêneas `(X, Y, W)` de
-        cada ponto da imagem.
+    indices: ndarray
+        Tensor `(largura, altura, 3)` com as coordenadas
+        `(X, Y, W)` de cada ponto da imagem.
     """
     # valores de x e y
     x = np.arange(largura, dtype=int)
     y = np.arange(altura, dtype=int)
-    # repetidos de formas diferentes
     x, y = np.meshgrid(x, y, copy=False)
     # dimensão de translação
     w = np.ones_like(x, dtype=int)
