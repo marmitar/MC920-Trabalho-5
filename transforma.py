@@ -10,8 +10,8 @@ from lib.inout import imgshow, imgwrite, encode
 from lib.dim import limites, indices, aplica
 from lib.interp import vizinho
 from lib.ops import (
-    identidade, escalonamento, rotacao, translacao,
-    redimensionamento, inversa
+    escalonamento, rotacao, translacao,
+    redimensionamento, inversa, rotacao_proj
 )
 
 
@@ -20,7 +20,9 @@ DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
 parser = Argumentos(DESCRICAO)
 # modificações na imagem
 parser.add_argument('-a', '--angulo', type=racional(),
-                    help='rotação da imagem, em graus')
+                    help='rotação no plano da imagem, em graus')
+parser.add_argument('-b', '--beta', type=racional(),
+                    help='rotação em torno de Y, em graus, projetado de volta para o plano XY')
 escala = parser.add_mutually_exclusive_group()
 escala.add_argument('-e', '--escala', type=racional(min=0),
                     help='escala de redimensionamento')
@@ -42,13 +44,16 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Montagem da matriz de transformação da imagem.
     Também retorna as dimensões da imagem de saída.
     """
-    T = identidade()
-    # rotacao
+    T = translacao((img.shape[0]-1)/2, (img.shape[1]-1)/2)
+    # rotação no plano da imagem
     if args.angulo is not None:
         T = rotacao(args.angulo, graus=True) @ T
     # escalonamento
     if args.escala is not None:
         T = escalonamento(args.escala) @ T
+    # rotação em torno de y com projeção
+    if args.beta is not None:
+        T = rotacao_proj(args.beta, graus=True) @ T
 
     # correção da origem
     (xmin, ymin), (xmax, ymax) = limites(T, img.shape)
