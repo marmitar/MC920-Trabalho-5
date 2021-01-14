@@ -7,10 +7,10 @@ from typing import Tuple
 from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural
 from lib.inout import imgshow, imgwrite, encode
-from lib.dim import limites
+from lib.dim import limites, indices, aplica
 from lib.ops import (
     identidade, escalonamento, rotacao, translacao,
-    redimensionamento
+    redimensionamento, inversa
 )
 
 
@@ -70,6 +70,10 @@ if __name__ == '__main__':
 
     # operações na imagem
     T, dim = transformacao(img, args)
+
+    # índices da imagem de entrada pela da saída
+    ind = indices(dim)
+    ind = aplica(inversa(T), ind)
 
     # TODO
     raise NotImplementedError(args)
