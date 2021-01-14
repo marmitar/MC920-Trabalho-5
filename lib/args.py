@@ -78,7 +78,7 @@ def math_eval(expr: str) -> float:
         raise ArgumentTypeError(str(err)) from err
 
     # resultados não numéricos
-    if not isinstance(ans, float):
+    if not isinstance(ans, (int, float)):
         raise ArgumentTypeError(f'expressão não númerica: {expr}')
 
     return ans
