@@ -6,7 +6,8 @@ from argparse import Namespace
 from typing import Tuple
 from lib.args import Argumentos, imagem, racional, natural
 from lib.inout import imgshow, imgwrite, encode
-from lib.ops import identidade, escalonamento, rotacao, resultado
+from lib.ops import identidade, escalonamento, rotacao
+from lib.dim import resultado
 from lib.tipos import Imagem, LinOp
 
 

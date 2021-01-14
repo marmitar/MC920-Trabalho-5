@@ -3,6 +3,7 @@ Análise de índices e dimensões da imagem.
 """
 from typing import Optional, Tuple
 import numpy as np
+from .ops import translacao, escalonamento
 from .tipos import LinOp, Indices
 
 
