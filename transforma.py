@@ -44,7 +44,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Montagem da matriz de transformação da imagem.
     Também retorna as dimensões da imagem de saída.
     """
-    # image normalizada
+    # imagem normalizada
     E = redimensionamento(img.shape, (1, 1)) # TODO: -1?
     # origem no centro da imagem
     T = translacao(-1/2, -1/2) @ E
