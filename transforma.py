@@ -44,17 +44,23 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Montagem da matriz de transformação da imagem.
     Também retorna as dimensões da imagem de saída.
     """
-    T = translacao((img.shape[0]-1)/2, (img.shape[1]-1)/2)
+    # image normalizada
+    E = redimensionamento(img.shape, (1, 1)) # TODO: -1?
+    # origem no centro da imagem
+    T = translacao(-1/2, -1/2) @ E
+
     # rotação no plano da imagem
     if args.angulo is not None:
         T = rotacao(args.angulo, graus=True) @ T
-    # escalonamento
-    if args.escala is not None:
-        T = escalonamento(args.escala) @ T
     # rotação em torno de y com projeção
     if args.beta is not None:
         T = rotacao_proj(args.beta, graus=True) @ T
+    # escalonamento
+    if args.escala is not None:
+        T = escalonamento(args.escala) @ T
 
+    # desnormalização
+    T = inversa(E) @ T
     # correção da origem
     (xmin, ymin), (xmax, ymax) = limites(T, img.shape)
     Wi, Hi = xmax - xmin, ymax - ymin
@@ -70,7 +76,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
 
 
 if __name__ == '__main__':
-    args = parser.parse_intermixed_args()
+    args = parser.parse_intermixed_args()#'imagens/baboon.png -b 30 -o out.png'.split())
     # argumentos da cli
     img, arquivo = args.imagem
 
