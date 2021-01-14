@@ -19,12 +19,12 @@ DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
 # parser de argumentos
 parser = Argumentos(DESCRICAO)
 # modificações na imagem
-parser.add_argument('-a', '--angulo', type=racional,
+parser.add_argument('-a', '--angulo', type=racional(),
                     help='rotação da imagem, em graus')
 escala = parser.add_mutually_exclusive_group()
-escala.add_argument('-e', '--escala', type=lambda s: racional(s, min=0),
+escala.add_argument('-e', '--escala', type=racional(min=0),
                     help='escala de redimensionamento')
-escala.add_argument('-d', '--dim', metavar=('ALTURA', 'LARGURA'), type=natural, nargs=2,
+escala.add_argument('-d', '--dim', metavar=('ALTURA', 'LARGURA'), type=natural(min=0), nargs=2,
                     help='dimensões da imagem resultante')
 # TODO: opção de cor de fundo
 # TODO: método de interpolação

@@ -1,11 +1,11 @@
 """
 Tratamento de argumentos da linha de comando.
 """
+import math
 from sys import stdin
-from math import isfinite
 from warnings import warn
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from typing import Tuple, Optional, Sequence
+from typing import Tuple, Optional, Sequence, Callable
 from .tipos import Imagem
 from .inout import decode
 
@@ -50,36 +50,72 @@ def imagem(arquivo: str) -> Tuple[Imagem, str]:
         raise ArgumentTypeError(str(err)) from err
 
 
-# marcador de infito
-inf = float('inf')
+# funções válidas na
+MATH = {
+    nome: getattr(math, nome)
+    for nome in dir(math)
+        if not nome.startswith('_')
+}
 
-def racional(texto: str, *, min: float=-inf, max: float=inf) -> float:
+def math_eval(expr: str) -> float:
+    """
+    Reconhecimento de expressões matemáticas.
+    """
+    try:
+        # de https://realpython.com/python-eval-function/
+        code = compile(expr, "<input>", "eval", optimize=0)
+
+        # proteção de acessos inválido
+        for nome in code.co_names:
+            if nome not in MATH:
+                raise NameError(f'expressão inválida: {expr}')
+
+        # evaluação
+        ans = eval(code, {'__builtins__': {}}, MATH)
+
+    # erros durante a validação da expressão
+    except (SyntaxError, NameError, ValueError) as err:
+        raise ArgumentTypeError(str(err)) from err
+
+    # resultados não numéricos
+    if not isinstance(ans, float):
+        raise ArgumentTypeError(f'expressão não númerica: {expr}')
+
+    return ans
+
+
+# limite infinito
+inf = math.inf
+
+def racional(*, min: float=-inf, max: float=inf) -> Callable[[str], float]:
     """
     Tratamento de argumentos de ponto flutuante dentro de um limite.
     """
-    try:
-        num = float(texto)
-    except ValueError as err:
-        raise ArgumentTypeError(str(err)) from err
+    def parse(texto: str) -> float:
+        num = math_eval(texto)
+        # checa por NaN e Inf
+        if not math.isfinite(num):
+            raise ArgumentTypeError('número inválido ou infinito')
+        # e checa limites
+        elif not min < num < max:
+            raise ArgumentTypeError('número fora do limite válido')
 
-    # checa por NaN e Inf
-    if not isfinite(num):
-        raise ArgumentTypeError('número inválido ou infinito')
-    elif not min < num < max:
-        raise ArgumentTypeError('número fora do limite válido')
-    return num
+        return num
+    return parse
 
 
-def natural(texto: str) -> int:
+def natural(*, min: float=-inf, max: float=inf) -> Callable[[str], int]:
     """
-    Tratamento de argumentos de inteiro positivo.
+    Tratamento de argumentos inteiros em um limite.
     """
-    try:
-        num = int(texto, base=10)
-    except ValueError as err:
-        raise ArgumentTypeError(str(err)) from err
+    def parse(texto: str) -> int:
+        num = math_eval(texto)
+        # checa se é inteiro
+        if not isinstance(num, int):
+            raise ArgumentTypeError(f'inteiro inválido: {num}')
+        # e checa limites
+        elif not min <= num <= max:
+            raise ArgumentTypeError('número fora do limite válido')
 
-    # checa negativo e zero
-    if num <= 0:
-        raise ArgumentTypeError('inteiro inválido')
-    return num
+        return num
+    return parse
