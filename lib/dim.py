@@ -1,3 +1,4 @@
+# TODO: docs
 """
 Análise de índices e dimensões da imagem.
 """
@@ -9,6 +10,7 @@ from .tipos import LinOp, Indices
 
 def indices(largura: int, altura: int) -> Indices:
     """
+    TODO: update doc, comment
     Lista de cordenadas homogêneas de todos os pixels
     em uma imagem de dimensões `largura` x `altura`.
 
@@ -28,12 +30,11 @@ def indices(largura: int, altura: int) -> Indices:
     x = np.arange(largura, dtype=int)
     y = np.arange(altura, dtype=int)
     # repetidos de formas diferentes
-    x = np.tile(x, altura)
-    y = np.repeat(y, largura)
+    x, y = np.meshgrid(x, y, copy=False)
     # dimensão de translação
-    w = np.ones(largura * altura, dtype=int)
+    w = np.ones_like(x, dtype=int)
 
-    return np.concatenate(([x], [y], [w]))
+    return np.stack((x, y, w), axis=2)
 
 
 def outerdim(T: LinOp, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
