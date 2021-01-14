@@ -59,15 +59,15 @@ def racional(texto: str, *, min: float=-inf, max: float=inf) -> float:
     """
     try:
         num = float(texto)
-        # checa por NaN e Inf
-        if not isfinite(num):
-            raise ArgumentTypeError('número inválido ou infinito')
-        elif not min < num < max:
-            raise ArgumentTypeError('número fora do limite válido')
-        return num
-
     except ValueError as err:
         raise ArgumentTypeError(str(err)) from err
+
+    # checa por NaN e Inf
+    if not isfinite(num):
+        raise ArgumentTypeError('número inválido ou infinito')
+    elif not min < num < max:
+        raise ArgumentTypeError('número fora do limite válido')
+    return num
 
 
 def natural(texto: str) -> int:
@@ -76,11 +76,10 @@ def natural(texto: str) -> int:
     """
     try:
         num = int(texto, base=10)
-        # checa negativo e zero
-        if num <= 0:
-            raise ArgumentTypeError('inteiro inválido')
-        return num
-
     except ValueError as err:
         raise ArgumentTypeError(str(err)) from err
 
+    # checa negativo e zero
+    if num <= 0:
+        raise ArgumentTypeError('inteiro inválido')
+    return num
