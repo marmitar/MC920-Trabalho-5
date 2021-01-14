@@ -55,11 +55,11 @@ def limites(T: OpLin, shape: Tuple[int, int]) -> Tuple[Ponto, Ponto]:
         Limites superiores.
     """
     W, H = shape
-    dim = T @ np.asarray([
+    dim = aplica(T, np.asarray([
         [0, W, 0, W],
         [0, 0, H, H],
         [1, 1, 1, 1]
-    ])
+    ]))
     # limites transformados
     xmax, ymax = np.max(dim[0]), np.max(dim[1])
     xmin, ymin = np.min(dim[0]), np.min(dim[1])

@@ -76,7 +76,7 @@ def rotacao(theta: float, graus: bool=True) -> OpLin:
     ], dtype=float)
 
 
-def rotacao_proj(beta: float, graus: bool=True, D: float=1.0) -> OpLin:
+def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
     """
     Matriz de rotação em torno do eixo y por um ângulo
     `beta`, projetado novamente no plano xy.
@@ -90,10 +90,10 @@ def rotacao_proj(beta: float, graus: bool=True, D: float=1.0) -> OpLin:
 
     # criação do eixo Z
     M = np.asarray([
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 0],
-        [0, 0, 1]
+        [-1, 0, 0],
+        [ 0,-1, 0],
+        [ 0, 0, 0],
+        [ 0, 0, 1]
     ], dtype=float)
 
     # translação para Z = D
