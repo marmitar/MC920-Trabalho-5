@@ -4,11 +4,14 @@ Ferramenta de rotação e escalonamento de imagens.
 from sys import stdout
 from argparse import Namespace
 from typing import Tuple
+from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural
 from lib.inout import imgshow, imgwrite, encode
-from lib.ops import identidade, escalonamento, rotacao
-from lib.dim import resultado
-from lib.tipos import Imagem, OpLin
+from lib.dim import limites
+from lib.ops import (
+    identidade, escalonamento, rotacao, translacao,
+    redimensionamento
+)
 
 
 DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
@@ -34,6 +37,7 @@ parser.add_argument('-o', '--output', dest='saida',
 def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]:
     """
     Montagem da matriz de transformação da imagem.
+    Também retorna as dimensões da imagem de saída.
     """
     T = identidade()
     # rotacao
@@ -42,8 +46,19 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     # escalonamento
     if args.escala is not None:
         T = T @ escalonamento(args.escala)
-    # correção final
-    return resultado(img.shape, T, args.dim)
+
+    # correção da origem
+    (xmin, ymin), (xmax, ymax) = limites(T, img.shape)
+    Wi, Hi = xmax - xmin, ymax - ymin
+    T = T @ translacao(-xmin, -ymin)
+
+    # redimensionamento para saída fixa
+    if args.dim is not None:
+        T = T @ redimensionamento((Wi, Hi), args.dim)
+        return T, args.dim
+    # sem redimensionamento
+    else:
+        return T, (int(Wi), int(Hi))
 
 
 if __name__ == '__main__':
