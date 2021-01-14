@@ -5,7 +5,7 @@ Análise de índices e dimensões da imagem.
 from typing import Optional, Tuple
 import numpy as np
 from .ops import translacao, escalonamento
-from .tipos import LinOp, Indices
+from .tipos import OpLin, Indices
 
 
 def indices(largura: int, altura: int) -> Indices:
@@ -37,7 +37,7 @@ def indices(largura: int, altura: int) -> Indices:
     return np.stack((x, y, w), axis=2)
 
 
-def outerdim(T: LinOp, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+def outerdim(T: OpLin, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     """
     Retorna informações da caixa delimitadora da
     imagem de saída.
@@ -70,7 +70,7 @@ def outerdim(T: LinOp, shape: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[i
     return (W, H), (xmin, ymin)
 
 
-def resultado(entrada: Tuple[int, int], T: LinOp, saida: Optional[Tuple[int, int]]=None) -> Tuple[LinOp, Tuple[int, int]]:
+def resultado(entrada: Tuple[int, int], T: OpLin, saida: Optional[Tuple[int, int]]=None) -> Tuple[OpLin, Tuple[int, int]]:
     """
     Retorna uma transformação de correção para que a saída
     tenha o mínimo na origem `(0, 0)` e, se especificadas,

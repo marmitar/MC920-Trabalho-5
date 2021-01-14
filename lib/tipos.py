@@ -17,7 +17,7 @@ else:
     Imagem = 'Imagem' # pylint: disable=invalid-name
 
 
-class LinOp(ndarray): # type: ignore # pylint: disable=function-redefined
+class OpLin(ndarray): # type: ignore # pylint: disable=function-redefined
     """
     Matrizes de transformação linear em coordenadas homogêneas.
     """

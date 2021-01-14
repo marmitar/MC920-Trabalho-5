@@ -3,17 +3,17 @@ Operações de transformação linear em imagens.
 """
 from typing import Tuple, Optional
 import numpy as np
-from .tipos import LinOp
+from .tipos import OpLin
 
 
-def identidade() -> LinOp:
+def identidade() -> OpLin:
     """
     Matriz identidade.
     """
     return np.eye(3, dtype=float)
 
 
-def escalonamento(Sx: float, Sy: Optional[float]=None) -> LinOp:
+def escalonamento(Sx: float, Sy: Optional[float]=None) -> OpLin:
     """
     Matriz de mudança de escala.
     """
@@ -28,7 +28,7 @@ def escalonamento(Sx: float, Sy: Optional[float]=None) -> LinOp:
     ], dtype=float)
 
 
-def redimensionamento(inicial: Tuple[float, float], final: Tuple[float, float]) -> LinOp:
+def redimensionamento(inicial: Tuple[float, float], final: Tuple[float, float]) -> OpLin:
     """
     Matriz de mudança de escala para dimensões específicas.
     """
@@ -36,7 +36,7 @@ def redimensionamento(inicial: Tuple[float, float], final: Tuple[float, float]) 
     return escalonamento(Wf / Wi, Hf / Hi)
 
 
-def translacao(Tx: float, Ty: Optional[float]=None) -> LinOp:
+def translacao(Tx: float, Ty: Optional[float]=None) -> OpLin:
     """
     Matriz de translação.
     """
@@ -51,7 +51,7 @@ def translacao(Tx: float, Ty: Optional[float]=None) -> LinOp:
     ], dtype=float)
 
 
-def rotacao(theta: float, graus: bool=True) -> LinOp:
+def rotacao(theta: float, graus: bool=True) -> OpLin:
     """
     Matriz de rotação por um ângulo `theta`.
     """
@@ -68,7 +68,7 @@ def rotacao(theta: float, graus: bool=True) -> LinOp:
     ], dtype=float)
 
 
-def inversa(mat: LinOp) -> LinOp:
+def inversa(mat: OpLin) -> OpLin:
     """
     Matriz da transformação inversa.
     """
