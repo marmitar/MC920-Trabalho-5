@@ -83,7 +83,12 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
     out: ndarray
         Matriz de coordenadas transformadas.
     """
-    return np.tensordot(op, ind, axes=1)
+    res = np.tensordot(op, ind, axes=1)
+    # correção das coordenadas
+    res[0] /= res[2]
+    res[1] /= res[2]
+    res[2] /= res[2]
+    return res
 
 
 def acesso(img: Imagem, ind: Indices, fundo: int=0) -> Imagem:
