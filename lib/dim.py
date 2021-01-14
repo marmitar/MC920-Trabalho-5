@@ -3,7 +3,7 @@ Análise de índices e dimensões da imagem.
 """
 from typing import Tuple
 import numpy as np
-from .tipos import OpLin, Indices
+from .tipos import OpLin, Indices, Imagem
 
 
 def indices(shape: Tuple[int, int]) -> Indices:
@@ -65,3 +65,58 @@ def limites(T: OpLin, shape: Tuple[int, int]) -> Tuple[Ponto, Ponto]:
     xmin, ymin = np.min(dim[0]), np.min(dim[1])
 
     return (xmin, ymin), (xmax, ymax)
+
+
+def aplica(op: OpLin, ind: Indices) -> Indices:
+    """
+    Aplica operação linear na matriz de índices.
+
+    Parâmetros
+    ----------
+    op: ndarray
+        Operação linear.
+    ind: ndarray
+        Matriz das coordenadas homogêneas.
+
+    Retorno
+    -------
+    out: ndarray
+        Matriz de coordenadas transformadas.
+    """
+    return np.tensordot(op, ind, axes=(-1,-1))
+
+
+def acesso(img: Imagem, ind: Indices, fundo: int=0) -> Imagem:
+    """
+    Acesso na imagem pela matriz de índices.
+
+    Parâmetros
+    ----------
+    img: ndarray
+        Imagem de entrada.
+    ind: ndarray
+        Matriz das coordenadas homogêneas.
+    fundo: int, opcional
+        Valor para índices fora da imagem. (padrão: 0)
+
+    Retorno
+    -------
+    out: ndarray
+        Imagem com pixels recuperados da entrada nas
+        coordenadas especificadas.
+    """
+    # força inteiro, se necesserário
+    ind = ind.astype(int, copy=False)
+    # coordenadas de cada ponto
+    x, y = ind[...,0], ind[..., 1]
+    # pontos que estão dentra da imagem de entrada
+    dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
+
+    # imagem de saída
+    out = np.zero(ind.shape[:2], dtype=np.uint8)
+    # acessos válidos
+    out[dentro] = img[ind[dentro, 0], ind[dentro, 1]]
+    # e inválido
+    out[~dentro] = fundo
+
+    return out
