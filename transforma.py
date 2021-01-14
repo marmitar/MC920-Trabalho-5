@@ -7,7 +7,7 @@ from typing import Tuple
 from lib.args import Argumentos, imagem, racional, natural
 from lib.inout import imgshow, imgwrite, encode
 from lib.ops import identidade, escalonamento, rotacao, resultado
-from lib.tipos import Imagem, Transformacao
+from lib.tipos import Imagem, LinOp
 
 
 DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
@@ -30,7 +30,7 @@ parser.add_argument('-o', '--output', dest='saida',
                     help='salva resultado em arquivo (padrão: exibe em nova janela)')
 
 
-def transformacao(img: Imagem, args: Namespace) -> Tuple[Transformacao, Tuple[int, int]]:
+def transformacao(img: Imagem, args: Namespace) -> Tuple[LinOp, Tuple[int, int]]:
     """
     Montagem da matriz de transformação da imagem.
     """

@@ -17,9 +17,9 @@ else:
     Imagem = 'Imagem' # pylint: disable=invalid-name
 
 
-class Transformacao(ndarray): # type: ignore # pylint: disable=function-redefined
+class LinOp(ndarray): # type: ignore # pylint: disable=function-redefined
     """
-    Matrizes de transformação em coordenadas homogêneas.
+    Matrizes de transformação linear em coordenadas homogêneas.
     """
     dtype: Type[float64] = float64
     ndim: Literal[2] = 2

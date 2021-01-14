@@ -3,17 +3,17 @@ Operações de transformação linear em imagens.
 """
 from typing import Optional
 import numpy as np
-from .tipos import Transformacao
+from .tipos import LinOp
 
 
-def identidade() -> Transformacao:
+def identidade() -> LinOp:
     """
     Matriz identidade.
     """
     return np.eye(3, dtype=float)
 
 
-def escalonamento(Sx: float, Sy: Optional[float]=None) -> Transformacao:
+def escalonamento(Sx: float, Sy: Optional[float]=None) -> LinOp:
     """
     Matriz de mudança de escala.
     """
@@ -28,7 +28,7 @@ def escalonamento(Sx: float, Sy: Optional[float]=None) -> Transformacao:
     ], dtype=float)
 
 
-def translacao(Tx: float, Ty: Optional[float]=None) -> Transformacao:
+def translacao(Tx: float, Ty: Optional[float]=None) -> LinOp:
     """
     Matriz de translação.
     """
@@ -43,7 +43,7 @@ def translacao(Tx: float, Ty: Optional[float]=None) -> Transformacao:
     ], dtype=float)
 
 
-def rotacao(theta: float, graus: bool=True) -> Transformacao:
+def rotacao(theta: float, graus: bool=True) -> LinOp:
     """
     Matriz de rotação por um ângulo `theta`.
     """
@@ -60,7 +60,7 @@ def rotacao(theta: float, graus: bool=True) -> Transformacao:
     ], dtype=float)
 
 
-def inversa(mat:Transformacao) ->Transformacao:
+def inversa(mat: LinOp) -> LinOp:
     """
     Matriz da transformação inversa.
     """
