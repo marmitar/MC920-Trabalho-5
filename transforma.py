@@ -45,7 +45,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Também retorna as dimensões da imagem de saída.
     """
     # imagem normalizada
-    E = redimensionamento(img.shape, (1, 1)) # TODO: -1?
+    E = redimensionamento(img.shape, (1, 1))
     # origem no centro da imagem
     T = translacao(-1/2, -1/2) @ E
 
@@ -76,7 +76,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
 
 
 if __name__ == '__main__':
-    args = parser.parse_intermixed_args()#'imagens/baboon.png -b 30 -o out.png'.split())
+    args = parser.parse_intermixed_args()
     # argumentos da cli
     img, arquivo = args.imagem
 
