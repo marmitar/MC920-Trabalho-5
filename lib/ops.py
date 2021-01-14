@@ -1,7 +1,7 @@
 """
 Operações de transformação linear em imagens.
 """
-from typing import Tuple
+from typing import Tuple, Optional
 import numpy as np
 from .tipos import LinOp
 
@@ -13,10 +13,14 @@ def identidade() -> LinOp:
     return np.eye(3, dtype=float)
 
 
-def escalonamento(Sx: float, Sy: float) -> LinOp:
+def escalonamento(Sx: float, Sy: Optional[float]=None) -> LinOp:
     """
     Matriz de mudança de escala.
     """
+    if Sy is None:
+        # escala repetida
+        Sy = Sx
+
     return np.asarray([
         [Sx,  0,  0],
         [ 0, Sy,  0],
@@ -32,10 +36,14 @@ def redimensionamento(inicial: Tuple[float, float], final: Tuple[float, float]) 
     return escalonamento(Wf / Wi, Hf / Hi)
 
 
-def translacao(Tx: float, Ty: float) -> LinOp:
+def translacao(Tx: float, Ty: Optional[float]=None) -> LinOp:
     """
     Matriz de translação.
     """
+    if Ty is None:
+        # escala repetida
+        Ty = Tx
+
     return np.asarray([
         [ 1,  0, Tx],
         [ 0,  1, Ty],
