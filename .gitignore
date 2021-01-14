@@ -2,6 +2,7 @@
 .mypy*
 __pycache__
 saida.png
+out.png
 *.fls*
 *.aux*
 *.fdb*
