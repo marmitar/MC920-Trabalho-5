@@ -55,7 +55,7 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação bilinear.
     """
-    indt = np.trunc(ind, dtype=np.int64)
+    indt = np.trunc(ind).astype(int)
     ind -= indt
     _, dx, dy = ind
 
