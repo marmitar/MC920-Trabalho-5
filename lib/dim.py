@@ -1,7 +1,7 @@
 """
 Análise de índices e dimensões da imagem.
 """
-from typing import Tuple
+from typing import Tuple, Type, Union, overload
 import numpy as np
 from .tipos import OpLin, Indices, Imagem, Color
 
@@ -102,8 +102,11 @@ def dim_resultado(ind: Indices, fundo: Color) -> Tuple[int, ...]:
     else:
         return ind.shape[1:] + (len(fundo),)
 
-
-def acesso(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
+@overload
+def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: Type[np.uint8]=np.uint8) -> Imagem: ...
+@overload
+def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type) -> np.ndarray: ...
+def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> Union[Imagem, np.ndarray]:
     """
     Acesso na imagem pela matriz de índices.
 
@@ -130,10 +133,10 @@ def acesso(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
 
     # imagem de saída
-    out = np.zeros(dim_resultado(ind, fundo), dtype=np.uint8)
+    out = np.zeros(dim_resultado(ind, fundo), dtype=dtype)
     # acessos válidos
     out[dentro] = img[ind[0, dentro], ind[1, dentro]]
-    # e inválido
+    # e inválidos
     out[~dentro] = fundo
 
     return out
