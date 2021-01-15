@@ -135,7 +135,7 @@ def cor(texto: str) -> Color:
         rgba = colors.to_rgba(texto)
         r, g, b, a = map(lambda c: int(255 * c), rgba)
     except ValueError as err:
-        raise ArgumentTypeError(str(err))
+        raise ArgumentTypeError(str(err)) from err
 
     # canal alfa necessário
     if a != 255:
