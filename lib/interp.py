@@ -114,3 +114,4 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
     # imagem resultante
     return out.astype(np.uint8)
+    # TODO: artefato
