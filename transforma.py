@@ -10,7 +10,7 @@ from lib.inout import imgshow, imgwrite, encode
 from lib.dim import limites, indices, aplica, ajusta_canais
 from lib.interp import Metodo
 from lib.ops import (
-    escalonamento, rotacao, translacao,
+    escalonamento, rotacao, translacao, normalizacao,
     redimensionamento, inversa, rotacao_proj
 )
 
@@ -57,10 +57,10 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Montagem da matriz de transformação da imagem.
     Também retorna as dimensões da imagem de saída.
     """
-    # imagem normalizada
-    E = redimensionamento(img.shape[:2], (1, 1))
-    # origem no centro da imagem
-    T = translacao(-1/2, -1/2) @ E
+    # normalização
+    N = redimensionamento(img.shape[:2], (1, 1))
+    # centra da imagem na origem
+    T = translacao(-1/2) @ N
 
     # rotação no plano da imagem
     if args.angulo is not None:
@@ -73,11 +73,12 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
         T = escalonamento(args.escala) @ T
 
     # desnormalização
-    T = inversa(E) @ T
+    T = inversa(N) @ T
     # correção da origem
     (xmin, ymin), (xmax, ymax) = limites(T, img.shape[:2])
-    Wi, Hi = xmax - xmin, ymax - ymin
     T = translacao(-xmin, -ymin) @ T
+    # dimensões após transformada
+    Wi, Hi = xmax - xmin, ymax - ymin
 
     # redimensionamento para saída fixa
     if args.dim is not None:
