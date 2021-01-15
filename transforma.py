@@ -2,17 +2,27 @@
 Ferramenta de rotação e escalonamento de imagens.
 """
 from sys import stdout
-from argparse import Namespace
+from argparse import Namespace, ArgumentTypeError
 from typing import Tuple
 from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural, cor
 from lib.inout import imgshow, imgwrite, encode
 from lib.dim import limites, indices, aplica, ajusta_canais
-from lib.interp import vizinho
+from lib.interp import Metodo
 from lib.ops import (
     escalonamento, rotacao, translacao,
     redimensionamento, inversa, rotacao_proj
 )
+
+
+def metodo(texto: str) -> Metodo:
+    """
+    Tratamento do método escolhido na entrada padrão.
+    """
+    try:
+        return Metodo[texto.upper()]
+    except KeyError as err:
+        raise ArgumentTypeError(f'método inválido: {texto}') from err
 
 
 DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
@@ -28,7 +38,9 @@ escala.add_argument('-e', '--escala', type=racional(min=0),
                     help='escala de redimensionamento')
 escala.add_argument('-d', '--dim', metavar=('ALTURA', 'LARGURA'), type=natural(min=0), nargs=2,
                     help='dimensões da imagem resultante')
-# TODO: método de interpolação
+# opções relacionadas ao processamento
+escala.add_argument('-m', '--metodo', metavar='METODO', type=metodo, choices=Metodo, default='vizinho',
+                    help='método de interpolação do resultado')
 escala.add_argument('-c', '--cor', type=cor, default=0,
                     help='cor de fundo da imagem transformada (reconhece opções do Matplotlib)')
 # entrada e saída
@@ -90,7 +102,7 @@ if __name__ == '__main__':
 
     # interpolação para o resultado
     img = ajusta_canais(img, args.cor)
-    img = vizinho(img, ind, args.cor)
+    img = args.metodo(img, ind, args.cor)
 
     # exibição do resultado
     if args.saida is None:
