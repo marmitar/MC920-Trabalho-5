@@ -17,8 +17,8 @@ def vizinho(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         Imagem de entrada.
     ind: ndarray
         Matriz das coordenadas homogêneas.
-    fundo: int, opcional
-        Valor para índices fora da imagem. (padrão: 0)
+    fundo: int
+        Cor para índices fora da imagem.
 
     Retorno
     -------
