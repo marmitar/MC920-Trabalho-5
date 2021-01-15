@@ -55,28 +55,60 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação bilinear.
     """
+    dxdy, ind = np.modf(ind)
     # índices truncados
-    indt = np.trunc(ind).astype(int)
+    ind = ind.astype(int)
     # erro do truncamento
-    ind -= indt
-    _, dx, dy = ind[...,np.newaxis]
+    dx, dy, _ = dxdy[...,np.newaxis]
 
     # vizinhança do ponto
     # f(x, y)
-    f00 = acesso(img, indt, fundo)
+    f00 = acesso(img, ind, fundo)
     # f(x+1, y)
-    indt[1] += 1
-    f10 = acesso(img, indt, fundo)
+    ind[1] += 1
+    f10 = acesso(img, ind, fundo)
     # f(x+1, y+1)
-    indt[2] += 1
-    f11 = acesso(img, indt, fundo)
+    ind[2] += 1
+    f11 = acesso(img, ind, fundo)
     # f(x, y+1)
-    indt[1] -= 1
-    f01 = acesso(img, indt, fundo)
+    ind[1] -= 1
+    f01 = acesso(img, ind, fundo)
 
     # interpolação
-    return (1 - dx) * (1 - dy) * f00 \
+    out = (1 - dx) * (1 - dy) * f00 \
         + dx * (1 - dy) * f10 \
         + (1 - dx) * dy * f01 \
         + dx * dy * f11
+    return out.astype(np.uint8)
     # TODO: interpolado para a direita
+
+
+def P(t: np.ndarray) -> np.ndarray:
+    return np.where(t > 0, t, 0)
+
+def R(s: np.ndarray) -> np.ndarray:
+    return (P(s+2)**3 - 4*P(s+1)**2 + 6*P(s)**2 - 4*P(s-1)**3)/6
+
+
+def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
+    """
+    Interpolação bicubica.
+    """
+    dxdy, xy = np.modf(ind)
+    # índices truncados
+    x, y, w = xy.astype(int)
+    # erro do truncamento
+    dx, dy, _ = dxdy[...,np.newaxis]
+
+    out = np.zeros_like(img, dtype=float)
+    # vizinhança do ponto
+    for m in range(-1, 2+1):
+        for n in range(-1, 2+1):
+            # acesso do vizinho
+            ind = np.stack((x + m, y + n, w), axis=0)
+            f = acesso(img, ind, fundo)
+            # soma proporcionada
+            out += f * R(m - dx) * R(n - dy)
+
+    # imagem resultante
+    return out.astype(np.uint8)
