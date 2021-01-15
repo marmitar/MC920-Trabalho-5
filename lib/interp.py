@@ -93,8 +93,8 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         return np.where(t > 0, t, 0)
 
     def R(s):
-        pn, p0, p1, p2 = (P(s+d)**3 for d in range(-1,2+1))
-        return (p2 - 4*p1 + 6*p0 - 4*pn) / 6
+        pm1, p0, p1, p2 = (P(s+d)**3 for d in range(-1,2+1))
+        return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
 
     dxdy, xy = np.modf(ind)
     # índices truncados
@@ -109,9 +109,51 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
             # acesso do vizinho
             ind = np.stack((x + m, y + n), axis=0)
             f = acesso(img, ind, fundo)
-            # soma proporcionada
+
             out += f * R(m - dx) * R(dy - n)
 
     # imagem resultante
     return out.astype(np.uint8)
     # TODO: artefato
+
+
+def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
+    """
+    Interpolação por polinômios de Lagrange.
+    """
+    dxdy, xy = np.modf(ind)
+    # índices truncados
+    x, y, _ = xy.astype(int)
+    # erro do truncamento
+    dx, dy, _ = dxdy[...,np.newaxis]
+
+    # operação interna
+    def L(n):
+        ind = np.stack((x - 1, y + n - 2), axis=0)
+
+        # f(x - 1, y + n - 2)
+        a = -dx * (dx - 1) * (dx - 2) * acesso(img, ind, fundo)
+        # f(x + 0, y + n - 2)
+        ind[0] += 1
+        b = (dx + 1) * (dx - 1) * (dx - 2) * acesso(img, ind, fundo)
+        # f(x + 1, y + n - 2)
+        ind[0] += 1
+        c = -dx * (dx + 1) * (dx - 2) * acesso(img, ind, fundo)
+        # f(x + 2, y + n - 2)
+        ind[0] += 1
+        d = dx * (dx + 1) * (dx - 1) * acesso(img, ind, fundo)
+
+        return (a / 6) + (b / 2) + (c / 2) + (d / 6)
+
+    # L(1)
+    a = -dy * (dy - 1) * (dy - 2) * L(1)
+    # L(2)
+    b = (dy + 1) * (dy - 1) * (dy - 2) * L(2)
+    # L(3)
+    c = -dy * (dy + 1) * (dy - 2) * L(3)
+    # L(4)
+    d = dy * (dy + 1) * (dy - 1) * L(4)
+
+    # imagem resultante
+    out = (a / 6) + (b / 2) + (c / 2) + (d / 6)
+    return out.astype(np.uint8)
