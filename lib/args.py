@@ -126,8 +126,8 @@ def cor(texto: str) -> Color:
     """
     Opções de cor reconhecidas pelo Matplotlib.
     """
-    # opção especial
-    if texto == 'transparente':
+    # opções especiais
+    if texto == 't' or texto == 'transparente':
         return (0, 0, 0, 0)
 
     try:
