@@ -84,17 +84,18 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     # TODO: interpolado para a direita
 
 
-def P(t: np.ndarray) -> np.ndarray:
-    return np.where(t > 0, t, 0)
-
-def R(s: np.ndarray) -> np.ndarray:
-    return (P(s+2)**3 - 4*P(s+1)**2 + 6*P(s)**2 - 4*P(s-1)**3)/6
-
-
 def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação bicubica.
     """
+    # operações internas
+    def P(t):
+        return np.where(t > 0, t, 0)
+
+    def R(s):
+        pn, p0, p1, p2 = (P(s+d)**3 for d in range(-1,2+1))
+        return (p2 - 4*p1 + 6*p0 - 4*pn) / 6
+
     dxdy, xy = np.modf(ind)
     # índices truncados
     x, y, _ = xy.astype(int)
