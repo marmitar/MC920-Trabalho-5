@@ -55,18 +55,26 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação bilinear.
     """
+    # índices truncados
     indt = np.trunc(ind).astype(int)
+    # erro do truncamento
     ind -= indt
     _, dx, dy = ind
 
+    # vizinhança do ponto
+    # f(x, y)
     f00 = acesso(img, indt, fundo)
+    # f(x+1, y)
     indt[1] += 1
     f10 = acesso(img, indt, fundo)
+    # f(x+1, y+1)
     indt[2] += 1
     f11 = acesso(img, indt, fundo)
+    # f(x, y+1)
     indt[1] -= 1
     f01 = acesso(img, indt, fundo)
 
+    # interpolação
     return (1 - dx) * (1 - dy) * f00 \
         + dx * (1 - dy) * f10 \
         + (1 - dx) * dy * f01 \
