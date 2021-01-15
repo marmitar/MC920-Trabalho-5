@@ -9,7 +9,8 @@ from .tipos import OpLin, Indices, Imagem, Color
 def indices(shape: Tuple[int, int]) -> Indices:
     """
     Lista de cordenadas homogêneas de todos os pixels
-    em uma imagem de dimensões com o dado formato.
+    em uma imagem de dimensões com o mesmo formato. A
+    coordenada de cada pixel é considerada em seu centro.
 
     Parâmetros
     ----------
@@ -20,14 +21,14 @@ def indices(shape: Tuple[int, int]) -> Indices:
     -------
     indices: ndarray
         Tensor `(largura, altura, 3)` com as coordenadas
-        `(X, Y, W)` de cada ponto `(i, j)` da imagem.
+        `(WX, WY, W)` de cada ponto `(i, j)` da imagem.
     """
     # valores de x e y
-    x = np.arange(shape[0], dtype=int)
-    y = np.arange(shape[1], dtype=int)
+    x = np.arange(shape[0], dtype=float) + 1/2
+    y = np.arange(shape[1], dtype=float) + 1/2
     y, x = np.meshgrid(y, x, copy=False)
     # dimensão de translação
-    w = np.ones_like(x, dtype=int)
+    w = np.ones_like(x, dtype=float)
 
     return np.stack((x, y, w), axis=0)
 
@@ -69,7 +70,8 @@ def limites(T: OpLin, shape: Tuple[int, int]) -> Tuple[Ponto, Ponto]:
 
 def aplica(op: OpLin, ind: Indices) -> Indices:
     """
-    Aplica operação linear na matriz de índices.
+    Aplica operação linear na matriz de índices e
+    normaliza para `W = 1`.
 
     Parâmetros
     ----------
@@ -84,7 +86,7 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
         Matriz de coordenadas transformadas.
     """
     res = np.tensordot(op, ind, axes=1)
-    # correção das coordenadas
+    # normalização das coordenadas
     res[0] /= res[2]
     res[1] /= res[2]
     res[2] /= res[2]
@@ -106,7 +108,7 @@ def dim_resultado(ind: Indices, fundo: Color) -> Tuple[int, ...]:
 def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: Type[np.uint8]=np.uint8) -> Imagem: ...
 @overload
 def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type) -> np.ndarray: ...
-def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> Union[Imagem, np.ndarray]:
+def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> np.ndarray:
     """
     Acesso na imagem pela matriz de índices.
 
