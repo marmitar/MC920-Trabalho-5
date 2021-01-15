@@ -130,7 +130,7 @@ def acesso(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
 
     # imagem de saída
-    out = np.zeros(dim_resultado(img, fundo), dtype=np.uint8)
+    out = np.zeros(dim_resultado(ind, fundo), dtype=np.uint8)
     # acessos válidos
     out[dentro] = img[ind[0, dentro], ind[1, dentro]]
     # e inválido
