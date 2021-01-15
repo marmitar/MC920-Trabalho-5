@@ -60,7 +60,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     # normalização
     N = redimensionamento(img.shape[:2], (1, 1))
     # centra da imagem na origem
-    T = translacao(-1/2) @ N
+    T = translacao(-1/2, -1/2) @ N
 
     # rotação no plano da imagem
     if args.angulo is not None:
@@ -77,9 +77,9 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     # correção da origem
     (xmin, ymin), (xmax, ymax) = limites(T, img.shape[:2])
     T = translacao(-xmin, -ymin) @ T
+
     # dimensões após transformada
     Wi, Hi = xmax - xmin, ymax - ymin
-
     # redimensionamento para saída fixa
     if args.dim is not None:
         T = redimensionamento((Wi, Hi), args.dim) @ T

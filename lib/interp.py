@@ -105,7 +105,7 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
 def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
-    Interpolação bicubica.
+    Interpolação bicúbica.
     """
     # operações internas
     def P(t: np.ndarray) -> np.ndarray:
