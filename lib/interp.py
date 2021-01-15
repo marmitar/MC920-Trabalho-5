@@ -14,6 +14,7 @@ class Metodo(Enum):
     Método de interpolação.
     """
     VIZINHO = auto()
+    BILINEAR = auto()
 
     def __call__(self, img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         """
@@ -48,3 +49,25 @@ def vizinho(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     Interpolação pelo vizinho mais próximo.
     """
     return acesso(img, np.round(ind), fundo=fundo)
+
+
+def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
+    """
+    Interpolação bilinear.
+    """
+    indt = np.trunc(ind, dtype=np.int64)
+    ind -= indt
+    _, dx, dy = ind
+
+    f00 = acesso(img, indt, fundo)
+    indt[1] += 1
+    f10 = acesso(img, indt, fundo)
+    indt[2] += 1
+    f11 = acesso(img, indt, fundo)
+    indt[1] -= 1
+    f01 = acesso(img, indt, fundo)
+
+    return (1 - dx) * (1 - dy) * f00 \
+        + dx * (1 - dy) * f10 \
+        + (1 - dx) * dy * f01 \
+        + dx * dy * f11
