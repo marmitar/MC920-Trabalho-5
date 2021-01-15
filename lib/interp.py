@@ -15,6 +15,7 @@ class Metodo(Enum):
     """
     VIZINHO = auto()
     BILINEAR = auto()
+    BICUBICA = auto()
 
     def __call__(self, img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         """
