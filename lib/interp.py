@@ -108,10 +108,10 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     Interpolação bicubica.
     """
     # operações internas
-    def P(t):
+    def P(t: np.ndarray) -> np.ndarray:
         return np.where(t > 0, t, 0)
 
-    def R(s):
+    def R(s: np.ndarray) -> np.ndarray:
         pm1, p0, p1, p2 = (P(s+d)**3 for d in range(-1,2+1))
         return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
 
@@ -147,7 +147,7 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dx, dy, _ = dxdy[...,np.newaxis]
 
     # operação interna
-    def L(n):
+    def L(n: int) -> np.ndarray:
         ind = np.stack((x - 1, y + n - 2), axis=0)
 
         # f(x - 1, y + n - 2)
