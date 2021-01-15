@@ -53,6 +53,24 @@ def vizinho(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     return acesso(img, np.round(ind), fundo=fundo)
 
 
+def asimg(mat: np.ndarray, trunca: bool=True) -> Imagem:
+    """
+    Convesão de matriz numérica para imagem de 8
+    bits, com cuidado de underflow e overflow.
+    """
+    # conversão por arredondamento
+    if not trunca:
+        mat = np.round(mat)
+
+    # posições de under / overflow
+    lo, hi = mat <= 0, mat >= 255
+    # imagem resultante
+    img = mat.astype(np.uint8)
+    img[lo] = 0
+    img[hi] = 255
+    return img
+
+
 def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação bilinear.
@@ -65,23 +83,23 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
     # vizinhança do ponto
     # f(x, y)
-    f00 = acesso(img, ind, fundo)
+    f00 = acesso(img, ind, fundo, dtype=float)
     # f(x+1, y)
     ind[1] += 1
-    f10 = acesso(img, ind, fundo)
+    f10 = acesso(img, ind, fundo, dtype=float)
     # f(x+1, y+1)
     ind[2] += 1
-    f11 = acesso(img, ind, fundo)
+    f11 = acesso(img, ind, fundo, dtype=float)
     # f(x, y+1)
     ind[1] -= 1
-    f01 = acesso(img, ind, fundo)
+    f01 = acesso(img, ind, fundo, dtype=float)
 
     # interpolação
     out = (1 - dx) * (1 - dy) * f00 \
         + dx * (1 - dy) * f10 \
         + (1 - dx) * dy * f01 \
         + dx * dy * f11
-    return out.astype(np.uint8)
+    return asimg(out)
     # TODO: interpolado para a direita
 
 
@@ -109,12 +127,12 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         for n in range(-1, 2+1):
             # acesso do vizinho
             ind = np.stack((x + m, y + n), axis=0)
-            f = acesso(img, ind, fundo)
+            f = acesso(img, ind, fundo, dtype=float)
 
             out += f * R(m - dx) * R(dy - n)
 
     # imagem resultante
-    return out.astype(np.uint8)
+    return asimg(out)
     # TODO: artefato
 
 
@@ -133,16 +151,16 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         ind = np.stack((x - 1, y + n - 2), axis=0)
 
         # f(x - 1, y + n - 2)
-        a = -dx * (dx - 1) * (dx - 2) * acesso(img, ind, fundo)
+        a = -dx * (dx - 1) * (dx - 2) * acesso(img, ind, fundo, dtype=float)
         # f(x + 0, y + n - 2)
         ind[0] += 1
-        b = (dx + 1) * (dx - 1) * (dx - 2) * acesso(img, ind, fundo)
+        b = (dx + 1) * (dx - 1) * (dx - 2) * acesso(img, ind, fundo, dtype=float)
         # f(x + 1, y + n - 2)
         ind[0] += 1
-        c = -dx * (dx + 1) * (dx - 2) * acesso(img, ind, fundo)
+        c = -dx * (dx + 1) * (dx - 2) * acesso(img, ind, fundo, dtype=float)
         # f(x + 2, y + n - 2)
         ind[0] += 1
-        d = dx * (dx + 1) * (dx - 1) * acesso(img, ind, fundo)
+        d = dx * (dx + 1) * (dx - 1) * acesso(img, ind, fundo, dtype=float)
 
         return (a / 6) + (b / 2) + (c / 2) + (d / 6)
 
@@ -157,4 +175,4 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
     # imagem resultante
     out = (a / 6) + (b / 2) + (c / 2) + (d / 6)
-    return out.astype(np.uint8)
+    return asimg(out)
