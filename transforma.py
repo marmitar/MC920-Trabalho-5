@@ -10,8 +10,8 @@ from lib.inout import imgshow, imgwrite, encode
 from lib.dim import limites, indices, aplica, ajusta_canais
 from lib.interp import Metodo
 from lib.ops import (
-    escalonamento, rotacao, translacao, normalizacao,
-    redimensionamento, inversa, rotacao_proj
+    redimensionamento, inversa, translacao,
+    escalonamento, rotacao, rotacao_proj
 )
 
 
