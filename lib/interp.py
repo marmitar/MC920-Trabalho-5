@@ -59,7 +59,7 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     indt = np.trunc(ind).astype(int)
     # erro do truncamento
     ind -= indt
-    _, dx, dy = ind
+    _, dx, dy = ind[...,np.newaxis]
 
     # vizinhança do ponto
     # f(x, y)
@@ -79,3 +79,4 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         + dx * (1 - dy) * f10 \
         + (1 - dx) * dy * f01 \
         + dx * dy * f11
+    # TODO: interpolado para a direita

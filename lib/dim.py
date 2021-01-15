@@ -97,7 +97,7 @@ def dim_resultado(ind: Indices, fundo: Color) -> Tuple[int, ...]:
     """
     # escala de cinza
     if isinstance(fundo, int):
-        return ind.shape[1:]
+        return ind.shape[1:] + (1,)
     # BGR ou BGRA
     else:
         return ind.shape[1:] + (len(fundo),)
@@ -157,7 +157,7 @@ def ajusta_canais(img: Imagem, cor: Color) -> Imagem:
     """
     # escala de cinza
     if isinstance(cor, int):
-        return img
+        return img[...,np.newaxis]
     # BGR
     elif len(cor) == 3:
         return np.stack((img, img, img), axis=2)
