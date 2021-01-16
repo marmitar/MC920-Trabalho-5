@@ -4,7 +4,7 @@ Operações de transformação linear em imagens.
 Sempre retorna uma operação com a imagem resultante
 iniciando em (0, 0) e a dimensão dessa imagem.
 """
-from typing import Tuple, overload
+from typing import Tuple, Union, overload
 import numpy as np
 from .tipos import OpLin
 from . import ops
@@ -103,13 +103,13 @@ def rotacao_proj(beta: float, shape: Dim) -> Tuple[OpLin, Dim]:
     return correcao(Op, shape)
 
 
-def escalonamento(prop: float, shape: Dim) -> Tuple[OpLin, Dim]:
+def escalonamento(prop: Union[float, Tuple[float, float]], shape: Dim) -> Tuple[OpLin, Dim]:
     """
     Mudança de escala.
 
     Parâmetros
     ----------
-    prop: float
+    prop: float, (float, float)
         Proporção da escala.
     shape: (float, float)
         Dimensões da imagem de entrada.
@@ -121,9 +121,21 @@ def escalonamento(prop: float, shape: Dim) -> Tuple[OpLin, Dim]:
     shape: (float, float)
         Dimensões da saída.
     """
+    # proporção repetida
+    if isinstance(prop, tuple):
+        px, py = prop
+    # proporção separada
+    else:
+        px = py = prop
+
     W, H = shape
-    T = ops.escalonamento(prop)
-    return T, (prop * W, prop * H)
+    # shape final
+    shape = px * W, py * H
+
+    T = ops.escalonamento(px, py)
+    # translação para o centro do pixel
+    L1, L2 = ops.translacao(-1/2), ops.translacao(1/2)
+    return L1 @ T @ L2, shape
 
 
 def arredondamento(shape: Dim) -> Tuple[OpLin, Tuple[int, int]]:
@@ -169,5 +181,5 @@ def redimensionamento(inicial: Dim, final: Dim) -> Tuple[OpLin, Dim]:
         Dimensões da saída.
     """
     (Wi, Hi), (Wf, Hf) = inicial, final
-    T = ops.escalonamento(Wf / Wi, Hf / Hi)
+    T, _ = escalonamento((Wf / Wi, Hf / Hi), inicial)
     return T, final
