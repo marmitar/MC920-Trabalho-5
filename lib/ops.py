@@ -50,7 +50,7 @@ def translacao(Tx: float, Ty: Optional[float]=None) -> OpLin:
     ], dtype=float)
 
 
-def rotacao(theta: float, graus: bool=True) -> OpLin:
+def rotacao(theta: float, *, graus: bool=True) -> OpLin:
     """
     Matriz de rotação no plano xy (em torno do eixo
     z) por um ângulo `theta`.
@@ -68,7 +68,7 @@ def rotacao(theta: float, graus: bool=True) -> OpLin:
     ], dtype=float)
 
 
-def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
+def rotacao_proj(beta: float, *, graus: bool=True, D: float=2.0) -> OpLin:
     """
     Matriz de rotação em torno do eixo y por um ângulo
     `beta`, projetado de volta para o plano xy.
