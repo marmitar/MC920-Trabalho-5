@@ -5,7 +5,7 @@ TODO: docs
 from typing import Tuple, overload
 import numpy as np
 from .tipos import OpLin
-import ops
+from . import ops
 
 
 Dim = Tuple[float, float]

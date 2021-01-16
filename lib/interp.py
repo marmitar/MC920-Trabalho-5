@@ -5,7 +5,7 @@ em imagens.
 from enum import Enum, unique, auto
 import numpy as np
 from .tipos import Indices, Imagem, Color
-from .dim import acesso, dim_resultado
+from .idx import acesso, dim_resultado
 
 
 @unique
