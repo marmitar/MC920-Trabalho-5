@@ -5,7 +5,7 @@ from typing import (
     TYPE_CHECKING, overload,
     Type, Union, Tuple
 )
-from numpy import ndarray, uint8, int64, float64
+from numpy import ndarray, uint8, float64
 
 if TYPE_CHECKING:
     # Python 3.8+
@@ -34,10 +34,10 @@ class Indices(ndarray): # type: ignore # pylint: disable=function-redefined
     """
     Matriz de índices da imagem em coordenadas homogêneas.
 
-    Composta por um vetor `(X, Y, Z)` da imagem original para
+    Composta por um vetor `(WX, WY, W)` da imagem original para
     cada posição `(i, j)` da nova imagem.
     """
-    dtype: Union[Type[int64], Type[float64]]
+    dtype: Type[float64] = float64
     ndim: Literal[3] = 3
     shape: Tuple[Literal[3], int, int]
 

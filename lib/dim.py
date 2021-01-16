@@ -24,11 +24,11 @@ def indices(shape: Tuple[int, int]) -> Indices:
         `(WX, WY, W)` de cada ponto `(i, j)` da imagem.
     """
     # valores de x e y
-    x = np.arange(shape[0], dtype=float) + 1/2
-    y = np.arange(shape[1], dtype=float) + 1/2
+    x = np.arange(shape[0], dtype=np.float64)
+    y = np.arange(shape[1], dtype=np.float64)
     y, x = np.meshgrid(y, x, copy=False)
     # dimensão de translação
-    w = np.ones_like(x, dtype=float)
+    w = np.ones_like(x, dtype=np.float64)
 
     return np.stack((x, y, w), axis=0)
 
