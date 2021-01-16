@@ -7,7 +7,7 @@ from typing import Tuple
 from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural, cor
 from lib.inout import imgshow, imgwrite, encode
-from lib.idx import indices, aplica, ajusta_canais
+from lib.idx import indices, aplica
 from lib.interp import Metodo
 from lib.ops import inversa, identidade
 from lib.imgop import (
@@ -99,7 +99,6 @@ if __name__ == '__main__':
     ind = aplica(inversa(T), ind)
 
     # interpolação para o resultado
-    img = ajusta_canais(img, args.cor)
     img = args.metodo(img, ind, args.cor)
 
     # exibição do resultado

@@ -56,12 +56,17 @@ def decode(buffer: bytes) -> Imagem:
         Arquivo não pode ser decodificado como imagem.
     """
     buf = np.frombuffer(buffer, dtype=np.uint8)
-    img = cv2.imdecode(buf, cv2.IMREAD_GRAYSCALE)
+    img = cv2.imdecode(buf, cv2.IMREAD_UNCHANGED)
     # problemas de decodificação
     if img is None:
         raise ValueError('não foi possível parsear dado como imagem')
 
-    return img
+    if img.ndim == 2:
+        return cv2.cvtColor(img, cv2.COLOR_GRAY2BGRA)
+    elif img.shape[2] == 3:
+        return cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
+    else:
+        return img
 
 
 def imgwrite(img: Imagem, caminho: str) -> None:

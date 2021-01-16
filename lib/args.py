@@ -65,7 +65,6 @@ def math_eval(expr: str) -> float:
     try:
         # de https://realpython.com/python-eval-function/
         code = compile(expr, "<input>", "eval", optimize=0)
-
         # proteção de acessos inválido
         for nome in code.co_names:
             if nome not in MATH:
@@ -133,16 +132,8 @@ def cor(texto: str) -> Color:
     try:
         # conversão RGBA
         rgba = colors.to_rgba(texto)
-        r, g, b, a = map(lambda c: int(255 * c), rgba)
     except ValueError as err:
         raise ArgumentTypeError(str(err)) from err
 
-    # canal alfa necessário
-    if a != 255:
-        return b, g, r, a
-    # RGB necessário
-    elif r != g or g != b:
-        return b, g, r
-    # pode ser grayscale
-    else:
-        return a
+    r, g, b, a = map(lambda c: int(255 * c), rgba)
+    return b, g, r, a

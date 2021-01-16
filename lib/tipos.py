@@ -17,8 +17,8 @@ else:
     Imagem = 'Imagem' # pylint: disable=invalid-name
 
 
-# Modos de cores para escala de cinza, BGR e BGRA
-Color = Union[int, Tuple[int, int, int], Tuple[int, int, int, int]]
+# Cor em BGRA
+Color = Tuple[int, int, int, int]
 
 
 class OpLin(ndarray): # type: ignore # pylint: disable=function-redefined
@@ -47,9 +47,9 @@ class Imagem(ndarray): # type: ignore # pylint: disable=function-redefined
     Matrizes que representam imagens em OpenCV e bibliotecas similares.
     """
     dtype: Type[uint8] = uint8
-    ndim: Union[Literal[2], Literal[3]]
-    # escala de cinza, BGR, ou BGRA
-    shape: Union[Tuple[int, int], Tuple[int, int, Union[Literal[3], Literal[4]]]]
+    ndim: Literal[3] = 3
+    # BGRA
+    shape: Tuple[int, int, Literal[4]]
 
     def copy(self) -> Imagem:
         ...

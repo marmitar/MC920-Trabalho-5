@@ -58,16 +58,12 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
     return res
 
 
-def dim_resultado(ind: Indices, fundo: Color) -> Tuple[int, ...]:
+def dim_resultado(ind: Indices) -> Tuple[int, ...]:
     """
+    TODO: update
     Dimensões do resultado para uma cor de fundo.
     """
-    # escala de cinza
-    if isinstance(fundo, int):
-        return ind.shape[1:] + (1,)
-    # BGR ou BGRA
-    else:
-        return ind.shape[1:] + (len(fundo),)
+    return ind.shape[1:] + (4,)
 
 @overload
 def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: Type[np.uint8]=np.uint8) -> Imagem: ...
@@ -100,38 +96,10 @@ def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> np.
     dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
 
     # imagem de saída
-    out = np.zeros(dim_resultado(ind, fundo), dtype=dtype)
+    out = np.zeros(dim_resultado(ind), dtype=dtype)
     # acessos válidos
     out[dentro] = img[ind[0, dentro], ind[1, dentro]]
     # e inválidos
     out[~dentro] = fundo
 
     return out
-
-
-def ajusta_canais(img: Imagem, cor: Color) -> Imagem:
-    """
-    Ajusta imagem para os canais necessários para a cor.
-
-    Parâmetros
-    ----------
-    img: ndarray
-        Imagem em escala de cinza.
-    cor: int, (int, int, int), (int, int, int, int)
-        Cor em escala de cinza, BGR ou BGRA.
-
-    Retorno
-    -------
-    out: ndarray
-        Imagem expandida para canais necessários.
-    """
-    # escala de cinza
-    if isinstance(cor, int):
-        return img[...,np.newaxis]
-    # BGR
-    elif len(cor) == 3:
-        return np.stack((img, img, img), axis=2)
-    # BGRA
-    else:
-        alpha = 255 * np.ones_like(img)
-        return np.stack((img, img, img, alpha), axis=2)

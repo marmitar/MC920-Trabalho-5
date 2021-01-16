@@ -121,7 +121,7 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     # "erro" do truncamento
     dx, dy, _ = dxdy[...,np.newaxis]
 
-    out = np.zeros(dim_resultado(ind, fundo), dtype=float)
+    out = np.zeros(dim_resultado(ind), dtype=float)
     # vizinhança do ponto
     for m in range(-1, 2+1):
         for n in range(-1, 2+1):
