@@ -59,7 +59,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     """
     # normalização
     N = redimensionamento(img.shape[:2], (1, 1))
-    # centra da imagem na origem
+    # centro da imagem na origem
     T = translacao(-1/2, -1/2) @ N
 
     # rotação no plano da imagem
@@ -96,6 +96,8 @@ if __name__ == '__main__':
 
     # operações na imagem
     T, dim = transformacao(img, args)
+    # posições representadas pelo centro do pixel
+    T = translacao(-1/2) @ T @ translacao(1/2)
 
     # índices da imagem de entrada pela da saída
     ind = indices(dim)
