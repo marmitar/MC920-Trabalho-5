@@ -97,23 +97,24 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dx, dy = dxdy[...,np.newaxis]
 
     # vizinhança do ponto
+    f = zeros(ind, dtype=float)
     # f(x, y)
-    f00 = acesso(img, ind, fundo)
+    f = acesso(img, ind, fundo, out=f)
+    out = (1 - dx) * (1 - dy) * f
     # f(x+1, y)
     ind[0] += 1
-    f10 = acesso(img, ind, fundo)
+    f = acesso(img, ind, fundo, out=f)
+    out += dx * (1 - dy) * f
     # f(x+1, y+1)
     ind[1] += 1
-    f11 = acesso(img, ind, fundo)
+    f = acesso(img, ind, fundo, out=f)
+    out += (1 - dx) * dy * f
     # f(x, y+1)
     ind[0] -= 1
-    f01 = acesso(img, ind, fundo)
+    f = acesso(img, ind, fundo, out=f)
+    out += dx * dy * f
 
-    # interpolação
-    out = (1 - dx) * (1 - dy) * f00 \
-        + dx * (1 - dy) * f10 \
-        + (1 - dx) * dy * f01 \
-        + dx * dy * f11
+    # transformação para 8 bits
     return asimg(out)
 
 
@@ -130,17 +131,18 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
 
     # índices truncados
-    (x, y), dxdy = modf(ind)
+    ind, dxdy = modf(ind)
     # "erro" do truncamento
     dx, dy = dxdy[...,np.newaxis]
 
     out = zeros(ind, dtype=float)
     # vizinhança do ponto
+    f = zeros(ind, dtype=float)
     for m in range(-1, 2+1):
         for n in range(-1, 2+1):
             # acesso do vizinho
             ind = np.stack((x + m, y + n), axis=0)
-            f = acesso(img, ind, fundo, out=out)
+            f = acesso(img, ind, fundo, out=f)
 
             out += f * R(m - dx) * R(dy - n)
 
@@ -158,20 +160,21 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dx, dy = dxdy[...,np.newaxis]
 
     # operação interna
+    f = zeros(ind, dtype=float)
     def L(n: int) -> np.ndarray:
         ind = np.stack((x - 1, y + n - 2), axis=0)
 
         # f(x - 1, y + n - 2)
-        a = -dx * (dx - 1) * (dx - 2) * acesso(img, ind, fundo, dtype=float)
+        a = -dx * (dx - 1) * (dx - 2) * acesso(img, ind, fundo, out=f)
         # f(x + 0, y + n - 2)
         ind[0] += 1
-        b = (dx + 1) * (dx - 1) * (dx - 2) * acesso(img, ind, fundo, dtype=float)
+        b = (dx + 1) * (dx - 1) * (dx - 2) * acesso(img, ind, fundo, out=f)
         # f(x + 1, y + n - 2)
         ind[0] += 1
-        c = -dx * (dx + 1) * (dx - 2) * acesso(img, ind, fundo, dtype=float)
+        c = -dx * (dx + 1) * (dx - 2) * acesso(img, ind, fundo, out=f)
         # f(x + 2, y + n - 2)
         ind[0] += 1
-        d = dx * (dx + 1) * (dx - 1) * acesso(img, ind, fundo, dtype=float)
+        d = dx * (dx + 1) * (dx - 1) * acesso(img, ind, fundo, out=f)
 
         return (a / 6) + (b / 2) + (c / 2) + (d / 6)
 
