@@ -92,10 +92,10 @@ def rotacao_proj(beta: float, graus: bool=True, D: float=2.0) -> OpLin:
     Cb, Sb = np.cos(beta), np.sin(beta)
     # rotação em torno de y
     R = np.asarray([
-        [1,  0,  0, 0],
-        [0, Cb,-Sb, 0],
-        [0, Sb, Cb, 0],
-        [0,  0,  0, 1]
+        [ Cb, 0,Sb, 0],
+        [  0, 1, 0, 0],
+        [-Sb, 0,Cb, 0],
+        [  0, 0, 0, 1]
     ], dtype=float)
 
     # translação para Z = D
