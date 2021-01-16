@@ -113,7 +113,6 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         + (1 - dx) * dy * f01 \
         + dx * dy * f11
     return asimg(out)
-    # TODO: interpolado para a direita
 
 
 def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
@@ -145,7 +144,6 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
     # imagem resultante
     return asimg(out)
-    # TODO: artefato
 
 
 def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:

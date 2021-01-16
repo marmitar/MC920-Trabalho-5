@@ -91,14 +91,10 @@ if __name__ == '__main__':
 
     # operações na imagem
     T, dim = transformacao(img, args)
-    # print('dim =', dim)
-    # print('T =', T)
 
     # índices da imagem de entrada pela da saída
     ind = indices(dim)
-    # print('ind =', ind)
     ind = aplica(inversa(T), ind)
-    # print('ind =', ind)
 
     # interpolação para o resultado
     img = args.metodo(img, ind, args.cor)
