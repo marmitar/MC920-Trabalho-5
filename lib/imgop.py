@@ -70,9 +70,7 @@ def rotacao(angulo: float, shape: Dim) -> Tuple[OpLin, Dim]:
     # a rotação propriamente
     R = ops.rotacao(angulo, graus=True)
     R, shape = correcao(R, shape)
-    # translação para o centro do pixel
-    T1, T2 = ops.translacao(-1/2), ops.translacao(1/2)
-    return T1 @ R @ T2, shape
+    return R, shape
 
 
 def rotacao_proj(beta: float, shape: Dim) -> Tuple[OpLin, Dim]:
@@ -105,13 +103,13 @@ def rotacao_proj(beta: float, shape: Dim) -> Tuple[OpLin, Dim]:
     return correcao(Op, shape)
 
 
-def escalonamento(prop: Union[float, Tuple[float, float]], shape: Dim) -> Tuple[OpLin, Dim]:
+def escalonamento(prop: float, shape: Dim) -> Tuple[OpLin, Dim]:
     """
     Mudança de escala.
 
     Parâmetros
     ----------
-    prop: float, (float, float)
+    prop: float
         Proporção da escala.
     shape: (float, float)
         Dimensões da imagem de entrada.
@@ -123,21 +121,13 @@ def escalonamento(prop: Union[float, Tuple[float, float]], shape: Dim) -> Tuple[
     shape: (float, float)
         Dimensões da saída.
     """
-    # proporção repetida
-    if isinstance(prop, tuple):
-        px, py = prop
-    # proporção separada
-    else:
-        px = py = prop
 
     W, H = shape
     # shape final
-    shape = px * W, py * H
+    shape = prop * W, prop * H
 
-    T = ops.escalonamento(px, py)
-    # translação para o centro do pixel
-    L1, L2 = ops.translacao(-1/2), ops.translacao(1/2)
-    return L1 @ T @ L2, shape
+    T = ops.escalonamento(prop)
+    return T, shape
 
 
 def arredondamento(shape: Dim) -> Tuple[OpLin, Tuple[int, int]]:
@@ -183,5 +173,5 @@ def redimensionamento(inicial: Dim, final: Dim) -> Tuple[OpLin, Dim]:
         Dimensões da saída.
     """
     (Wi, Hi), (Wf, Hf) = inicial, final
-    T, _ = escalonamento((Wf / Wi, Hf / Hi), inicial)
+    T = ops.escalonamento(Wf / Wi, Hf / Hi)
     return T, final

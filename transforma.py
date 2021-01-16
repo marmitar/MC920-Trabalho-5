@@ -9,7 +9,7 @@ from lib.args import Argumentos, imagem, racional, natural, cor
 from lib.inout import imgshow, imgwrite, encode
 from lib.idx import indices, aplica
 from lib.interp import Metodo
-from lib.ops import inversa, identidade
+from lib.ops import inversa, identidade, translacao
 from lib.imgop import (
     redimensionamento, arredondamento,
     rotacao, rotacao_proj, escalonamento
@@ -81,7 +81,10 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     else:
         R, dim = arredondamento(shape)
 
-    return R @ T, dim
+    # translação para o centro do pixel e depois de
+    # volta pro superior esquerdo
+    L1, L2 = translacao(-1/2), translacao(1/2)
+    return L1 @ R @ T @ L2, dim
 
 
 if __name__ == '__main__':
