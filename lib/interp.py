@@ -131,7 +131,7 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
 
     # índices truncados
-    ind, dxdy = modf(ind)
+    (x, y), dxdy = modf(ind)
     # "erro" do truncamento
     dx, dy = dxdy[...,np.newaxis]
 
