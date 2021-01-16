@@ -33,7 +33,7 @@ def correcao(T: OpLin, shape: Dim) -> Tuple[OpLin, Dim]:
     shape: (float, float)
         Dimensões da saída.
     """
-    W, H = shape
+    H, W = shape
     dim = aplica(T, np.asarray([
         [0, W, 0, W],
         [0, 0, H, H],
@@ -46,7 +46,7 @@ def correcao(T: OpLin, shape: Dim) -> Tuple[OpLin, Dim]:
     W, H = xmax - xmin, ymax - ymin
     # início no (0, 0)
     T = ops.translacao(-xmin, -ymin) @ T
-    return T, (W, H)
+    return T, (H, W)
 
 
 def rotacao(angulo: float, shape: Dim) -> Tuple[OpLin, Dim]:
@@ -99,7 +99,6 @@ def rotacao_proj(beta: float, shape: Dim) -> Tuple[OpLin, Dim]:
 
     # operação completa e desnormalizada
     Op = ops.inversa(N) @ R @ T @ N
-    print(Op, correcao(Op, shape))
     return correcao(Op, shape)
 
 
@@ -146,9 +145,9 @@ def arredondamento(shape: Dim) -> Tuple[OpLin, Tuple[int, int]]:
     shape: (float, float)
         Dimensões da saída.
     """
-    W, H = map(int, np.round(shape))
-    T, _ = redimensionamento(shape, (W, H))
-    return T, (W, H)
+    H, W = map(int, np.round(shape))
+    T, _ = redimensionamento(shape, (H, W))
+    return T, (H, W)
 
 @overload
 def redimensionamento(inicial: Dim, final: Tuple[int, int]) -> Tuple[OpLin, Tuple[int, int]]:...
@@ -172,6 +171,6 @@ def redimensionamento(inicial: Dim, final: Dim) -> Tuple[OpLin, Dim]:
     shape: (float, float)
         Dimensões da saída.
     """
-    (Wi, Hi), (Wf, Hf) = inicial, final
+    (Hi, Wi), (Hf, Wf) = inicial, final
     T = ops.escalonamento(Wf / Wi, Hf / Hi)
     return T, final

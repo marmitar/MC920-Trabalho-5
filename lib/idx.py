@@ -24,11 +24,11 @@ def indices(shape: Tuple[int, int]) -> Indices:
         `(WX, WY, W)` de cada ponto `(i, j)` da imagem.
     """
     # valores de x e y
-    x = np.arange(shape[0], dtype=np.float64)
-    y = np.arange(shape[1], dtype=np.float64)
-    y, x = np.meshgrid(y, x, copy=False)
+    y = np.arange(shape[0], dtype=float)
+    x = np.arange(shape[1], dtype=float)
+    x, y = np.meshgrid(x, y, copy=False)
     # dimensão de translação
-    w = np.ones_like(x, dtype=np.float64)
+    w = np.ones(shape, dtype=float)
 
     return np.stack((x, y, w), axis=0)
 
@@ -87,17 +87,18 @@ def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> np.
         Imagem com pixels recuperados da entrada nas
         coordenadas especificadas.
     """
+    H, W, _ = img.shape
     # força inteiro, se necesserário
     ind = ind.astype(int, copy=False)
     # coordenadas de cada ponto
     x, y = ind[0], ind[1]
     # pontos que estão dentra da imagem de entrada
-    dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
+    dentro = (x >= 0) & (x < W) & (y >= 0) & (y < H)
 
     # imagem de saída
     out = np.zeros(dim(ind), dtype=dtype)
     # acessos válidos
-    out[dentro] = img[ind[0, dentro], ind[1, dentro]]
+    out[dentro] = img[ind[1, dentro], ind[0, dentro]]
     # e inválidos
     out[~dentro] = fundo
 
