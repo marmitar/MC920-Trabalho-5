@@ -5,7 +5,7 @@ em imagens.
 from enum import Enum, unique, auto
 import numpy as np
 from .tipos import Indices, Imagem, Color
-from .idx import acesso, dim_resultado
+from .idx import acesso, dim
 
 
 @unique
@@ -121,7 +121,7 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     # "erro" do truncamento
     dx, dy, _ = dxdy[...,np.newaxis]
 
-    out = np.zeros(dim_resultado(ind), dtype=float)
+    out = np.zeros(dim(ind), dtype=float)
     # vizinhança do ponto
     for m in range(-1, 2+1):
         for n in range(-1, 2+1):

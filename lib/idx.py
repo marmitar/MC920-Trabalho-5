@@ -58,10 +58,9 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
     return res
 
 
-def dim_resultado(ind: Indices) -> Tuple[int, ...]:
+def dim(ind: Indices) -> Tuple[int, int, int]:
     """
-    TODO: update
-    Dimensões do resultado para uma cor de fundo.
+    Dimensões do resultado para uma matriz de coordenadas.
     """
     return ind.shape[1:] + (4,)
 
@@ -96,7 +95,7 @@ def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> np.
     dentro = (x >= 0) & (x < img.shape[0]) & (y >= 0) & (y < img.shape[1])
 
     # imagem de saída
-    out = np.zeros(dim_resultado(ind), dtype=dtype)
+    out = np.zeros(dim(ind), dtype=dtype)
     # acessos válidos
     out[dentro] = img[ind[0, dentro], ind[1, dentro]]
     # e inválidos
