@@ -7,6 +7,7 @@ iniciando em (0, 0) e a dimensão dessa imagem.
 from typing import Tuple, Union, overload
 import numpy as np
 from .tipos import OpLin
+from .idx import aplica
 from . import ops
 
 
@@ -33,14 +34,14 @@ def correcao(T: OpLin, shape: Dim) -> Tuple[OpLin, Dim]:
         Dimensões da saída.
     """
     W, H = shape
-    dim = T @ np.asarray([
+    dim = aplica(T, np.asarray([
         [0, W, 0, W],
         [0, 0, H, H],
         [1, 1, 1, 1]
-    ])
+    ]))
     # limites transformados
-    xmax, ymax = np.max(dim[0]), np.max(dim[1])
-    xmin, ymin = np.min(dim[0]), np.min(dim[1])
+    xmax, ymax = np.max(dim[:2], axis=1)
+    xmin, ymin = np.min(dim[:2], axis=1)
     # novas dimensõe
     W, H = xmax - xmin, ymax - ymin
     # início no (0, 0)
@@ -98,8 +99,9 @@ def rotacao_proj(beta: float, shape: Dim) -> Tuple[OpLin, Dim]:
     # só então rotaciona e projeta
     R = ops.rotacao_proj(beta, graus=True)
 
-    # operação completa e corrigida
-    Op = ops.inversa(T @ N) @ R @ T @ N
+    # operação completa e desnormalizada
+    Op = ops.inversa(N) @ R @ T @ N
+    print(Op, correcao(Op, shape))
     return correcao(Op, shape)
 
 
