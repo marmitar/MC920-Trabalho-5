@@ -67,8 +67,7 @@ def rotacao(angulo: float, shape: Dim) -> Tuple[OpLin, Dim]:
     shape: (float, float)
         Dimensões da saída.
     """
-    # a rotação é negativa, já que XY invertem da
-    # repr. matricial para a cartesiana
+    # a rotação é negativa, já que Y inverte em matrizes
     R = ops.rotacao(-angulo, graus=True)
     R, shape = correcao(R, shape)
     return R, shape
@@ -95,8 +94,7 @@ def rotacao_proj(beta: float, shape: Dim) -> Tuple[OpLin, Dim]:
     # imagem normalizada e centrada na origem
     N, _ = redimensionamento(shape, (1, 1))
     T = ops.translacao(-1/2)
-    # a rotação é negativa, já que XY invertem da
-    # repr. matricial para a cartesiana
+    # a rotação é negativa, já que Y inverte em matrizes
     R = ops.rotacao_proj(-beta, graus=True)
 
     # operação completa e desnormalizada
