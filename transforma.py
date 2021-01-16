@@ -64,7 +64,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     # rotação no plano da imagem
     if args.angulo is not None:
         R, shape = rotacao(args.angulo, shape)
-        T = R @ T,
+        T = R @ T
     # rotação em torno de y com projeção
     if args.beta is not None:
         R, shape = rotacao_proj(args.beta, shape)
