@@ -17,8 +17,13 @@ else:
     Imagem = 'Imagem' # pylint: disable=invalid-name
 
 
-# Cor em BGRA
-Color = Tuple[int, int, int, int]
+class Color(ndarray): # type: ignore # pylint: disable=function-redefined
+    """
+    Uma cor em BGRA
+    """
+    dtype: Type[uint8] = uint8
+    ndim: Literal[1] = 1
+    shape: Tuple[Literal[4]] = (4,)
 
 
 class OpLin(ndarray): # type: ignore # pylint: disable=function-redefined

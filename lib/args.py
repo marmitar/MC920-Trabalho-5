@@ -7,6 +7,7 @@ from warnings import warn
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from typing import Tuple, Optional, Sequence, Callable
 from matplotlib import colors
+import numpy as np
 from .tipos import Imagem, Color
 from .inout import decode
 
@@ -136,4 +137,4 @@ def cor(texto: str) -> Color:
         raise ArgumentTypeError(str(err)) from err
 
     r, g, b, a = map(lambda c: int(255 * c), rgba)
-    return b, g, r, a
+    return np.asarray([b, g, r, a], dtype=np.uint8)

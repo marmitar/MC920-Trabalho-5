@@ -42,7 +42,7 @@ escala.add_argument('-d', '--dim', metavar=('ALTURA', 'LARGURA'), type=natural(m
 # opções relacionadas ao processamento
 parser.add_argument('-m', '--metodo', type=metodo, choices=Metodo, default='vizinho',
                     help='método de interpolação do resultado (padrão: vizinho)')
-parser.add_argument('-c', '--cor', type=cor, default=(0, 0, 0, 255),
+parser.add_argument('-c', '--cor', type=cor, default=cor('black'),
                     help='cor de fundo da imagem transformada (reconhece opções do Matplotlib)')
 # entrada e saída
 parser.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
