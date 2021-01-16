@@ -78,20 +78,20 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dxdy, ind = np.modf(ind)
     # índices truncados
     ind = ind.astype(int)
-    # erro do truncamento
+    # "erro" do truncamento
     dx, dy, _ = dxdy[...,np.newaxis]
 
     # vizinhança do ponto
     # f(x, y)
     f00 = acesso(img, ind, fundo, dtype=float)
     # f(x+1, y)
-    ind[1] += 1
+    ind[0] += 1
     f10 = acesso(img, ind, fundo, dtype=float)
     # f(x+1, y+1)
-    ind[2] += 1
+    ind[1] += 1
     f11 = acesso(img, ind, fundo, dtype=float)
     # f(x, y+1)
-    ind[1] -= 1
+    ind[0] -= 1
     f01 = acesso(img, ind, fundo, dtype=float)
 
     # interpolação
@@ -118,7 +118,7 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dxdy, xy = np.modf(ind)
     # índices truncados
     x, y, _ = xy.astype(int)
-    # erro do truncamento
+    # "erro" do truncamento
     dx, dy, _ = dxdy[...,np.newaxis]
 
     out = np.zeros(dim_resultado(ind, fundo), dtype=float)
@@ -143,7 +143,7 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     dxdy, xy = np.modf(ind)
     # índices truncados
     x, y, _ = xy.astype(int)
-    # erro do truncamento
+    # "erro" do truncamento
     dx, dy, _ = dxdy[...,np.newaxis]
 
     # operação interna
