@@ -128,7 +128,7 @@ def cor(texto: str) -> Color:
     """
     # opções especiais
     if texto == 't' or texto == 'transparente':
-        return (0, 0, 0, 0)
+        return np.zeros(4, dtype=np.uint8)
 
     try:
         # conversão RGBA
