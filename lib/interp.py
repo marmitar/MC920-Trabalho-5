@@ -3,6 +3,7 @@ Interpolação para o resultado das operações lineares
 em imagens.
 """
 from enum import Enum, unique, auto
+from typing import Tuple
 import numpy as np
 from .tipos import Indices, Imagem, Color
 from .idx import acesso, dim
@@ -53,13 +54,13 @@ def vizinho(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     return acesso(img, np.round(ind), fundo=fundo)
 
 
-def asimg(mat: np.ndarray, trunca: bool=True) -> Imagem:
+def asimg(mat: np.ndarray, round: bool=False) -> Imagem:
     """
     Convesão de matriz numérica para imagem de 8
     bits, com cuidado de underflow e overflow.
     """
     # conversão por arredondamento
-    if not trunca:
+    if round:
         mat = np.round(mat)
 
     # posições de under / overflow
@@ -70,16 +71,28 @@ def asimg(mat: np.ndarray, trunca: bool=True) -> Imagem:
     img[hi] = 255
     return img
 
+def modf(ind: Indices, round: bool=False) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Retorna a parte inteira e a parte fracionária de
+    cada coordenada. A coordenada W é descartada.
+    """
+    # descarta W
+    ind = ind[:2]
+    # arredonda ou trunca
+    x = np.round(ind) if round else np.floor(ind)
+    # parte fracionária
+    dx = ind - x
+    return x.astype(int), dx
+
 
 def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação bilinear.
     """
-    dxdy, ind = np.modf(ind)
     # índices truncados
-    ind = ind.astype(int)
+    ind, dxdy = modf(ind)
     # "erro" do truncamento
-    dx, dy, _ = dxdy[...,np.newaxis]
+    dx, dy = dxdy[...,np.newaxis]
 
     # vizinhança do ponto
     # f(x, y)
@@ -115,11 +128,10 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         pm1, p0, p1, p2 = (P(s+d)**3 for d in range(-1,2+1))
         return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
 
-    dxdy, xy = np.modf(ind)
     # índices truncados
-    x, y, _ = xy.astype(int)
+    (x, y), dxdy = modf(ind)
     # "erro" do truncamento
-    dx, dy, _ = dxdy[...,np.newaxis]
+    dx, dy = dxdy[...,np.newaxis]
 
     out = np.zeros(dim(ind), dtype=float)
     # vizinhança do ponto
@@ -140,11 +152,10 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação por polinômios de Lagrange.
     """
-    dxdy, xy = np.modf(ind)
     # índices truncados
-    x, y, _ = xy.astype(int)
+    (x, y), dxdy = modf(ind)
     # "erro" do truncamento
-    dx, dy, _ = dxdy[...,np.newaxis]
+    dx, dy = dxdy[...,np.newaxis]
 
     # operação interna
     def L(n: int) -> np.ndarray:
