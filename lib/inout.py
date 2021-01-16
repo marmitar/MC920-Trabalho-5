@@ -28,7 +28,7 @@ def encode(img: Imagem, ext: str='PNG') -> bytes:
     ValueError
         A entrada não representa uma imagem.
     """
-    ok, buf = cv2.imencode('.'+ext, img)
+    ok, buf = cv2.imencode('.' + ext, img)
     # problemas de codificação
     if not ok:
         raise ValueError('não foi possível codificar em PNG')
