@@ -33,41 +33,6 @@ def indices(shape: Tuple[int, int]) -> Indices:
     return np.stack((x, y, w), axis=0)
 
 
-# Um ponto na imagem
-Ponto = Tuple[float, float]
-
-def limites(T: OpLin, shape: Tuple[int, int]) -> Tuple[Ponto, Ponto]:
-    """
-    Retorna informações da caixa delimitadora da
-    imagem de saída.
-
-    Parâmetros
-    ----------
-    T: ndarray
-        Matriz das transformações a serem aplicadas.
-    shape: (int, int)
-        Dimensões da imagem de entrada.
-
-    Retorno
-    -------
-    min: (int, int)
-        Limites inferiores da imagem transformada.
-    max: (int, int)
-        Limites superiores.
-    """
-    W, H = shape
-    dim = aplica(T, np.asarray([
-        [0, W, 0, W],
-        [0, 0, H, H],
-        [1, 1, 1, 1]
-    ]))
-    # limites transformados
-    xmax, ymax = np.max(dim[0]), np.max(dim[1])
-    xmin, ymin = np.min(dim[0]), np.min(dim[1])
-
-    return (xmin, ymin), (xmax, ymax)
-
-
 def aplica(op: OpLin, ind: Indices) -> Indices:
     """
     Aplica operação linear na matriz de índices e

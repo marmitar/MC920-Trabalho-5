@@ -1,5 +1,5 @@
 """
-Operações de transformação linear em imagens.
+Operações de transformação linear puras.
 """
 from typing import Tuple, Optional
 import numpy as np
@@ -33,14 +33,6 @@ def escalonamento(Sx: float, Sy: Optional[float]=None) -> OpLin:
         [ 0, Sy,  0],
         [ 0,  0,  1]
     ], dtype=float)
-
-
-def redimensionamento(inicial: Tuple[float, float], final: Tuple[float, float]) -> OpLin:
-    """
-    Matriz de mudança de escala para dimensões específicas.
-    """
-    (Wi, Hi), (Wf, Hf) = inicial, final
-    return escalonamento(Wf / Wi, Hf / Hi)
 
 
 def translacao(Tx: float, Ty: Optional[float]=None) -> OpLin:

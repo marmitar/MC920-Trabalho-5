@@ -7,11 +7,12 @@ from typing import Tuple
 from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural, cor
 from lib.inout import imgshow, imgwrite, encode
-from lib.dim import limites, indices, aplica, ajusta_canais
+from lib.idx import indices, aplica, ajusta_canais
 from lib.interp import Metodo
-from lib.ops import (
-    redimensionamento, inversa, translacao,
-    escalonamento, rotacao, rotacao_proj
+from lib.ops import inversa, identidade
+from lib.imgop import (
+    redimensionamento, arredondamento,
+    rotacao, rotacao_proj, escalonamento
 )
 
 
@@ -57,36 +58,30 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Montagem da matriz de transformação da imagem.
     Também retorna as dimensões da imagem de saída.
     """
-    # normalização
-    N = redimensionamento(img.shape[:2], (1, 1))
-    # centro da imagem na origem
-    T = translacao(-1/2, -1/2) @ N
+    T = identidade()
+    shape = img.shape[:2]
 
     # rotação no plano da imagem
     if args.angulo is not None:
-        T = rotacao(args.angulo, graus=True) @ T
+        R, shape = rotacao(args.angulo, shape)
+        T = R @ T,
     # rotação em torno de y com projeção
     if args.beta is not None:
-        T = rotacao_proj(args.beta, graus=True) @ T
+        R, shape = rotacao_proj(args.beta, shape)
+        T = R @ T
     # escalonamento
     if args.escala is not None:
-        T = escalonamento(args.escala) @ T
+        E, shape = escalonamento(args.escala, shape)
+        T = E @ T
 
-    # desnormalização
-    T = inversa(N) @ T
-    # correção da origem
-    (xmin, ymin), (xmax, ymax) = limites(T, img.shape[:2])
-    T = translacao(-xmin, -ymin) @ T
-
-    # dimensões após transformada
-    Wi, Hi = xmax - xmin, ymax - ymin
     # redimensionamento para saída fixa
     if args.dim is not None:
-        T = redimensionamento((Wi, Hi), args.dim) @ T
-        return T, args.dim
+        R, dim = redimensionamento(shape, args.dim)
     # sem redimensionamento
     else:
-        return T, (int(Wi), int(Hi))
+        R, dim = arredondamento(shape)
+
+    return R @ T, dim
 
 
 if __name__ == '__main__':
@@ -97,7 +92,7 @@ if __name__ == '__main__':
     # operações na imagem
     T, dim = transformacao(img, args)
     # posições representadas pelo centro do pixel
-    T = translacao(-1/2) @ T @ translacao(1/2)
+    # T = translacao(-1/2) @ T @ translacao(1/2)
 
     # índices da imagem de entrada pela da saída
     ind = indices(dim)
