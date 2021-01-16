@@ -1,7 +1,7 @@
 """
 Análise de índices e dimensões da imagem.
 """
-from typing import Tuple, Type, Union, overload
+from typing import Tuple, Optional, overload
 import numpy as np
 from .tipos import OpLin, Indices, Imagem, Color
 
@@ -57,18 +57,21 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
     res[2] /= res[2]
     return res
 
-
-def dim(ind: Indices) -> Tuple[int, int, int]:
+@overload
+def zeros(ind: Indices) -> np.ndarray: ...
+@overload
+def zeros(ind: Indices, *, dtype: type) -> np.ndarray: ...
+def zeros(ind: Indices, *, dtype: type=np.uint8) -> np.ndarray:
     """
-    Dimensões do resultado para uma matriz de coordenadas.
+    Matriz de zeros com o formato da imagem resultante.
     """
-    return ind.shape[1:] + (4,)
+    return np.zeros(ind.shape[1:] + (4,), dtype=dtype)
 
 @overload
-def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: Type[np.uint8]=np.uint8) -> Imagem: ...
+def acesso(img: Imagem, ind: Indices, fundo: Color) -> Imagem: ...
 @overload
-def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type) -> np.ndarray: ...
-def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> np.ndarray:
+def acesso(img: Imagem, ind: Indices, fundo: Color, *, out: np.ndarray) -> np.ndarray: ...
+def acesso(img: Imagem, ind: Indices, fundo: Color, *, out: Optional[np.ndarray]=None) -> np.ndarray:
     """
     Acesso na imagem pela matriz de índices.
 
@@ -80,6 +83,8 @@ def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> np.
         Matriz das coordenadas homogêneas.
     fundo: int
         Cor para índices fora da imagem.
+    out: ndarray, opcional
+        Matriz para salvar o resultado.
 
     Retorno
     -------
@@ -89,16 +94,15 @@ def acesso(img: Imagem, ind: Indices, fundo: Color, dtype: type=np.uint8) -> np.
     """
     H, W, _ = img.shape
     # força inteiro, se necesserário
-    ind = ind.astype(int, copy=False)
-    # coordenadas de cada ponto
-    x, y = ind[0], ind[1]
+    x, y = ind[:2].astype(int, copy=False)
     # pontos que estão dentra da imagem de entrada
     dentro = (x >= 0) & (x < W) & (y >= 0) & (y < H)
 
     # imagem de saída
-    out = np.zeros(dim(ind), dtype=dtype)
+    if out is None:
+        out = zeros(ind)
     # acessos válidos
-    out[dentro] = img[ind[1, dentro], ind[0, dentro]]
+    out[dentro] = img[y[dentro], x[dentro]]
     # e inválidos
     out[~dentro] = fundo
 

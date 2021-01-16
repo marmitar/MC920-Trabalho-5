@@ -6,7 +6,7 @@ from enum import Enum, unique, auto
 from typing import Tuple
 import numpy as np
 from .tipos import Indices, Imagem, Color
-from .idx import acesso, dim
+from .idx import acesso, zeros
 
 
 @unique
@@ -54,7 +54,7 @@ def vizinho(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     return acesso(img, np.round(ind), fundo=fundo)
 
 
-def asimg(mat: np.ndarray, round: bool=False) -> Imagem:
+def asimg(mat: np.ndarray, *, round: bool=False) -> Imagem:
     """
     Convesão de matriz numérica para imagem de 8
     bits, com cuidado de underflow e overflow.
@@ -63,15 +63,14 @@ def asimg(mat: np.ndarray, round: bool=False) -> Imagem:
     if round:
         mat = np.round(mat)
 
-    # posições de under / overflow
-    lo, hi = mat <= 0, mat >= 255
     # imagem resultante
     img = mat.astype(np.uint8)
-    img[lo] = 0
-    img[hi] = 255
+    # posições de under e overflow
+    img[mat < 0] = 0
+    img[mat > 255] = 255
     return img
 
-def modf(ind: Indices, round: bool=False) -> Tuple[np.ndarray, np.ndarray]:
+def modf(ind: Indices, *, round: bool=False) -> Tuple[np.ndarray, np.ndarray]:
     """
     Retorna a parte inteira e a parte fracionária de
     cada coordenada. A coordenada W é descartada.
@@ -79,7 +78,10 @@ def modf(ind: Indices, round: bool=False) -> Tuple[np.ndarray, np.ndarray]:
     # descarta W
     ind = ind[:2]
     # arredonda ou trunca
-    x = np.round(ind) if round else np.floor(ind)
+    if round:
+        x = np.round(ind)
+    else:
+        x = np.floor(ind)
     # parte fracionária
     dx = ind - x
     return x.astype(int), dx
@@ -96,16 +98,16 @@ def bilinear(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
     # vizinhança do ponto
     # f(x, y)
-    f00 = acesso(img, ind, fundo, dtype=float)
+    f00 = acesso(img, ind, fundo)
     # f(x+1, y)
     ind[0] += 1
-    f10 = acesso(img, ind, fundo, dtype=float)
+    f10 = acesso(img, ind, fundo)
     # f(x+1, y+1)
     ind[1] += 1
-    f11 = acesso(img, ind, fundo, dtype=float)
+    f11 = acesso(img, ind, fundo)
     # f(x, y+1)
     ind[0] -= 1
-    f01 = acesso(img, ind, fundo, dtype=float)
+    f01 = acesso(img, ind, fundo)
 
     # interpolação
     out = (1 - dx) * (1 - dy) * f00 \
@@ -132,13 +134,13 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     # "erro" do truncamento
     dx, dy = dxdy[...,np.newaxis]
 
-    out = np.zeros(dim(ind), dtype=float)
+    out = zeros(ind, dtype=float)
     # vizinhança do ponto
     for m in range(-1, 2+1):
         for n in range(-1, 2+1):
             # acesso do vizinho
             ind = np.stack((x + m, y + n), axis=0)
-            f = acesso(img, ind, fundo, dtype=float)
+            f = acesso(img, ind, fundo, out=out)
 
             out += f * R(m - dx) * R(dy - n)
 
