@@ -8,7 +8,7 @@ from .tipos import Imagem
 
 def encode(img: Imagem, ext: str='PNG') -> bytes:
     """
-    Codifica imagem em buffer para arquivo de imagem.
+    Codifica matriz em buffer para arquivo de imagem.
 
     Parâmetros
     ----------
@@ -30,14 +30,15 @@ def encode(img: Imagem, ext: str='PNG') -> bytes:
     ok, buf = cv2.imencode('.' + ext, img)
     # problemas de codificação
     if not ok:
-        raise ValueError('não foi possível codificar em PNG')
+        raise ValueError(f'não foi possível codificar em "{ext}"')
 
     return buf.tobytes()
 
 
 def decode(buffer: bytes) -> Imagem:
     """
-    Decodifica imagem colorida de um buffer PNG.
+    Decodifica imagem colorida a partir de
+    um buffer PNG.
 
     Parâmetros
     ----------
@@ -115,6 +116,6 @@ def imgshow(img: Imagem, nome: str="", delay: int=250) -> None:
                 break
         cv2.destroyAllWindows()
         cv2.waitKey(1)
-    # Ctrl-C não são erros nesse caso
+    # Ctrl-C não são erros aqui
     except KeyboardInterrupt:
         pass

@@ -8,7 +8,7 @@ from typing import Tuple, overload
 import numpy as np
 from .tipos import OpLin
 from .idx import aplica
-from . import ops
+from . import linop
 
 
 Dim = Tuple[float, float]
@@ -45,8 +45,8 @@ def correcao(T: OpLin, shape: Dim) -> Tuple[OpLin, Dim]:
     # novas dimensõe
     W, H = xmax - xmin, ymax - ymin
     # início no (0, 0)
-    T = ops.translacao(-xmin, -ymin) @ T
-    return T, (H, W)
+    L = linop.translacao(-xmin, -ymin)
+    return L @ T, (H, W)
 
 
 def rotacao(angulo: float, shape: Dim) -> Tuple[OpLin, Dim]:
@@ -63,12 +63,12 @@ def rotacao(angulo: float, shape: Dim) -> Tuple[OpLin, Dim]:
     Retorno
     -------
     T: ndarray
-        Transformação corrigida.
+        Rotação com resultado em (0, 0).
     shape: (float, float)
         Dimensões da saída.
     """
     # a rotação é negativa, já que Y inverte em matrizes
-    R = ops.rotacao(-angulo, graus=True)
+    R = linop.rotacao(-angulo, graus=True)
     R, shape = correcao(R, shape)
     return R, shape
 
@@ -87,18 +87,18 @@ def rotacao_proj(beta: float, shape: Dim) -> Tuple[OpLin, Dim]:
     Retorno
     -------
     T: ndarray
-        Transformação corrigida.
+        Rotação com resultado em (0, 0).
     shape: (float, float)
         Dimensões da saída.
     """
     # imagem normalizada e centrada na origem
     N, _ = redimensionamento(shape, (1, 1))
-    T = ops.translacao(-1/2)
+    T = linop.translacao(-1/2)
     # a rotação é negativa, já que Y inverte em matrizes
-    R = ops.rotacao_proj(-beta, graus=True)
+    R = linop.rotacao_proj(-beta, graus=True)
 
     # operação completa e desnormalizada
-    Op = ops.inversa(N) @ R @ T @ N
+    Op = linop.inversa(N) @ R @ T @ N
     return correcao(Op, shape)
 
 
@@ -116,7 +116,7 @@ def escalonamento(prop: float, shape: Dim) -> Tuple[OpLin, Dim]:
     Retorno
     -------
     T: ndarray
-        Transformação corrigida.
+        Escala com resultado em (0, 0).
     shape: (float, float)
         Dimensões da saída.
     """
@@ -125,13 +125,14 @@ def escalonamento(prop: float, shape: Dim) -> Tuple[OpLin, Dim]:
     # shape final
     shape = prop * W, prop * H
 
-    T = ops.escalonamento(prop)
+    T = linop.escalonamento(prop)
     return T, shape
 
 
 def arredondamento(shape: Dim) -> Tuple[OpLin, Tuple[int, int]]:
     """
-    Arredondamento das dimensões da imagem para inteiro.
+    Redimensionamento da imagem para dimensões
+    arredondadas para inteiro.
 
     Parâmetros
     ----------
@@ -141,8 +142,8 @@ def arredondamento(shape: Dim) -> Tuple[OpLin, Tuple[int, int]]:
     Retorno
     -------
     T: ndarray
-        Transformação corrigida.
-    shape: (float, float)
+        Escala com resultado em (0, 0).
+    shape: (int, int)
         Dimensões da saída.
     """
     H, W = map(int, np.round(shape))
@@ -172,5 +173,5 @@ def redimensionamento(inicial: Dim, final: Dim) -> Tuple[OpLin, Dim]:
         Dimensões da saída.
     """
     (Hi, Wi), (Hf, Wf) = inicial, final
-    T = ops.escalonamento(Wf / Wi, Hf / Hi)
+    T = linop.escalonamento(Wf / Wi, Hf / Hi)
     return T, final

@@ -29,13 +29,13 @@ class Metodo(Enum):
             Imagem de entrada.
         ind: ndarray
             Matriz das coordenadas homogêneas.
-        fundo: int
+        fundo: (int, int, int, int)
             Cor para índices fora da imagem.
 
         Retorno
         -------
         out: ndarray
-            Imagem resultado interpolada da entrada.
+            Imagem interpolada da entrada.
         """
         fn = globals()[str(self)]
         return fn(img, ind, fundo)
@@ -57,7 +57,7 @@ def vizinho(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 def asimg(mat: np.ndarray, *, round: bool=False) -> Imagem:
     """
     Convesão de matriz numérica para imagem de 8
-    bits, com cuidado de underflow e overflow.
+    bits, com tratamento de underflow e overflow.
     """
     # conversão por arredondamento
     if round:
@@ -133,9 +133,8 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
         pm1, p0, p1, p2 = (Pe3(s+d) for d in range(-1,2+1))
         return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
 
-    # índices truncados
+    # índices truncados e "erros"
     ind, dxdy = modf(ind)
-    # "erro" do truncamento
     dx, dy = dxdy[...,np.newaxis]
 
     out = zeros(ind, dtype=float)
@@ -150,7 +149,7 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
             out += f * R(m - dx) * R(dy - n)
 
-    # imagem resultante
+    # transformação para 8 bits
     return asimg(out)
 
 
@@ -158,9 +157,8 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     """
     Interpolação por polinômios de Lagrange.
     """
-    # índices truncados
+    # índices truncados e "erros"
     (x, y), dxdy = modf(ind)
-    # "erro" do truncamento
     dx, dy = dxdy[...,np.newaxis]
 
     # operação interna

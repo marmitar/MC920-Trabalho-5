@@ -40,7 +40,7 @@ def translacao(Tx: float, Ty: Optional[float]=None) -> OpLin:
     Matriz de translação.
     """
     if Ty is None:
-        # escala repetida
+        # desvio repetido
         Ty = Tx
 
     return np.asarray([

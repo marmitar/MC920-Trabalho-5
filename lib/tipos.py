@@ -5,7 +5,7 @@ from typing import (
     TYPE_CHECKING, overload,
     Type, Union, Tuple
 )
-from numpy import ndarray, uint8, float64
+from numpy import ndarray, uint8, float64, int64
 
 if TYPE_CHECKING:
     # Python 3.8+
@@ -19,7 +19,7 @@ else:
 
 class Color(ndarray): # type: ignore # pylint: disable=function-redefined
     """
-    Uma cor em BGRA
+    Vetor representando uma cor BGRA.
     """
     dtype: Type[uint8] = uint8
     ndim: Literal[1] = 1
@@ -42,14 +42,14 @@ class Indices(ndarray): # type: ignore # pylint: disable=function-redefined
     Composta por um vetor `(WX, WY, W)` da imagem original para
     cada posição `(i, j)` da nova imagem.
     """
-    dtype: Type[float64] = float64
+    dtype: Union[Type[float64], Type[int64]]
     ndim: Literal[3] = 3
-    shape: Tuple[Literal[3], int, int]
+    shape: Tuple[Literal[2, 3], int, int]
 
 
 class Imagem(ndarray): # type: ignore # pylint: disable=function-redefined
     """
-    Matrizes que representam imagens em OpenCV e bibliotecas similares.
+    Matrizes que representam imagens do OpenCV.
     """
     dtype: Type[uint8] = uint8
     ndim: Literal[3] = 3

@@ -9,8 +9,8 @@ from lib.args import Argumentos, imagem, racional, natural, cor, metodo
 from lib.inout import imgshow, imgwrite, encode
 from lib.interp import Metodo
 from lib.idx import indices, aplica
-from lib.ops import inversa, identidade, translacao
-from lib.imgop import (
+from lib.linop import inversa, identidade, translacao
+from lib.opimg import (
     redimensionamento, arredondamento,
     rotacao, rotacao_proj, escalonamento
 )
@@ -45,7 +45,7 @@ parser.add_argument('-o', '--output', dest='saida',
 
 def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]:
     """
-    Montagem da matriz de transformação da imagem.
+    Montagem da matriz de transformação linear.
     Também retorna as dimensões da imagem de saída.
     """
     T = identidade()
@@ -72,7 +72,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
         R, dim = arredondamento(shape)
 
     # translação para o centro do pixel e depois de
-    # volta pro superior esquerdo
+    # volta pro canto superior esquerdo
     L1, L2 = translacao(-1/2), translacao(1/2)
     return L1 @ R @ T @ L2, dim
 
@@ -85,8 +85,9 @@ if __name__ == '__main__':
     # operações na imagem
     T, dim = transformacao(img, args)
 
-    # índices da imagem de entrada pela da saída
+    # índices da imagem de saída
     ind = indices(dim)
+    # transformados para os da entrada
     ind = aplica(inversa(T), ind)
 
     # interpolação para o resultado

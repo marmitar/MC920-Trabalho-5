@@ -8,9 +8,8 @@ from .tipos import OpLin, Indices, Imagem, Color
 
 def indices(shape: Tuple[int, int]) -> Indices:
     """
-    Lista de cordenadas homogêneas de todos os pixels
-    em uma imagem de dimensões com o mesmo formato. A
-    coordenada de cada pixel é considerada em seu centro.
+    Matriz de cordenadas homogêneas de todos os pixels
+    da imagem. O resultado têm o mesmo shape da imagem.
 
     Parâmetros
     ----------
@@ -20,8 +19,8 @@ def indices(shape: Tuple[int, int]) -> Indices:
     Retorno
     -------
     indices: ndarray
-        Tensor `(largura, altura, 3)` com as coordenadas
-        `(WX, WY, W)` de cada ponto `(i, j)` da imagem.
+        Tensor `(3, largura, altura)` com as coordenadas
+        `(WX, WY, W)` de cada ponto `(y, x)` da imagem.
     """
     # valores de x e y
     y = np.arange(shape[0], dtype=float)
@@ -52,9 +51,7 @@ def aplica(op: OpLin, ind: Indices) -> Indices:
     """
     res = np.tensordot(op, ind, axes=1)
     # normalização das coordenadas
-    res[0] /= res[2]
-    res[1] /= res[2]
-    res[2] /= res[2]
+    res /= [res[2]]
     return res
 
 @overload
@@ -81,7 +78,7 @@ def acesso(img: Imagem, ind: Indices, fundo: Color, *, out: Optional[np.ndarray]
         Imagem de entrada.
     ind: ndarray
         Matriz das coordenadas homogêneas.
-    fundo: int
+    fundo: (int, int, int, int)
         Cor para índices fora da imagem.
     out: ndarray, opcional
         Matriz para salvar o resultado.

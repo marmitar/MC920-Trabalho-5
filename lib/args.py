@@ -93,7 +93,7 @@ inf = math.inf
 
 def racional(*, min: float=-inf, max: float=inf) -> Callable[[str], float]:
     """
-    Tratamento de argumentos de ponto flutuante dentro de um limite.
+    Tratamento de argumentos de ponto flutuante limitados.
     """
     def parse(texto: str) -> float:
         num = math_eval(texto)
@@ -110,7 +110,7 @@ def racional(*, min: float=-inf, max: float=inf) -> Callable[[str], float]:
 
 def natural(*, min: float=-inf, max: float=inf) -> Callable[[str], int]:
     """
-    Tratamento de argumentos inteiros em um limite.
+    Tratamento de argumentos inteiros limitados.
     """
     def parse(texto: str) -> int:
         num = math_eval(texto)
@@ -129,15 +129,16 @@ def cor(texto: str) -> Color:
     """
     Opções de cor reconhecidas pelo Matplotlib.
     """
-    # opções especiais
+    # opções especiais para fundo transparente
     if texto in ('t', 'transparente'):
         return np.zeros(4, dtype=np.uint8)
 
     try:
-        # conversão RGBA
+        # leitura RGBA entre 0 e 1 do matplotlib
         rgba = colors.to_rgba(texto)
     except ValueError as err:
         raise ArgumentTypeError(str(err)) from err
 
     r, g, b, a = map(lambda c: int(255 * c), rgba)
+    # ordem BGR para OpenCV
     return np.asarray([b, g, r, a], dtype=np.uint8)
