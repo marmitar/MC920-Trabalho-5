@@ -1,3 +1,3 @@
 mkdir -p resultados
 
-python3 transforma.py imagens/city.png -o resultados/exemplo.png -a 15 -b 45 -e 0.336
+python3 transforma.py imagens/city.png -o resultados/exemplo.png -a asin\(0.25\) -b deg\(pi/4\) -e 1/3

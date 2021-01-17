@@ -64,15 +64,12 @@ A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superi
 
     Também temos as opções de escalonamento da imagem. A opção \mintinline{bash}{--escala ESCALA} ou \mintinline{bash}{-e ESCALA} recebe um fator de escala positivo e redimensiona cada pixel por esse fator, nas duas dimensões da imagem. Também pode ser especificada as dimensões da imagem resultante, com a \textit{flag} \mintinline{bash}{--dim ALTURA LARGURA} ou \mintinline{bash}{-d ALTURA LARGURA}. Apenas uma das opções de escala pode ser usada a cada invocação.
 
-    As transformações são aplicadas na ordem com que aparecem nessa seção, ou seja, primeiro é feito a rotação no plano XY, depois a rotação em torno de Y com a projeção perspectiva, e por fim o redimensionamento. O exemplo abaixo gera a \cref{fig:exemplo}.
+    As transformações são aplicadas na ordem com que aparecem nessa seção, ou seja, primeiro é feito a rotação no plano XY, depois a rotação em torno de Y com a projeção perspectiva, e por fim o redimensionamento. As entradas númericas também podem ser passadas por expressões matemáticas simples e podem usar funções da bibliotecas \mintinline{python}{math}. O exemplo abaixo usa algumas expressões para gerar a \cref{fig:exemplo}.
 
-    \begin{minted}{bash}
-        $ python3 transforma.py imagens/city.png -o saida.png -a 15 -b 45 -e 0.336
+    \begin{minted}[style=vs]{bash}
+        $ python3 transforma.py imagens/city.png -o saida.png \
+            -a asin\(0.25\) -b deg\(pi/4\) -e 1/3
     \end{minted}
-
-\subsubsection{\red{math\_eval}}
-
-    % TODO: math eval
 
 \subsubsection{Método de Interpolação}
 
