@@ -16,7 +16,7 @@ Biblioteca auxiliar para a ferramenta.
 - `linop`: Operações lineares puras.
 
 - `opimg`: Operações lineares aplicadas em imagens,
-    considerando as dimensões dela.
+    considerando os limites dela.
 
 - `interp`: Métodos de interpolação.
 """

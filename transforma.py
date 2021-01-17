@@ -62,13 +62,8 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
         T = R @ T
     # rotação em torno de y com projeção
     if args.beta is not None:
-        print('T =', T)
-        print('lim =', lim)
         R, lim = rotacao_proj(args.beta, lim)
         T = R @ T
-        print('R =', R)
-        print('lim =', lim)
-        print('T =', T)
     # escalonamento
     if args.escala is not None:
         E, lim = escalonamento(args.escala, lim)
