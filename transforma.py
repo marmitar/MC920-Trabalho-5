@@ -5,7 +5,10 @@ from sys import stdout
 from argparse import Namespace
 from typing import Tuple
 from lib.tipos import Imagem, OpLin
-from lib.args import Argumentos, imagem, racional, natural, cor, metodo
+from lib.args import (
+    Argumentos, MATH,
+    imagem, racional, natural, cor, metodo
+)
 from lib.inout import imgshow, imgwrite, encode
 from lib.interp import Metodo
 from lib.idx import indices, aplica
@@ -17,8 +20,9 @@ from lib.opimg import (
 
 
 DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
+EPILOGO = 'Expressões matemáticas reconhecidas: ' + ', '.join(sorted(MATH.keys()))
 # parser de argumentos
-parser = Argumentos(allow_abbrev=False, description=DESCRICAO, add_help=False)
+parser = Argumentos(allow_abbrev=False, add_help=False, description=DESCRICAO, epilog=EPILOGO)
 # modificações na imagem
 transf = parser.add_argument_group('Transformações')
 transf.add_argument('-a', '--angulo', metavar='ALFA', type=racional(),

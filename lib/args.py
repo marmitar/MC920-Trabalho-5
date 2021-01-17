@@ -4,8 +4,9 @@ Tratamento de argumentos da linha de comando.
 import math
 from sys import stdin
 from warnings import warn
+from functools import wraps
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from typing import Tuple, Optional, Sequence, Callable
+from typing import Tuple, Optional, Sequence, Callable, Dict, Iterator
 from matplotlib import colors
 import numpy as np
 from .tipos import Imagem, Color
@@ -53,39 +54,6 @@ def metodo(texto: str) -> Metodo:
         return Metodo[texto.upper()]
     except KeyError as err:
         raise ArgumentTypeError(f'método inválido: {texto}') from err
-
-
-# funções matemáicas válidas para 'math_eval'
-MATH = {
-    nome: getattr(math, nome)
-    for nome in dir(math)
-        if not nome.startswith('_')
-}
-
-def math_eval(expr: str) -> float:
-    """
-    Reconhecimento de expressões matemáticas.
-    """
-    try:
-        # de https://realpython.com/python-eval-function/
-        code = compile(expr, "<input>", "eval", optimize=0)
-        # proteção de acessos inválidos
-        for nome in code.co_names:
-            if nome not in MATH:
-                raise NameError(f'expressão inválida: {expr}')
-
-        # execução da expressão
-        ans = eval(code, {'__builtins__': {}}, MATH)
-
-    # erros durante a validação da expressão
-    except (SyntaxError, NameError, ValueError) as err:
-        raise ArgumentTypeError(str(err)) from err
-
-    # resultados não numéricos
-    if not isinstance(ans, (int, float)):
-        raise ArgumentTypeError(f'expressão não númerica: {expr}')
-
-    return ans
 
 
 # limite infinito
@@ -142,3 +110,62 @@ def cor(texto: str) -> Color:
     r, g, b, a = map(lambda c: int(255 * c), rgba)
     # ordem BGR para OpenCV
     return np.asarray([b, g, r, a], dtype=np.uint8)
+
+
+def funcoes() -> Iterator[Tuple[str, Callable[..., float]]]:
+    """
+    Funções matemáticas válidas.
+    """
+    # todas as funções públicas de math
+    for nome in dir(math):
+        if not nome.startswith('_'):
+            yield nome, getattr(math, nome)
+
+    # alguns builtins
+    yield 'int', int
+    yield 'abs', abs
+    yield 'sum', sum
+    yield 'round', round
+    # facilidade para conversão de ângulos
+    yield 'd', math.degrees
+    yield 'deg', math.degrees
+
+    # funções trigonométricas para graus
+    for nome in ('cos', 'sin', 'tan'):
+        fun = getattr(math, nome)
+        wrapper = lambda x: fun(math.radians(x))
+        yield nome, wraps(fun)(wrapper)
+
+    # funções inversas retornando graus
+    for nome in ('acos', 'asin', 'atan', 'atan2'):
+        fun = getattr(math, nome)
+        wrapper = lambda x: math.degrees(fun(x))
+        yield nome, wraps(fun)(wrapper)
+
+# funções matemáicas válidas para 'math_eval'
+MATH = {nome: fun for nome, fun in funcoes()}
+
+def math_eval(expr: str) -> float:
+    """
+    Reconhecimento de expressões matemáticas.
+    """
+    try:
+        # de https://realpython.com/python-eval-function/
+        code = compile(expr, "<input>", "eval", optimize=0)
+        # proteção de acessos inválidos
+        for nome in code.co_names:
+            if nome not in MATH:
+                raise NameError(f'expressão inválida: {expr}')
+
+        # execução da expressão
+        ans = eval(code, {'__builtins__': {}}, MATH)
+
+    # erros durante a validação da expressão
+    except (SyntaxError, NameError, ValueError) as err:
+        raise ArgumentTypeError(str(err)) from err
+
+    # resultados não numéricos
+    if not isinstance(ans, (int, float)):
+        raise ArgumentTypeError(f'expressão não númerica: {expr}')
+
+    return ans
