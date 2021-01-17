@@ -36,9 +36,9 @@ Executed in    6,16 secs   fish           external
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m bicubica
 
 ________________________________________________________
-Executed in   79,05 secs   fish           external
-   usr time   64,62 secs  478,00 micros   64,62 secs
-   sys time   15,02 secs  116,00 micros   15,02 secs
+Executed in   70,94 secs   fish           external
+   usr time   61,12 secs    0,00 micros   61,12 secs
+   sys time   10,30 secs  517,00 micros   10,30 secs
 
 ```
 

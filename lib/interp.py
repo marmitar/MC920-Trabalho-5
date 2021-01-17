@@ -123,15 +123,18 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     Interpolação bicúbica.
     """
     # operações internas
-    def P(t: np.ndarray) -> np.ndarray:
-        return np.where(t > 0, t, 0)
+    def Pe3(t: np.ndarray) -> np.ndarray:
+        # já faz P(t)^3
+        t[t < 0] = 0
+        t[t > 0] **= 3
+        return t
 
     def R(s: np.ndarray) -> np.ndarray:
-        pm1, p0, p1, p2 = (P(s+d)**3 for d in range(-1,2+1))
+        pm1, p0, p1, p2 = (Pe3(s+d) for d in range(-1,2+1))
         return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
 
     # índices truncados
-    (x, y), dxdy = modf(ind)
+    ind, dxdy = modf(ind)
     # "erro" do truncamento
     dx, dy = dxdy[...,np.newaxis]
 
@@ -141,8 +144,9 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     for m in range(-1, 2+1):
         for n in range(-1, 2+1):
             # acesso do vizinho
-            ind = np.stack((x + m, y + n), axis=0)
+            ind += np.reshape([m, n], (2, 1, 1))
             f = acesso(img, ind, fundo, out=f)
+            ind -= np.reshape([m, n], (2, 1, 1))
 
             out += f * R(m - dx) * R(dy - n)
 
