@@ -11,7 +11,7 @@ from lib.interp import Metodo
 from lib.idx import indices, aplica
 from lib.linop import inversa, identidade, translacao
 from lib.opimg import (
-    redimensionamento, arredondamento,
+    limites, redimensionamento, arredondamento,
     rotacao, rotacao_proj, escalonamento
 )
 
@@ -54,32 +54,36 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Também retorna as dimensões da imagem de saída.
     """
     T = identidade()
-    shape: Tuple[float, float] = img.shape[:2]
+    lim = limites(img.shape[:2])
 
     # rotação no plano da imagem
     if args.angulo is not None:
-        R, shape = rotacao(args.angulo, shape)
+        R, lim = rotacao(args.angulo, lim)
         T = R @ T
     # rotação em torno de y com projeção
     if args.beta is not None:
-        R, shape = rotacao_proj(args.beta, shape)
+        print('T =', T)
+        print('lim =', lim)
+        R, lim = rotacao_proj(args.beta, lim)
         T = R @ T
+        print('R =', R)
+        print('lim =', lim)
+        print('T =', T)
     # escalonamento
     if args.escala is not None:
-        E, shape = escalonamento(args.escala, shape)
+        E, lim = escalonamento(args.escala, lim)
         T = E @ T
-
     # redimensionamento para saída fixa
     if args.dim is not None:
-        R, dim = redimensionamento(shape, args.dim)
-    # sem redimensionamento
-    else:
-        R, dim = arredondamento(shape)
+        E, lim = redimensionamento(lim, args.dim)
+        T = E @ T
 
+    # dimensões inteiras
+    A, shape = arredondamento(lim)
     # translação para o centro do pixel e depois de
     # volta pro canto superior esquerdo
     L1, L2 = translacao(-1/2), translacao(1/2)
-    return L1 @ R @ T @ L2, dim
+    return L1 @ A @ T @ L2, shape
 
 
 if __name__ == '__main__':

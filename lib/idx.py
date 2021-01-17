@@ -3,7 +3,7 @@ Análise de índices e dimensões da imagem.
 """
 from typing import Tuple, Optional, overload
 import numpy as np
-from .tipos import OpLin, Indices, Imagem, Color
+from .tipos import OpLin, Indices, Limites, Imagem, Color
 
 
 def indices(shape: Tuple[int, int]) -> Indices:
@@ -32,7 +32,11 @@ def indices(shape: Tuple[int, int]) -> Indices:
     return np.stack((x, y, w), axis=0)
 
 
-def aplica(op: OpLin, ind: Indices) -> Indices:
+@overload
+def aplica(op: OpLin, ind: Limites) -> Limites: ...
+@overload
+def aplica(op: OpLin, ind: Indices) -> Indices: ...
+def aplica(op: OpLin, ind: np.ndarray) -> np.ndarray:
     """
     Aplica operação linear na matriz de índices e
     normaliza para `W = 1`.

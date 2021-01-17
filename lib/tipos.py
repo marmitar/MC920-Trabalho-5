@@ -35,6 +35,15 @@ class OpLin(ndarray): # type: ignore # pylint: disable=function-redefined
     shape: Tuple[Literal[3], Literal[3]] = (3, 3)
 
 
+class Limites(ndarray): # type: ignore # pylint: disable=function-redefined
+    """
+    Matrizes com os pontos `(WX, WY, W)` extremos da imagem.
+    """
+    dtype: Type[float64] = float64
+    ndim: Literal[2] = 2
+    shape: Tuple[Literal[3], Literal[4]] = (3, 4)
+
+
 class Indices(ndarray): # type: ignore # pylint: disable=function-redefined
     """
     Matriz de índices da imagem em coordenadas homogêneas.
