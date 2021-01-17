@@ -38,7 +38,7 @@ class Metodo(Enum):
         out: ndarray
             Imagem interpolada da entrada.
         """
-        logging.info(f'método de interpolação: {self}')
+        logging.debug(f'método de interpolação: {self}')
         logging.debug(f'indices:{ind.shape} com fundo {fundo}')
 
         fn = globals()[str(self)]
