@@ -130,17 +130,32 @@ def funcoes() -> Iterator[Tuple[str, Callable[..., float]]]:
     yield 'd', math.degrees
     yield 'deg', math.degrees
 
-    # funções trigonométricas para graus
-    for nome in ('cos', 'sin', 'tan'):
+    def as_deg(nome: str) -> Callable[..., float]:
+        """
+        Converte entrada ou saída da função
+        trigonométrica para graus.
+        """
+        # a função trigonométrica
         fun = getattr(math, nome)
-        wrapper = lambda x: fun(math.radians(x))
-        yield nome, wraps(fun)(wrapper)
 
-    # funções inversas retornando graus
-    for nome in ('acos', 'asin', 'atan', 'atan2'):
-        fun = getattr(math, nome)
-        wrapper = lambda x: math.degrees(fun(x))
-        yield nome, wraps(fun)(wrapper)
+        # funções inversas retornam ângulo
+        if nome.startswith('a'):
+            @wraps(fun)
+            def wrapper(x: float) -> float:
+                return math.degrees(fun(x))
+        # funções diretas recebem o ângulo
+        else:
+            @wraps(fun)
+            def wrapper(x: float) -> float:
+                return fun(math.radians(x))
+
+        return wrapper
+
+
+    # funções trigonométricas que devem ser ajustadas p/ graus
+    fns = ('cos', 'sin', 'tan', 'acos', 'asin', 'atan', 'atan2')
+    for nome in fns:
+        yield nome, as_deg(nome)
 
 # funções matemáicas válidas para 'math_eval'
 MATH = {nome: fun for nome, fun in funcoes()}
@@ -161,7 +176,7 @@ def math_eval(expr: str) -> float:
         ans = eval(code, {'__builtins__': {}}, MATH)
 
     # erros durante a validação da expressão
-    except (SyntaxError, NameError, ValueError) as err:
+    except (SyntaxError, NameError, ValueError, TypeError) as err:
         raise ArgumentTypeError(str(err)) from err
 
     # resultados não numéricos
