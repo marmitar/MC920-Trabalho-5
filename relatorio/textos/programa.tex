@@ -1,4 +1,4 @@
-\section{O Programa} \label{sec:programa}
+\section{Execução} \label{sec:programa}
 
 % TODO: testar 3.6+
 
@@ -6,11 +6,11 @@ A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superi
 
 \subsection{Código-Fonte}
 
-    Neste trabalho foi elaborada a ferramenta \texttt{trasforma.py} que faz a transformação da imagem e aplicação da interpolação. O código responsável pelas operações podem ser encontrados na pasta \texttt{lib}, como apresentado a seguir.
+    Neste trabalho foi elaborada a ferramenta \texttt{transforma.py} que faz a transformação da imagem e aplicação da interpolação. O código responsável pelas operações podem ser encontrados na pasta \texttt{lib}, como apresentado a seguir.
 
     \begin{description}
 
-        \item[trasnforma.py] Ferramenta de transformação da imagem.
+        \item[transforma.py] Ferramenta de transformação da imagem.
 
         \item[lib] Conjunto de arquivos com implementações para cada funcionalidade da ferramenta.
 
@@ -34,22 +34,43 @@ A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superi
 
     Todas as imagens base para o processamento discutido ao longo do texto estão presente na pasta \texttt{imagens}. Também existe o \textit{script} \texttt{run.sh} em Bash que refaz todos resultados apresentados neste relatório.
 
-\subsection{Execução} % TODO: separar
+\subsection{Argumentos}
 
-    A execução de ambos os programas deverá ser feita através do interpretador de Python 3.6+. Os exemplos de execuções a seguir funcionam apenas em Python 3.7+, devido à ordem com que os argumentos são interpretados. No entanto, o \textit{script} \texttt{run.sh} também funciona na versão 3.6.
+    A execução de ambos os programas deverá ser feita através do interpretador de Python 3.6+. Os exemplos de execuções neste relatório podem não funcionar nessa versão, devido à ordem com que os argumentos são interpretados. No entanto, o \textit{script} \texttt{run.sh} funciona em todas variantes especificadas.
+
+    Todas as opções à seguir estão explicadas com o texto de ajuda da ferramenta, que pode ser acessado com a \textit{flag} \mintinline{bash}{--help} ou apenas \mintinline{bash}{-h}.
+
+\subsubsection{Entrada e Saída}
 
     O único argumento obrigatório é o caminho da imagem de entrada, preferencialmente PNG, que deverá ser transformada. A imagem de saída é, por padrão, exibida em uma nova janela gráfica, mas pode ser salva em um arquivo com a opção \mintinline{bash}{--output SAIDA} ou \mintinline{bash}{-o SAIDA}.
 
-    A primeira transformação que pode ser feita na imagem é rotação no plano $XY$ por um ângulo $\alpha$. Isso pode ser realizado com \mintinline{bash}{--angulo ALFA} ou \mintinline{bash}{-a ALFA}. Também pode ser feita uma rotação em torno do eixo $Y$, que é projetada em perspectiva para o plano original da imagem. A \textit{flag} para isso é \mintinline{bash}{--beta BETA} ou \mintinline{bash}{-b BETA}. Ambas opções tratam apenas de ângulos em graus.
+    Se nenhum outro argumento for especificado, a ferramenta apenas clona a imagem de entrada. Por exemplo, a invocação a seguir gera uma imagem \texttt{saida.png} idêntica à entrada \texttt{imagens/baboon.png}.
+
+    \begin{minted}{bash}
+        $ python3 transforma.py imagens/baboon.png -o saida.png
+    \end{minted}
+
+\subsubsection{Transformações}
+
+    A primeira transformação que pode ser feita na imagem é uma rotação no plano XY por um ângulo $\alpha$. Isso pode ser realizado com \mintinline{bash}{--angulo ALFA} ou \mintinline{bash}{-a ALFA}. Também pode ser feita uma rotação em torno do eixo Y, que é projetada em perspectiva para o plano original da imagem. A \textit{flag} para isso é \mintinline{bash}{--beta BETA} ou \mintinline{bash}{-b BETA}. Ambas opções tratam apenas de ângulos em graus. Os detalhes dessas transformações pode ser encontrado na \red{seção ??}.
+
+
+    Também temos as opções de escalonamento da imagem. A opção \mintinline{bash}{--escala ESCALA} ou \mintinline{bash}{-e ESCALA} recebe um fator de escala positivo e redimensiona cada pixel por esse fator, nas duas dimensões da imagem. Também pode ser especificada as dimensões da imagem resultante, com a \textit{flag} \mintinline{bash}{--dim ALTURA LARGURA} ou \mintinline{bash}{-d ALTURA LARGURA}. Apenas uma das opções de escala pode ser usada a cada invocação.
+
+    As transformações são aplicadas na ordem com que aparecem nessa seção, ou seja, primeiro é feito a rotação no plano XY, depois a rotação em torno de Y com a projeção perspectiva, e por fim o redimensionamento. O exemplo abaixo gera a \red{figura ??}.
+
+    \begin{minted}{bash}
+        $ python3 transforma.py imagens/baboon.png -o saida.png -a 60 -b 30 -e 0.1618
+    \end{minted}
+
+\subsubsection{\red{math\_eval}}
 
     % TODO: math eval
 
-    Também temos as opções de escalonamento da imagem. % TODO
+\subsubsection{Método de Interpolação}
 
-    \begin{minted}{bash}
-        $ echo MC920 | python3 codificar.py imagens/baboon.png -o saida.png
-    \end{minted}
+    % TODO: método
+
+\subsubsection{Cor do Fundo}
 
     % TODO: cor
-
-    Todas as opções anteriores estão explicadas com o texto de ajuda da ferramenta, que pode ser acessado com a \textit{flag} \mintinline{bash}{--help} ou apenas \mintinline{bash}{-h}.
