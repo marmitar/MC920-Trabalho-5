@@ -2,11 +2,12 @@
 Tratamento de argumentos da linha de comando.
 """
 import math
+import logging
 from sys import stdin
 from warnings import warn
 from functools import wraps
-from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from typing import Tuple, Optional, Sequence, Callable, Dict, Iterator
+from argparse import ArgumentParser, Action, ArgumentTypeError, Namespace, BooleanOptionalAction
+from typing import Any, Tuple, Optional, Sequence, Callable, Dict, Iterator
 from matplotlib import colors
 import numpy as np
 from .tipos import Imagem, Color
@@ -28,6 +29,22 @@ class Argumentos(ArgumentParser):
         except AttributeError:
             warn('Python 3.6 não suporta argumentos opcionais após entrada')
             return super().parse_args(args)
+
+
+def verbosidade(level: int) -> None:
+    """
+    Muda a verbosidade do logger.
+    """
+    if level < 0:
+        log_level = logging.ERROR
+    elif level == 0:
+        log_level = logging.WARNING
+    elif level == 1:
+        log_level = logging.INFO
+    else: # level > 1
+        log_level = logging.DEBUG
+
+    logging.getLogger().setLevel(log_level)
 
 
 def imagem(arquivo: str) -> Tuple[Imagem, str]:

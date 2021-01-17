@@ -4,6 +4,7 @@ Operações de transformação linear em imagens.
 Sempre retorna uma operação com a imagem resultante
 iniciando em (0, 0) e os limites dessa imagem.
 """
+import logging
 from typing import Tuple, Optional, overload
 import numpy as np
 from .tipos import OpLin, Limites
@@ -103,6 +104,8 @@ def escalonamento(prop: float, lim: Limites) -> Tuple[OpLin, Limites]:
     lim: ndarray
         Limites da saída.
     """
+    logging.debug(f'escalonamento de {prop}')
+
     T = linop.escalonamento(prop)
     return T, aplica(T, lim)
 
@@ -126,6 +129,8 @@ def redimensionamento(lim: Limites, shape: Dim) -> Tuple[OpLin, Limites]:
         Limites da saída.
     """
     (Hi, Wi), (Hf, Wf) = dimensoes(lim), shape
+    logging.debug(f'redimensionamento de {Hi, Wi} para {Hf, Wf}')
+
     T = linop.escalonamento(Wf / Wi, Hf / Hi)
     return T, aplica(T, lim)
 
@@ -148,6 +153,8 @@ def rotacao(angulo: float, lim: Limites) -> Tuple[OpLin, Limites]:
     lim: ndarray
         Limites da saída.
     """
+    logging.debug(f'rotação em XY de {angulo} graus')
+
     # a rotação é negativa, já que Y inverte em matrizes
     R = linop.rotacao(-angulo, graus=True)
     return correcao(R, lim)
@@ -171,6 +178,8 @@ def rotacao_proj(beta: float, lim: Limites) -> Tuple[OpLin, Limites]:
     lim: ndarray
         Limites da saída.
     """
+    logging.debug(f'rotação com projeção de {beta} graus')
+
     # imagem normalizada e centrada na origem
     N, _ = redimensionamento(lim, (1, 1))
     T = linop.translacao(-1/2)
@@ -199,6 +208,8 @@ def arredondamento(lim: Limites) -> Tuple[OpLin, Tuple[int, int]]:
     shape: (int, int)
         Dimensões da saída.
     """
+    logging.debug('arredodamento')
+
     # mapeamento para dimensão válida
     def asdim(num: float) -> int:
         res = int(round(num))

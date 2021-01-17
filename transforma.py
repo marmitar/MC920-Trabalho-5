@@ -1,12 +1,15 @@
 """
 Ferramenta de rotação e escalonamento de imagens.
 """
+import logging
 from sys import stdout
+from time import time
+from timeit import timeit
 from argparse import Namespace
 from typing import Tuple
-from lib.tipos import Imagem, OpLin
+from lib.tipos import Imagem, Indices
 from lib.args import (
-    Argumentos, MATH,
+    Argumentos, MATH, verbosidade,
     imagem, racional, natural, cor, metodo
 )
 from lib.inout import imgshow, imgwrite, encode
@@ -42,6 +45,8 @@ optadc.add_argument('-c', '--cor', type=cor, default=cor('transparente'),
                     help='cor de fundo da imagem transformada (reconhece opções do Matplotlib)')
 optadc.add_argument('-h', '--help', action='help',
                     help='mostra esse texto de ajuda')
+optadc.add_argument('-v', '--verboso', action='count', default=0,
+                    help='mostra detalhes da execução')
 # entrada e saída
 inpout = parser.add_argument_group('Entrada e saída')
 inpout.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
@@ -52,10 +57,10 @@ inpout.add_argument('-o', '--output', dest='saida',
 # # # # #
 # MAIN  #
 
-def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]:
+def transformacao(img: Imagem, args: Namespace) -> Indices:
     """
-    Montagem da matriz de transformação linear.
-    Também retorna as dimensões da imagem de saída.
+    Monta da matriz de transformação linear e aplica
+    para conseguir os índices transformados.
     """
     T = identidade()
     lim = limites(img.shape[:2])
@@ -78,28 +83,34 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
         T = E @ T
 
     # dimensões inteiras
-    A, shape = arredondamento(lim)
+    A, dim = arredondamento(lim)
     # translação para o centro do pixel e depois de
     # volta pro canto superior esquerdo
-    L1, L2 = translacao(-1/2), translacao(1/2)
-    return L1 @ A @ T @ L2, shape
+    T = translacao(-1/2) @ A @ T @ translacao(1/2)
+
+    # índices da imagem de saída transformados
+    return aplica(inversa(T), indices(dim))
 
 
 if __name__ == '__main__':
     args = parser.parse_intermixed_args()
+    verbosidade(args.verboso)
+
     # argumentos da cli
     img, arquivo = args.imagem
+    logging.info(f'imagem {arquivo} de dimensões {img.shape}')
 
+    inicio = time()
     # operações na imagem
-    T, dim = transformacao(img, args)
+    ind = transformacao(img, args)
+    # tempo de transformação
+    logging.info(f'transformação em {time() - inicio} segundos')
 
-    # índices da imagem de saída
-    ind = indices(dim)
-    # transformados para os da entrada
-    ind = aplica(inversa(T), ind)
-
+    inicio = time()
     # interpolação para o resultado
     img = args.metodo(img, ind, args.cor)
+    # tempo de interpolação
+    logging.info(f'interpolação em {time() - inicio} segundos')
 
     # exibição do resultado
     if args.saida is None:

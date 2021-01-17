@@ -1,6 +1,7 @@
 """
 Funções de IO com as imagens.
 """
+import logging
 import numpy as np
 import cv2
 from .tipos import Imagem
@@ -27,6 +28,8 @@ def encode(img: Imagem, ext: str='PNG') -> bytes:
     ValueError
         A entrada não representa uma imagem.
     """
+    logging.debug(f'encoding imagem {img.shape} em {ext}')
+
     ok, buf = cv2.imencode('.' + ext, img)
     # problemas de codificação
     if not ok:
@@ -55,6 +58,8 @@ def decode(buffer: bytes) -> Imagem:
     ValueError
         Arquivo não pode ser decodificado como imagem.
     """
+    logging.debug(f'decoding buffer de {len(buffer)} bytes em BGRA')
+
     buf = np.frombuffer(buffer, dtype=np.uint8)
     img = cv2.imdecode(buf, cv2.IMREAD_UNCHANGED)
     # problemas de decodificação
@@ -86,6 +91,8 @@ def imgwrite(img: Imagem, caminho: str) -> None:
         Problema de escrita no caminho especificado ou
         na codificação da imagem.
     """
+    logging.debug(f'escrita de imagem {img.shape} em {caminho}')
+
     if not cv2.imwrite(caminho, img):
         raise ValueError('problema de escrita ou codificação')
 
@@ -103,6 +110,7 @@ def imgshow(img: Imagem, nome: str="", delay: int=250) -> None:
     delay: int, opcional
         Tempo em milisegundos de checagem da janela.
     """
+    logging.debug(f'apresentação de imagem {img.shape} com nome {repr(nome)}')
     try:
         cv2.namedWindow(nome, cv2.WINDOW_AUTOSIZE)
         cv2.imshow(nome, img)
