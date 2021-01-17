@@ -20,7 +20,7 @@ DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
 # parser de argumentos
 parser = Argumentos(allow_abbrev=False, description=DESCRICAO)
 # modificações na imagem
-parser.add_argument('-a', '--angulo', type=racional(),
+parser.add_argument('-a', '--angulo', metavar='ALFA', type=racional(),
                     help='rotação no plano da imagem, em graus')
 parser.add_argument('-b', '--beta', type=racional(),
                     help='rotação em torno de Y, em graus, projetado de volta para o plano XY')
