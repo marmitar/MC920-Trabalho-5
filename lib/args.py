@@ -31,7 +31,7 @@ class Argumentos(ArgumentParser):
 
 def imagem(arquivo: str) -> Tuple[Imagem, str]:
     """
-    Leitura e decodificação de imagem.
+    Leitura e decodificação da imagem.
     """
     try:
         # argumento especial
@@ -55,7 +55,7 @@ def metodo(texto: str) -> Metodo:
         raise ArgumentTypeError(f'método inválido: {texto}') from err
 
 
-# funções válidas na
+# funções matemáicas válidas para 'math_eval'
 MATH = {
     nome: getattr(math, nome)
     for nome in dir(math)
@@ -69,12 +69,12 @@ def math_eval(expr: str) -> float:
     try:
         # de https://realpython.com/python-eval-function/
         code = compile(expr, "<input>", "eval", optimize=0)
-        # proteção de acessos inválido
+        # proteção de acessos inválidos
         for nome in code.co_names:
             if nome not in MATH:
                 raise NameError(f'expressão inválida: {expr}')
 
-        # evaluação
+        # execução da expressão
         ans = eval(code, {'__builtins__': {}}, MATH)
 
     # erros durante a validação da expressão
@@ -130,7 +130,7 @@ def cor(texto: str) -> Color:
     Opções de cor reconhecidas pelo Matplotlib.
     """
     # opções especiais
-    if texto == 't' or texto == 'transparente':
+    if texto in ('t', 'transparente'):
         return np.zeros(4, dtype=np.uint8)
 
     try:

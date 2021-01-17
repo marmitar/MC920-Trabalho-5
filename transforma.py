@@ -2,7 +2,7 @@
 Ferramenta de rotação e escalonamento de imagens.
 """
 from sys import stdout
-from argparse import Namespace, ArgumentTypeError
+from argparse import Namespace
 from typing import Tuple
 from lib.tipos import Imagem, OpLin
 from lib.args import Argumentos, imagem, racional, natural, cor, metodo

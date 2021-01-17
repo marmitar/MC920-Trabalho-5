@@ -4,7 +4,7 @@ Operações de transformação linear em imagens.
 Sempre retorna uma operação com a imagem resultante
 iniciando em (0, 0) e a dimensão dessa imagem.
 """
-from typing import Tuple, Union, overload
+from typing import Tuple, overload
 import numpy as np
 from .tipos import OpLin
 from .idx import aplica
