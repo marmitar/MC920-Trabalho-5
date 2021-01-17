@@ -18,26 +18,31 @@ from lib.opimg import (
 
 DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
 # parser de argumentos
-parser = Argumentos(allow_abbrev=False, description=DESCRICAO)
+parser = Argumentos(allow_abbrev=False, description=DESCRICAO, add_help=False)
 # modificações na imagem
-parser.add_argument('-a', '--angulo', metavar='ALFA', type=racional(),
+transf = parser.add_argument_group('Transformações')
+transf.add_argument('-a', '--angulo', metavar='ALFA', type=racional(),
                     help='rotação no plano da imagem, em graus')
-parser.add_argument('-b', '--beta', type=racional(),
+transf.add_argument('-b', '--beta', type=racional(),
                     help='rotação em torno de Y, em graus, projetado de volta para o plano XY')
-escala = parser.add_mutually_exclusive_group()
+escala = transf.add_mutually_exclusive_group()
 escala.add_argument('-e', '--escala', type=racional(min=0),
                     help='escala de redimensionamento')
 escala.add_argument('-d', '--dim', metavar=('ALTURA', 'LARGURA'), type=natural(min=0), nargs=2,
                     help='dimensões da imagem resultante')
-# opções relacionadas ao processamento
-parser.add_argument('-m', '--metodo', type=metodo, choices=Metodo, default='vizinho',
-                    help='método de interpolação do resultado (padrão: vizinho)')
-parser.add_argument('-c', '--cor', type=cor, default=cor('black'),
+# opções adicionais
+optadc = parser.add_argument_group('Opções adicionais')
+optadc.add_argument('-m', '--metodo', type=metodo, choices=Metodo, default='bilinear',
+                    help='método de interpolação do resultado (padrão: bilinear)')
+optadc.add_argument('-c', '--cor', type=cor, default=cor('transparente'),
                     help='cor de fundo da imagem transformada (reconhece opções do Matplotlib)')
+optadc.add_argument('-h', '--help', action='help',
+                    help='mostra esse texto de ajuda')
 # entrada e saída
-parser.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
+inpout = parser.add_argument_group('Entrada e saída')
+inpout.add_argument('imagem', metavar='IMAGEM', type=imagem, default='-',
                     help='imagem de entrada')
-parser.add_argument('-o', '--output', dest='saida',
+inpout.add_argument('-o', '--output', dest='saida',
                     help='salva resultado em arquivo (padrão: exibe em nova janela)')
 
 # # # # #
