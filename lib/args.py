@@ -9,21 +9,14 @@ from typing import Tuple, Optional, Sequence, Callable
 from matplotlib import colors
 import numpy as np
 from .tipos import Imagem, Color
+from .interp import Metodo
 from .inout import decode
 
 
 class Argumentos(ArgumentParser):
     """
     Objeto para tratar opções da linha comando.
-
-    Parâmetros
-    ----------
-    descricao: str
-        Descrição da ferramenta.
     """
-    def __init__(self, descricao: str):
-        super().__init__(allow_abbrev=False, description=descricao)
-
     def parse_intermixed_args(self, args: Optional[Sequence[str]]=None, namespace: Optional[Namespace]=None) -> Namespace:
         """
         Parser de argumentos com ordem mistas.
@@ -50,6 +43,16 @@ def imagem(arquivo: str) -> Tuple[Imagem, str]:
 
     except (OSError, ValueError) as err:
         raise ArgumentTypeError(str(err)) from err
+
+
+def metodo(texto: str) -> Metodo:
+    """
+    Método de interpolação.
+    """
+    try:
+        return Metodo[texto.upper()]
+    except KeyError as err:
+        raise ArgumentTypeError(f'método inválido: {texto}') from err
 
 
 # funções válidas na

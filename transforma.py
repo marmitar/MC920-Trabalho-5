@@ -5,10 +5,10 @@ from sys import stdout
 from argparse import Namespace, ArgumentTypeError
 from typing import Tuple
 from lib.tipos import Imagem, OpLin
-from lib.args import Argumentos, imagem, racional, natural, cor
+from lib.args import Argumentos, imagem, racional, natural, cor, metodo
 from lib.inout import imgshow, imgwrite, encode
-from lib.idx import indices, aplica
 from lib.interp import Metodo
+from lib.idx import indices, aplica
 from lib.ops import inversa, identidade, translacao
 from lib.imgop import (
     redimensionamento, arredondamento,
@@ -16,19 +16,9 @@ from lib.imgop import (
 )
 
 
-def metodo(texto: str) -> Metodo:
-    """
-    Tratamento do método escolhido na entrada padrão.
-    """
-    try:
-        return Metodo[texto.upper()]
-    except KeyError as err:
-        raise ArgumentTypeError(f'método inválido: {texto}') from err
-
-
 DESCRICAO = 'Ferramenta de rotação e escalonamento de imagens.'
 # parser de argumentos
-parser = Argumentos(DESCRICAO)
+parser = Argumentos(allow_abbrev=False, description=DESCRICAO)
 # modificações na imagem
 parser.add_argument('-a', '--angulo', type=racional(),
                     help='rotação no plano da imagem, em graus')
@@ -59,7 +49,7 @@ def transformacao(img: Imagem, args: Namespace) -> Tuple[OpLin, Tuple[int, int]]
     Também retorna as dimensões da imagem de saída.
     """
     T = identidade()
-    shape = img.shape[:2]
+    shape: Tuple[float, float] = img.shape[:2]
 
     # rotação no plano da imagem
     if args.angulo is not None:
