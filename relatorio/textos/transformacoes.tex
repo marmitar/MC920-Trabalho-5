@@ -7,3 +7,28 @@ Usando a caixa delimitadora como a imagem resultante $I': H' \times W'$, temos o
 É importante notar, entretanto, que os pixels foram considerados pelo centro. Então, o pixel $ij$ é entendido como $z_{ij} = f(j + 1/2, i + 1/2)$. Para efeito prático, isso feito por uma translação de $T_x = T_y = 1/2$ antes da transformação e outra $T_x = T_y = -1/2$ ao final. Isso faz com que as operações tenham o comportamento esperado.
 
 A seguir estão apresentadas as transformações que podem ser aplicadas com a ferramenta. As matrizes foram baseadas na bibliografia da disciplina \autocite{helio}, com algumas modificações para que a caixa delimitadora sempre comece na origem do plano cartesiano, ou seja, $x_{\min} = y_{\min} = 0$.
+
+Além disso, as coordenadas homogêneas $C$ foram representadas no código-fonte por um tensor $3 \times H \times W$ em que $c_{1ij} = x_{ij} = j$, $c_{2ij} = y_{ij} = i$ e $c_{3ij} = w_{ij} = 1$. Assim, a aplicação da transformação $T$ é feita pelo produto interno:
+\[
+    C'_{ijl} = \sum_{k = 1}^3 T^{ik} C_{kjl}
+\]
+
+\subsection{Rotação no Plano XY}
+
+    Esse tipo de rotação (em torno do eixo Z, perpendicular à imagem) pode ser feita por:
+    \[
+        R = \begin{bmatrix}
+            \cos\alpha & -\sin\alpha & 0 \\
+            \sin\alpha & \cos\alpha & 0 \\
+            0 & 0 & 1
+        \end{bmatrix}
+    \]
+
+    No programa, o ângulo $\alpha$ é tratado pelo oposto $-\alpha$, já que o eixo Y é invertido entre as representações matricial e cartesiana. Além disso, a rotação é combinada com uma translação $L$ que corrige a posição da caixa delimitadora, sendo:
+    \[
+        L = \begin{bmatrix}
+            1 & 0 & -x_{\min} \\
+            0 & 1 & -y_{\min} \\
+            0 & 0 & 1
+        \end{bmatrix}
+    \]
