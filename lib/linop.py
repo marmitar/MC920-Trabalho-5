@@ -81,7 +81,7 @@ def rotacao_proj(beta: float, *, graus: bool=True, D: float=2.0) -> OpLin:
         beta = np.deg2rad(beta)
 
     # criação do eixo Z
-    M = np.asarray([
+    G = np.asarray([
         [1, 0, 0],
         [0, 1, 0],
         [0, 0, 0],
@@ -99,7 +99,7 @@ def rotacao_proj(beta: float, *, graus: bool=True, D: float=2.0) -> OpLin:
     ], dtype=float)
 
     # translação para Z = D
-    T = np.asarray([
+    TD = np.asarray([
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, D],
@@ -116,4 +116,4 @@ def rotacao_proj(beta: float, *, graus: bool=True, D: float=2.0) -> OpLin:
     # correção de escala da projeção
     E = escalonamento(D + 1)
 
-    return E @ P @ T @ R @ M
+    return E @ P @ TD @ R @ G

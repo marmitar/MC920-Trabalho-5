@@ -47,3 +47,63 @@ Além disso, as coordenadas homogêneas $C$ foram representadas no código-fonte
     Para a opção de escala da entrada padrão, temos que $S_x = S_y$. No entanto, para o redimensionamento de $H_i \times W_i$ para $H_f \times W_f$, podemos usar $S_x = W_f / W_i$ e $S_y = H_f / H_i$. Note que operações de escala não precisam de translações corretivas.
 
     Além disso, uma última operação de escala é feita após a transformação principal. Ela serve para arredondar as dimensões da imagem resultante $H \times W$ para os inteiros positivos mais próximos $H' \times W'$. Desse modo, $H' \geq 1$ e $H' - H \leq 1$, com restrições similares para $W'$.
+
+\subsection{Rotação em Torno de Y} \label{sec:rotacaoXY}
+
+    Nessa transformação, a imagem é considerada na posição $Z = 0$ e é então rotacionada em torno de Y. O resultado disso é então projetado novamente no plano da imagem. Para isso, é preciso gerar o novo eixo, que é feito com a matriz $\vec{G}$, para podermos rotacionar por $\beta$ com $\vec{R}$. Assim:
+    \[
+        \vec{G} = \begin{bmatrix}
+            1 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & 0 \\
+            0 & 0 & 1
+        \end{bmatrix}
+        \qquad \qquad
+        \vec{R} = \begin{bmatrix}
+            \cos\beta & 0 & \sin\beta & 0 \\
+            0 & 1 & 0 & 0 \\
+            -\sin\beta & 0 & \cos\beta & 0 \\
+            0 & 0 & 0 & 1
+        \end{bmatrix}
+    \]
+
+    A projeção perspectiva $\vec{P}$ é feita considerando o foco em $f = -1$ e a imagem em $Z = D$, que deve ser transladada com $\vec{D}$ para essa posição.
+    \[
+        \vec{D} = \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & D\\
+            0 & 0 & 0 & 1
+        \end{bmatrix}
+        \qquad \qquad
+        \vec{P} = \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & -\frac{1}{f} & 1
+        \end{bmatrix} = \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 1
+        \end{bmatrix}
+    \]
+
+    Além disso, temos as correções de escala. A primeira é uma correção da escala da projeção $\vec{E}$ com fatores $S_x = S_y = D - f = D + 1$. Isso vale, pois projeçoes são homografias, isto é, preserva razões cruzadas. Temos também uma normalização $\vec{N}$, resposável por reduzir a imagem $H \times W$ para um quadrado $1 \times 1$, para podermos usar $D = 2$ como um padrão razoável. A normalização também faz uma translação de $T_x = T_y = -1/2$ para centralizar a imagem na origem.
+    \[
+        \vec{E} = \begin{bmatrix}
+            D + 1 & 0 & 0 \\
+            0 & D + 1 & 0 \\
+            0 & 0 & 1
+        \end{bmatrix}
+        \qquad \qquad
+        \vec{N} = \begin{bmatrix}
+            1 & 0 & -\frac{1}{2} \\
+            0 & 1 & -\frac{1}{2} \\
+            0 & 0 & 1
+        \end{bmatrix} \cdot \begin{bmatrix}
+            \frac{1}{W} & 0 & 0 \\
+            0 & \frac{1}{H} & 0 \\
+            0 & 0 & 1
+        \end{bmatrix}
+    \]
+
+    Assim, a transformação final é dada $\vec{B} = \vec{N}^{-1} \cdot \vec{E} \cdot \vec{P} \cdot \vec{D} \cdot \vec{R} \cdot \vec{G}$. Essa transformação, assim como na rotação anterior (\cref{sec:rotacaoXY}), necessita de correção da posição da caixa delimitadora, feito com uma matriz similar à $\vec{L}$ naquela situação.
