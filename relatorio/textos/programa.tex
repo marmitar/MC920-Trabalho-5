@@ -73,10 +73,24 @@ A ferramenta foi desenvolvida e testada para as versões de Python \autocite{pyt
 
 \subsubsection{Método de Interpolação}
 
-    A ferramenta é capaz de interpolar de quatro métodos diferentes, escolhidos com a opção \mintinline{bash}{--metodo METODO} ou \mintinline{bash}{-m METODO}. Os métodos são: \mintinline{bash}{-m vizinho} (\cref{sec:interp:vizinho}), para interpolação pelo vizinho mais próximo, \mintinline{bash}{-m bilinear} (\ref{sec:interp:bilinear}), \mintinline{bash}{-m bicubica} (\ref{sec:interp:bicubica}) e \mintinline{bash}{-m lagrange} (\ref{sec:interp:lagrange}), que usa polinômios de Langrange.
+    A ferramenta é capaz de interpolar de quatro métodos diferentes, escolhidos com a opção \mintinline{bash}{--metodo METODO} ou \mintinline{bash}{-m METODO}. Os métodos são: \mintinline{bash}{-m vizinho} (\cref{sec:interp:vizinho}), para interpolação pelo vizinho mais próximo, \mintinline{bash}{-m bilinear} (\ref{sec:interp:bilinear}), \mintinline{bash}{-m bicubica} (\ref{sec:interp:bicubica}) e \mintinline{bash}{-m lagrange} (\ref{sec:interp:lagrange}), que usa polinômios de Langrange. O padrão é \texttt{bilinear}.
 
 \subsubsection{Cor do Fundo}
+
+    \begin{wrapfigure}{L}{0.25\textwidth}
+        \centering
+        \includegraphics[width=0.2\textwidth]{exemplo2.png}
+        \caption{Exemplo de execução.}
+        \label{fig:exemplo2}
+    \end{wrapfigure}
 
     Todas as transformações são feitas de forma que a imagem resultante seja uma caixa delimitadora da imagem transformada. No entanto, as rotações podem fazer com que a imagem transformada não seja retangular, o que deixa buracos na imagem resultante. Nesses casos, é aplicada uma cor de fundo em RGBA, representando a falta de informação.
 
     Por padrão, a cor de fundo é transparente, mas isso pode ser alterado com a \textit{flag} \mintinline{bash}{--cor COR} ou \mintinline{bash}{-c COR}. As opções de cores são tratadas pela função \mintinline{python}{to_rgba} \autocite{torbga}, então todas as cores da biblioteca Matplotlib são reconhecidas pela ferramenta. Uma opção extra \mintinline{python}{'transparente'} ou \mintinline{python}{'t'} é utilizada para representar o fundo transparente, usado como padrão.
+
+    O exemplo a seguir gera uma imagem \cref{fig:exemplo2}, que é similar à \ref{fig:exemplo}, mas com fundo vermelho e construída por interpolação bicúbica.
+
+    \begin{minted}[style=vs]{bash}
+        $ python3 transforma.py imagens/city.png -o saida.png \
+            -a asin\(0.25\) -b deg\(pi/4\) -e 1/3 -m bicubica -c red
+    \end{minted}
