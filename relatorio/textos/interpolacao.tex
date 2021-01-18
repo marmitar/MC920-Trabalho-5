@@ -1,6 +1,28 @@
 \section{Métodos de Interpolação} \label{sec:interp}
 
+\[
+    \begin{bmatrix}
+        x'_i \\
+        y'_i \\
+        1
+    \end{bmatrix}
+    = \begin{bmatrix}
+        w x'_i \\
+        w y'_i \\
+        w
+    \end{bmatrix}
+    = \vec{T} \cdot \begin{bmatrix}
+        x_f \\
+        y_f \\
+        1
+    \end{bmatrix}
+\]
+
 \subsection{Pelo Vizinho Mais Próximo} \label{sec:interp:vizinho}
+
+\[
+    z'_{y_f x_f} = f'(x_f, y_f) = f(x'_i, y'_i) = f(\round(x'_i), \round(y'_i))
+\]
 
 \subsection{Bilinear} \label{sec:interp:bilinear}
 
