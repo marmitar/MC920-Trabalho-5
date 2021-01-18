@@ -59,7 +59,7 @@ A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superi
         \label{fig:exemplo}
     \end{wrapfigure}
 
-    A primeira transformação que pode ser feita na imagem é uma rotação no plano XY por um ângulo $\alpha$. Isso pode ser realizado com \mintinline{bash}{--angulo ALFA} ou \mintinline{bash}{-a ALFA}. Também pode ser feita uma rotação em torno do eixo Y, que é projetada em perspectiva para o plano original da imagem. A \textit{flag} para isso é \mintinline{bash}{--beta BETA} ou \mintinline{bash}{-b BETA}. Ambas opções tratam apenas de ângulos em graus. Os detalhes dessas transformações pode ser encontrado na \red{seção ??}.
+    A primeira transformação que pode ser feita na imagem é uma rotação no plano XY por um ângulo $\alpha$. Isso pode ser realizado com \mintinline{bash}{--angulo ALFA} ou \mintinline{bash}{-a ALFA}. Também pode ser feita uma rotação em torno do eixo Y, que é projetada em perspectiva para o plano original da imagem. A \textit{flag} para isso é \mintinline{bash}{--beta BETA} ou \mintinline{bash}{-b BETA}. Ambas opções tratam apenas de ângulos em graus. Os detalhes dessas transformações pode ser encontrado na \cref{sec:transformacoes}.
 
 
     Também temos as opções de escalonamento da imagem. A opção \mintinline{bash}{--escala ESCALA} ou \mintinline{bash}{-e ESCALA} recebe um fator de escala positivo e redimensiona cada pixel por esse fator, nas duas dimensões da imagem. Também pode ser especificada as dimensões da imagem resultante, com a \textit{flag} \mintinline{bash}{--dim ALTURA LARGURA} ou \mintinline{bash}{-d ALTURA LARGURA}. Apenas uma das opções de escala pode ser usada a cada invocação.
@@ -73,7 +73,7 @@ A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superi
 
 \subsubsection{Método de Interpolação}
 
-    A ferramenta é capaz de interpolar de quatro métodos diferentes, escolhidos com a opção \mintinline{bash}{--metodo METODO} ou \mintinline{bash}{-m METODO}. Os métodos são: \mintinline{bash}{-m vizinho} (\red{sec:vizinho}), para interpolação pelo vizinho mais próximo, \mintinline{bash}{-m bilinear} (\red{sec:bilinear}), \mintinline{bash}{-m bicubica} (\red{sec:bicubica}) e \mintinline{bash}{-m lagrange} (\red{sec:lagrange}), que usa polinômios de Langrange.
+    A ferramenta é capaz de interpolar de quatro métodos diferentes, escolhidos com a opção \mintinline{bash}{--metodo METODO} ou \mintinline{bash}{-m METODO}. Os métodos são: \mintinline{bash}{-m vizinho} (\cref{sec:interp:vizinho}), para interpolação pelo vizinho mais próximo, \mintinline{bash}{-m bilinear} (\cref{sec:interp:bilinear}), \mintinline{bash}{-m bicubica} (\cref{sec:interp:bicubica}) e \mintinline{bash}{-m lagrange} (\cref{sec:interp:lagrange}), que usa polinômios de Langrange.
 
 \subsubsection{Cor do Fundo}
 
