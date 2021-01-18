@@ -2,13 +2,13 @@
 
 % TODO: testar 3.6+
 
-A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superior. Também foram utilizados os pacotes OpenCV, para entrada e saída de imagens, Numpy, para operações vetorizadas com a imagem, e Matplotlib, para opções de cores para pixels inexistentes.
+A ferramenta foi desenvolvida e testada para as versões de Python \autocite{python} 3.6 ou superior. Também foram utilizados os pacotes OpenCV \autocite{opencv}, para entrada e saída de imagens, Numpy \autocite{numpy}, para operações vetorizadas com a imagem, e Matplotlib \autocite{matplotlib}, para opções de cores de fundo.
 
 \subsection{Código-Fonte}
 
     Neste trabalho foi elaborada a ferramenta \texttt{transforma.py} que faz a transformação da imagem e aplicação da interpolação. O código responsável pelas operações podem ser encontrados na pasta \texttt{lib}, como apresentado a seguir.
 
-    \begin{description}[leftmargin = 1.5em]
+    \begin{description}[leftmargin=1.5em]
 
         \item[transforma.py] Ferramenta de transformação da imagem.
 
@@ -28,7 +28,7 @@ A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superi
 
             \item[inout.py] Tratamento de entrada e saída de imagens do programa.
 
-            \item[tipos.py] Tipos para checagem estática.
+            \item[tipos.py] Tipos para checagem estática \autocite{mypy} \autocite{pep484}.
         \end{description}
     \end{description}
 
@@ -73,8 +73,10 @@ A ferramenta foi desenvolvida e testada para as versões de Python 3.6 ou superi
 
 \subsubsection{Método de Interpolação}
 
-    A ferramenta é capaz de interpolar de quatro métodos diferentes, escolhidos com a opção \mintinline{bash}{--metodo METODO} ou \mintinline{bash}{-m METODO}. Os métodos são: \mintinline{bash}{-m vizinho} (\cref{sec:interp:vizinho}), para interpolação pelo vizinho mais próximo, \mintinline{bash}{-m bilinear} (\cref{sec:interp:bilinear}), \mintinline{bash}{-m bicubica} (\cref{sec:interp:bicubica}) e \mintinline{bash}{-m lagrange} (\cref{sec:interp:lagrange}), que usa polinômios de Langrange.
+    A ferramenta é capaz de interpolar de quatro métodos diferentes, escolhidos com a opção \mintinline{bash}{--metodo METODO} ou \mintinline{bash}{-m METODO}. Os métodos são: \mintinline{bash}{-m vizinho} (\cref{sec:interp:vizinho}), para interpolação pelo vizinho mais próximo, \mintinline{bash}{-m bilinear} (\ref{sec:interp:bilinear}), \mintinline{bash}{-m bicubica} (\ref{sec:interp:bicubica}) e \mintinline{bash}{-m lagrange} (\ref{sec:interp:lagrange}), que usa polinômios de Langrange.
 
 \subsubsection{Cor do Fundo}
 
-    % TODO: cor
+    Todas as transformações são feitas de forma que a imagem resultante seja uma caixa delimitadora da imagem transformada. No entanto, as rotações podem fazer com que a imagem transformada não seja retangular, o que deixa buracos na imagem resultante. Nesses casos, é aplicada uma cor de fundo em RGBA, representando a falta de informação.
+
+    Por padrão, a cor de fundo é transparente, mas isso pode ser alterado com a \textit{flag} \mintinline{bash}{--cor COR} ou \mintinline{bash}{-c COR}. As opções de cores são tratadas pela função \mintinline{python}{to_rgba} \autocite{torbga}, então todas as cores da biblioteca Matplotlib são reconhecidas pela ferramenta. Uma opção extra \mintinline{python}{'transparente'} ou \mintinline{python}{'t'} é utilizada para representar o fundo transparente, usado como padrão.
