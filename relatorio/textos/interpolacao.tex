@@ -1,27 +1,45 @@
 \section{Métodos de Interpolação} \label{sec:interp}
 
+Após a etapa descrita na \hyperref[sec:transformacoes]{seção anterior}, teremos a transformação $\vec{T}$ e as dimensões $H_g \times W_g$ da imagem de saída. Assim, para cada ponto $(x_g, f_g)$, podemos encontrar o ponto da entrada $(x_f, y_f)$ associado:
+
 \[
     \begin{bmatrix}
-        x'_i \\
-        y'_i \\
-        1
-    \end{bmatrix}
-    = \begin{bmatrix}
-        w x'_i \\
-        w y'_i \\
-        w
-    \end{bmatrix}
-    = \vec{T}^{-1} \cdot \begin{bmatrix}
         x_f \\
         y_f \\
         1
     \end{bmatrix}
+    = \begin{bmatrix}
+        w x_f \\
+        w y_f \\
+        w
+    \end{bmatrix}
+    = \vec{T}^{-1} \cdot \begin{bmatrix}
+        x_g \\
+        y_g \\
+        1
+    \end{bmatrix}
 \]
+
+Com isso, temos $g(x_g, y_g) = f(x_f, y_f)$ descrevendo a intensidade da imagem resultante. No entanto, como a imagem é discreta, $f$ só é definida em pontos específicos, no caso, em inteiros dentro dos limites da imagem. Para resolver isso, podemos usar uma função interpolada $f'$ que aproximam o valor com $f'(x_f, y_f)$, usando a vizinhança de $(x_f, y_f)$. Assim, com base na \cref{fig:viz:exemplo}, nós temos $x = \left\lfloor x_f \right\rfloor$ e $y = \left\lfloor y_f \right\rfloor$, além de $dx = x_f - x$ e $dy = y_f - y$, que são os valores que definem vizinhança e as distâncias para interpolação.
+
+\begin{figure}[H]
+    \centering
+    \input{imagens/grid}
+    \caption{Vizinhança de $(x_f, y_f)$.}
+    \label{fig:viz:exemplo}
+\end{figure}
+
+Para pontos fora da figura, podemos usar a cor de fundo (escolhida como na \cref{sec:fundo}) como valor do pixel. Assim, $f(x, y) = z_\text{fundo}$ quando $x < 0$, $x \geq W_f$, $y < 0$ ou $y \geq H_f$.
 
 \subsection{Pelo Vizinho Mais Próximo} \label{sec:interp:vizinho}
 
 \[
-    z'_{y_f x_f} = f'(x_f, y_f) = f(x'_i, y'_i) = f(\round(x'_i), \round(y'_i))
+    g(x_g, y_g) = f'(x_f, y_f) = f(\round(x_f), \round(y_f)) = \begin{cases}
+        f(x, y) & \text{se } dx < 0.5 \text{ e } dy < 0.5 \\
+        f(x+1, y) & \text{se } dx \geq 0.5 \text{ e } dy < 0.5 \\
+        f(x, y+1) & \text{se } dx < 0.5 \text{ e } dy \geq 0.5 \\
+        f(x+1, y+1) & \text{se } dx \geq 0.5 \text{ e } dy \geq 0.5 \\
+    \end{cases}
 \]
 
 \subsection{Bilinear} \label{sec:interp:bilinear}
