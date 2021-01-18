@@ -28,21 +28,21 @@ mkdir -p resultados/rotacoes
 mkdir -p resultados/escala
 # escalonamento
 echo -n Escalonamento...
-echo -n ' ' 1/4...
-python3 transforma.py imagens/city.png -o resultados/escala/city_14_viz.png -e 1/4 -m vizinho
-python3 transforma.py imagens/city.png -o resultados/escala/city_14_bil.png -e 1/4 -m bilinear
-python3 transforma.py imagens/city.png -o resultados/escala/city_14_bic.png -e 1/4 -m bicubica
-python3 transforma.py imagens/city.png -o resultados/escala/city_14_lag.png -e 1/4 -m lagrange
+echo -n ' ' 1/3...
+python3 transforma.py imagens/city.png -o resultados/escala/city_13_viz.png -e 1/3 -m vizinho
+python3 transforma.py imagens/city.png -o resultados/escala/city_13_bil.png -e 1/3 -m bilinear
+python3 transforma.py imagens/city.png -o resultados/escala/city_13_bic.png -e 1/3 -m bicubica
+python3 transforma.py imagens/city.png -o resultados/escala/city_13_lag.png -e 1/3 -m lagrange
 echo -n ' ' 80x60...
 python3 transforma.py imagens/city128.png -o resultados/escala/128_86_viz.png -d 80 60 -m vizinho
 python3 transforma.py imagens/city128.png -o resultados/escala/128_86_bil.png -d 80 60 -m bilinear
 python3 transforma.py imagens/city128.png -o resultados/escala/128_86_bic.png -d 80 60 -m bicubica
 python3 transforma.py imagens/city128.png -o resultados/escala/128_86_lag.png -d 80 60 -m lagrange
 echo -n ' ' 1.5...
-python3 transforma.py imagens/city128.png -o resultados/escala/128_2_viz.png -e 1.5 -m vizinho
-python3 transforma.py imagens/city128.png -o resultados/escala/128_2_bil.png -e 1.5 -m bilinear
-python3 transforma.py imagens/city128.png -o resultados/escala/128_2_bic.png -e 1.5 -m bicubica
-python3 transforma.py imagens/city128.png -o resultados/escala/128_2_lag.png -e 1.5 -m lagrange
+python3 transforma.py imagens/city128.png -o resultados/escala/128_15_viz.png -e 1.5 -m vizinho
+python3 transforma.py imagens/city128.png -o resultados/escala/128_15_bil.png -e 1.5 -m bilinear
+python3 transforma.py imagens/city128.png -o resultados/escala/128_15_bic.png -e 1.5 -m bicubica
+python3 transforma.py imagens/city128.png -o resultados/escala/128_15_lag.png -e 1.5 -m lagrange
 echo
 
 # profiling
