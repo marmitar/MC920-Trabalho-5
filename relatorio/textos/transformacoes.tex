@@ -1,6 +1,6 @@
 \section{Transformações} \label{sec:transformacoes}
 
-As transformações de imagem foram feitas por operações lineares em coordenadas homogêneas dos pixels. Inicialmente, as operações $T$ são aplicadas nos pontos extremos $p_1 = (0, 0, 1)$, $p_2 = (0, H, 1)$, $p_3 = (W, 0, 1)$ e $p_4 = (W, H, 1)$ da imagem $I: H \times W$, de forma que os resultados $p'_i = T \cdot p_i$ pode ser usado para extrair os extremos da imagem transformada. Note que isso é válido, pois as transformações deste trabalho são colineações, isto é, elas mantém a colinearidade entre pontos. Assim, a caixa delimitadora \autocite{bbox} será dada por $(x_{\min}, y_{\min})$ e $(x_{\max}, y_{\max})$, sendo $x_{\min} = \min\left\{ \frac{x_i}{w_i} \;\middle|\; p'_i = (x_i, y_i, w_i)\right\}$ e assim por diante.
+As transformações de imagem foram feitas por operações lineares em coordenadas homogêneas dos pixels. Inicialmente, as operações $\vec{T}$ são aplicadas nos pontos extremos $p_1 = (0, 0, 1)$, $p_2 = (0, H, 1)$, $p_3 = (W, 0, 1)$ e $p_4 = (W, H, 1)$ da imagem $I: H \times W$, de forma que os resultados $p'_i = T \cdot p_i$ pode ser usado para extrair os extremos da imagem transformada. Note que isso é válido, pois as transformações deste trabalho são colineações, isto é, elas mantém a colinearidade entre pontos. Assim, a caixa delimitadora \autocite{bbox} será dada por $(x_{\min}, y_{\min})$ e $(x_{\max}, y_{\max})$, sendo $x_{\min} = \min\left\{ \frac{x_i}{w_i} \;\middle|\; p'_i = (x_i, y_i, w_i)\right\}$ e assim por diante.
 
 Usando a caixa delimitadora como a imagem resultante $I': H' \times W'$, temos os índices $y_{\min} \leq i \leq y_{\max}$ e $x_{\min} \leq j \leq x_{\max}$ como parte da imagem. Assim, podemos aplicar a operação inversa $T'$ para descobrir qual o ponto equivalente na imagem original $I$. A última etapa é a interpolação com os valores discretos da imagem, discutida na \cref{sec:interp} a seguir.
 
@@ -8,27 +8,42 @@ Usando a caixa delimitadora como a imagem resultante $I': H' \times W'$, temos o
 
 A seguir estão apresentadas as transformações que podem ser aplicadas com a ferramenta. As matrizes foram baseadas na bibliografia da disciplina \autocite{helio}, com algumas modificações para que a caixa delimitadora sempre comece na origem do plano cartesiano, ou seja, $x_{\min} = y_{\min} = 0$.
 
-Além disso, as coordenadas homogêneas $C$ foram representadas no código-fonte por um tensor $3 \times H \times W$ em que $c_{1ij} = x_{ij} = j$, $c_{2ij} = y_{ij} = i$ e $c_{3ij} = w_{ij} = 1$. Assim, a aplicação da transformação $T$ é feita pelo produto interno:
+Além disso, as coordenadas homogêneas $C$ foram representadas no código-fonte por um tensor $3 \times H \times W$ em que $C_{1ij} = x_{ij} = j$, $C_{2ij} = y_{ij} = i$ e $C_{3ij} = w_{ij} = 1$. Assim, a aplicação da transformação $\vec{T}$ é feita pelo produto interno:
 \[
-    C'_{ijl} = \sum_{k = 1}^3 T^{ik} C_{kjl}
+    C'_{ijl} = \sum_{k = 1}^3 \vec{T}^{ik} C_{kjl}
 \]
 
 \subsection{Rotação no Plano XY}
 
     Esse tipo de rotação (em torno do eixo Z, perpendicular à imagem) pode ser feita por:
     \[
-        R = \begin{bmatrix}
+        \vec{R} = \begin{bmatrix}
             \cos\alpha & -\sin\alpha & 0 \\
             \sin\alpha & \cos\alpha & 0 \\
             0 & 0 & 1
         \end{bmatrix}
     \]
 
-    No programa, o ângulo $\alpha$ é tratado pelo oposto $-\alpha$, já que o eixo Y é invertido entre as representações matricial e cartesiana. Além disso, a rotação é combinada com uma translação $L$ que corrige a posição da caixa delimitadora, sendo:
+    No programa, o ângulo $\alpha$ é tratado pelo oposto $-\alpha$, já que o eixo Y é invertido entre as representações matricial e cartesiana. Além disso, a rotação é combinada com uma translação $\vec{L}$ que corrige a posição da caixa delimitadora, sendo:
     \[
-        L = \begin{bmatrix}
+        \vec{L} = \begin{bmatrix}
             1 & 0 & -x_{\min} \\
             0 & 1 & -y_{\min} \\
             0 & 0 & 1
         \end{bmatrix}
     \]
+
+\subsection{Escalonamento}
+
+    Sendo $S_x$ e $S_y$ as escalas em X e Y, respectivamente, a matriz de mudança de escala é dada por:
+    \[
+        \vec{S} = \begin{bmatrix}
+            S_x & 0 & 0 \\
+            0 & S_y & 0 \\
+            0 & 0 & 1
+        \end{bmatrix}
+    \]
+
+    Para a opção de escala da entrada padrão, temos que $S_x = S_y$. No entanto, para o redimensionamento de $H_i \times W_i$ para $H_f \times W_f$, podemos usar $S_x = W_f / W_i$ e $S_y = H_f / H_i$. Note que operações de escala não precisam de translações corretivas.
+
+    Além disso, uma última operação de escala é feita após a transformação principal. Ela serve para arredondar as dimensões da imagem resultante $H \times W$ para os inteiros positivos mais próximos $H' \times W'$. Desse modo, $H' \geq 1$ e $H' - H \leq 1$, com restrições similares para $W'$.
