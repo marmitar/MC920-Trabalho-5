@@ -59,4 +59,20 @@ Na interpolação bilinear, a intensidade é interpolada por uma \textit{spline}
 
 \subsection{Bicúbica} \label{sec:interp:bicubica}
 
+Assim como na \hyperref[sec:interp:bilinear]{interpolação bilinear}, a bicúbica é aproximada por \textit{splines} na malha retangular. No caso, é interpolação é feita por B-\textit{splines} de ordem 3, que mantém continuidade na primeira derivada, apesar de serem descritas por partes. Na malha retangular, o processo pode ser descrito por:
+
+\[
+    f'(x_f, y_f) = \sum_{m = -1}^2 \sum_{n = -1}^2 R(m - dx) R(dy - n) \cdot f(x + m, y + n)
+\]
+
+Sendo que:
+
+\begin{align*}
+    R(s) &= \frac{1}{6} \left[P(s + 2)^3 - 4 P(s+1)^3 + 6 P(s)^3 - 4 P(s-1)^3\right] \\
+    S(t) &= \max\{t, 0\} = \begin{cases}
+        t, & \text{se } t > 0 \\
+        0, & \text{caso contrário}
+    \end{cases}
+\end{align*}
+
 \subsection{Por Polinômios de Lagrange} \label{sec:interp:lagrange}
