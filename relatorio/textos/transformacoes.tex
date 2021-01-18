@@ -48,7 +48,7 @@ Além disso, as coordenadas homogêneas $C$ foram representadas no código-fonte
 
     Além disso, uma última operação de escala é feita após a transformação principal. Ela serve para arredondar as dimensões da imagem resultante $H \times W$ para os inteiros positivos mais próximos $H' \times W'$. Desse modo, $H' \geq 1$ e $H' - H \leq 1$, com restrições similares para $W'$.
 
-\subsection{Rotação em Torno de Y} \label{sec:rotacaoXY}
+\subsection{Rotação em Torno do Eixo Y} \label{sec:rotacaoXY}
 
     Nessa transformação, a imagem é considerada na posição $Z = 0$ e é então rotacionada em torno de Y. O resultado disso é então projetado novamente no plano da imagem. Para isso, é preciso gerar o novo eixo, que é feito com a matriz $\vec{G}$, para podermos rotacionar por $\beta$ com $\vec{R}$. Assim:
     \[
