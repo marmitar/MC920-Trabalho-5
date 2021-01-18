@@ -59,7 +59,7 @@ Na interpolação bilinear, a intensidade é interpolada por uma \textit{spline}
 
 \subsection{Bicúbica} \label{sec:interp:bicubica}
 
-Assim como na \hyperref[sec:interp:bilinear]{interpolação bilinear}, a bicúbica é aproximada por \textit{splines} na malha retangular. No caso, é interpolação é feita por B-\textit{splines} de ordem 3, que mantém continuidade na primeira derivada, apesar de serem descritas por partes. Na malha retangular, o processo pode ser descrito por:
+Assim como na \hyperref[sec:interp:bilinear]{interpolação bilinear}, a bicúbica é aproximada por \textit{splines} na malha retangular. No caso, é interpolação é feita por B-\textit{splines} \autocite{bspline} de ordem 3, que mantém continuidade na primeira derivada \autocite{bicubic}, apesar de serem descritas por partes. Na malha retangular, essa aproximação é dada por:
 
 \[
     f'(x_f, y_f) = \sum_{m = -1}^2 \sum_{n = -1}^2 R(m - dx) R(dy - n) \cdot f(x + m, y + n)
@@ -76,3 +76,5 @@ Sendo que:
 \end{align*}
 
 \subsection{Por Polinômios de Lagrange} \label{sec:interp:lagrange}
+
+Nesse último método,
