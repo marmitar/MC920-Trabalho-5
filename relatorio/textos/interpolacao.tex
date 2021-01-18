@@ -47,6 +47,16 @@ Nesse método, a intensidade da pixel é escolhido pelo vizinho com posição ma
 
 \subsection{Bilinear} \label{sec:interp:bilinear}
 
+Na interpolação bilinear, a intensidade é interpolada por uma \textit{spline} \autocite{spline} linear na dimensão X e outra \textit{spline} em Y. O resultado deverá seguir a seguinte fórmula:
+
+\begin{align*}
+    f'(x_f, y_f) &= (1-dx) \left[(1-dy) f(x,y) + dy f(x,y+1)\right] \\
+        &\qquad + dx \left[(1-dy) f(x+1,y) + dy f(x+1,y+1)\right] \\
+        \\
+        &= (1-dx) (1-dy) f(x,y) + dx (1 - dy) f(x+1,y) \\
+        &\qquad + (1-dx) dy f(x,y+1) + dx dy f(x+1,y+1)
+\end{align*}
+
 \subsection{Bicúbica} \label{sec:interp:bicubica}
 
 \subsection{Por Polinômios de Lagrange} \label{sec:interp:lagrange}
