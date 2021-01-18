@@ -7,17 +7,22 @@
 
 mkdir -p resultados/rotacoes
 # rotações ALFA
-echo -n Rotações ALFA...
+echo -n Rotações... ALFA...
 # echo -n ' ' house.png...
 # python3 transforma.py imagens/house.png -o resultados/rotacoes/house_alp_viz.png -a 15 -m vizinho
 # python3 transforma.py imagens/house.png -o resultados/rotacoes/house_alp_bil.png -a 15 -m bilinear
 # python3 transforma.py imagens/house.png -o resultados/rotacoes/house_alp_bic.png -a 15 -m bicubica
 # python3 transforma.py imagens/house.png -o resultados/rotacoes/house_alp_lag.png -a 15 -m lagrange
-echo -n ' ' house16.png...
-python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_viz.png -a 15 -m vizinho
-python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_bil.png -a 15 -m bilinear
-python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_bic.png -a 15 -m bicubica
-python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_lag.png -a 15 -m lagrange
+# echo -n ' ' house16.png...
+# python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_viz.png -a 15 -m vizinho
+# python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_bil.png -a 15 -m bilinear
+# python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_bic.png -a 15 -m bicubica
+# python3 transforma.py imagens/house16.png -o resultados/rotacoes/16_alp_lag.png -a 15 -m lagrange
+echo -n ' ' beta...
+python3 transforma.py imagens/house64.png -o resultados/rotacoes/64_alp_viz.png -b -30 -m vizinho
+python3 transforma.py imagens/house64.png -o resultados/rotacoes/64_alp_bil.png -b -30 -m bilinear
+python3 transforma.py imagens/house64.png -o resultados/rotacoes/64_alp_bic.png -b -30 -m bicubica
+python3 transforma.py imagens/house64.png -o resultados/rotacoes/64_alp_lag.png -b -30 -m lagrange
 echo
 
 # profiling
