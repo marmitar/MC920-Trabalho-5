@@ -130,10 +130,9 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     def Pe3(t: np.ndarray) -> np.ndarray:
         logging.debug(f'P(t)^3 com t:{t.shape}')
         # já faz P(t)^3
-        idx = (t <= 0)
-        t[idx] = 0
-        x = t[~idx]
-        x *= x * x
+        idx = (t > 0)
+        t[~idx] = 0
+        t[idx] *= np.square(t[idx])
         return t
 
     def R(s: np.ndarray) -> np.ndarray:
@@ -141,8 +140,8 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
 
         r = Pe3(s + 2)
         r -= 4 * Pe3(s + 1)
-        r += 6 * Pe3(s)
         r -= 4 * Pe3(s - 1)
+        r += 6 * Pe3(s)
         r /= 6
         return r
 
