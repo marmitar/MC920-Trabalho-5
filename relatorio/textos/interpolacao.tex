@@ -77,7 +77,7 @@ Sendo que:
 
 \subsection{Por Polinômios de Lagrange} \label{sec:interp:lagrange}
 
-Nesse último método, também é feita uma interpolação cúbica nas dimensões X e Y separadamente, por isso ele também pode ser chamado de interpolação bicúbica, como no \hyperref[sec:interp:bicubica]{método anterior}. Aqui, no entanto, a função encontrada é um polinômio propriamente, sem funções por partes, comumente denominado polinômio de Lagrange. A fórmula do método é:
+Nesse último método, também é feita uma interpolação cúbica nas dimensões X e Y separadamente, por isso ele também pode ser chamado de interpolação bicúbica, como no \hyperref[sec:interp:bicubica]{método anterior}. Aqui, no entanto, a função encontrada é um polinômio propriamente, sem funções por partes, comumente denominado polinômio de Lagrange \autocite{lagrange}. A fórmula do método é:
 
 \begin{align*}
     f'(x_f, y_f) &= \frac{-dy (dy - 1) (dy - 2)}{6} \cdot L(1) + \frac{(dy + 1) (dy - 1) (dy - 2)}{2} \cdot L(2) \\
@@ -91,4 +91,4 @@ Considerando:
     &\quad + \frac{-dx (dx + 1) (dx - 2)}{6} \cdot f(x + 1, y + n - 2) + \frac{dx (dx + 1) (dx - 1)}{2} \cdot f(x + 2, y + n - 2)
 \end{align*}
 
-Uma desvatagem desse método é que as derivadas de primeira ordem normalmente são descontínuas, que pode causar efeitos de descontinuidade visual na imagem resultante.
+Uma desvatagem desse método é que as derivadas de primeira ordem normalmente são descontínuas, que pode causar efeitos de descontinuidade visual na imagem resultante. No entanto, isso também ajuda a evitar efeitos de \textit{blur} não intencionais \autocite{upsample}.
