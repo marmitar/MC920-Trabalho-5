@@ -130,15 +130,21 @@ def bicubica(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     def Pe3(t: np.ndarray) -> np.ndarray:
         logging.debug(f'P(t)^3 com t:{t.shape}')
         # já faz P(t)^3
-        t[t < 0] = 0
-        t[t > 0] **= 3
+        idx = (t <= 0)
+        t[idx] = 0
+        x = t[~idx]
+        x *= x * x
         return t
 
     def R(s: np.ndarray) -> np.ndarray:
         logging.debug(f'R(s) com s:{s.shape}')
 
-        pm1, p0, p1, p2 = (Pe3(s+d) for d in range(-1,2+1))
-        return (p2 - 4*p1 + 6*p0 - 4*pm1) / 6
+        r = Pe3(s + 2)
+        r -= 4 * Pe3(s + 1)
+        r += 6 * Pe3(s)
+        r -= 4 * Pe3(s - 1)
+        r /= 6
+        return r
 
     # índices truncados e "erros"
     ind, dxdy = modf(ind)
@@ -171,7 +177,7 @@ def lagrange(img: Imagem, ind: Indices, fundo: Color) -> Imagem:
     # operação interna
     f = zeros(ind, dtype=float)
     def L(n: int) -> np.ndarray:
-        logging.info(f'L(n={n})')
+        logging.debug(f'L(n={n})')
 
         ind = np.stack((x - 1, y + n - 2), axis=0)
         # f(x - 1, y + n - 2)
