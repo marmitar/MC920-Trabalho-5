@@ -33,16 +33,17 @@ Para pontos fora da figura, podemos usar a cor de fundo (escolhida como na \cref
 
 \subsection{Pelo Vizinho Mais Próximo} \label{sec:interp:vizinho}
 
-Nesse método, a intensidade da pixel é escolhido pelo vizinho com posição mais próxima de $(x_f, y_f)$. Assim:
+Nesse método, a intensidade da pixel é escolhido pelo vizinho com posição mais próxima de $(x_f, y_f)$. Assim: % TODO: formatação
 
-\[
-    g(x_g, y_g) = f'(x_f, y_f) = f(\round(x_f), \round(y_f)) = \begin{cases}
+\begin{align*}
+    g(x_g, y_g) = f'(x_f, y_f) &= \begin{cases}
         f(x, y) & \text{se } dx < 0.5 \text{ e } dy < 0.5 \\
         f(x+1, y) & \text{se } dx \geq 0.5 \text{ e } dy < 0.5 \\
         f(x, y+1) & \text{se } dx < 0.5 \text{ e } dy \geq 0.5 \\
         f(x+1, y+1) & \text{se } dx \geq 0.5 \text{ e } dy \geq 0.5 \\
-    \end{cases}
-\]
+    \end{cases} \\
+    &= f(\round(x_f), \round(y_f))
+\end{align*}
 
 \subsection{Bilinear} \label{sec:interp:bilinear}
 
