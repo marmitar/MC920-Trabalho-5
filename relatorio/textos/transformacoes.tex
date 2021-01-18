@@ -10,7 +10,7 @@ A seguir estão apresentadas as transformações que podem ser aplicadas com a f
 
 Além disso, as coordenadas homogêneas $C$ foram representadas no código-fonte por um tensor $3 \times H \times W$ em que $C_{1ij} = x_{ij} = j$, $C_{2ij} = y_{ij} = i$ e $C_{3ij} = w_{ij} = 1$. Assim, a aplicação da transformação $\vec{T}$ é feita pelo produto interno:
 \[
-    C'_{ijl} = \sum_{k = 1}^3 \vec{T}^{ik} C_{kjl}
+    C'_{ijl} = \sum_{k = 1}^3 \vec{T}_{ik} C_{kjl}
 \]
 
 \subsection{Rotação no Plano XY}
