@@ -87,8 +87,10 @@ Nesse último método, também é feita uma interpolação cúbica nas dimensõe
 Considerando:
 
 \begin{align*}
-    L(n) &= \frac{-dx (dx - 1) (dx - 2)}{6} \cdot f(x - 1, y + n - 2) + \frac{(dx + 1) (dx - 1) (dx - 2)}{2} \cdot f(x, y + n - 2) \\
-    &\quad + \frac{-dx (dx + 1) (dx - 2)}{6} \cdot f(x + 1, y + n - 2) + \frac{dx (dx + 1) (dx - 1)}{2} \cdot f(x + 2, y + n - 2)
+    L(n) &= \frac{-dx (dx - 1) (dx - 2)}{6} \cdot f(x - 1, y + n - 2) \\
+    &\quad + \frac{(dx + 1) (dx - 1) (dx - 2)}{2} \cdot f(x, y + n - 2) \\
+    &\quad + \frac{-dx (dx + 1) (dx - 2)}{6} \cdot f(x + 1, y + n - 2) \\
+    &\quad + \frac{dx (dx + 1) (dx - 1)}{2} \cdot f(x + 2, y + n - 2)
 \end{align*}
 
 Uma desvatagem desse método é que as derivadas de primeira ordem normalmente são descontínuas, que pode causar efeitos de descontinuidade visual na imagem resultante. No entanto, isso também ajuda a evitar efeitos de \textit{blur} não intencionais \autocite{upsample}.
