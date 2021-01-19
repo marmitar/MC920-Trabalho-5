@@ -14,16 +14,26 @@
 
 \subsection{Escalonamento}
 
-    \input{figuras/city_13.tex}
+    \input{figuras/city_13}
 
-    \input{figuras/city_15.tex}
+    \input{figuras/city_15}
 
     No caso da mudança de escala, podemos ver que a bicúbica tem os melhores resultados na redução das dimensões, que acontece na \cref{fig:esc:13}. No entanto, para ampliação da imagem (\cref{fig:esc:15}), o borramento da imagem é muito forte, fazendo com que o método por polinômios de Lagrange tenha resultados melhores. Isso também acontece na \cref{fig:esc:86}, por ser muito pequeno o resultado.
 
     Tanto na ampliação (\ref{fig:esc:15:bil}), quanto na redução (\ref{fig:esc:13:bil}), o método bilinear gerou artefatos muito presentes nas bordas dos objetos. No entanto, isso pode ser devido à implementação e não necessariamente ao método. Um efeito similar aconteceu usando os vizinhos mais próximos.
 
-    \input{figuras/city_86.tex}
+    \input{figuras/city_86}
 
 \subsection{Reconstrução}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.27\textwidth]{reconstrucao/original.png}
+        \caption{\texttt{baboon128.png} ($128 \times 128$).}
+    \end{figure}
+
+    \input{figuras/baboon_x2}
+
+    \input{figuras/baboon_45}
 
 \subsection{Tempo de Execução}
