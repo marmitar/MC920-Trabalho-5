@@ -47,3 +47,37 @@
         \caption{\texttt{among.png} ($2000 \times 1544$).}
         \label{fig:among}
     \end{figure}
+
+    Para testar a eficiência computacional de cada método, a imagem \texttt{among.png} (\ref{fig:among}) foi rotacionada e escalonada por 2, gerando uma imagem final de dimensões $4867 \times 4112$ pixels em RGBA, ou seja, com 4 canais de cores. O tempo de execução pode ser medido na própria ferramenta, no modo verboso \mintinline{bash}{-v}, como exemplificado abaixo para o método \texttt{lagrange}.
+
+    \begin{minted}[style=vs]{bash}
+        $ python3 transforma.py imagens/among.png -o saida.png -v \
+            -c r -a 22 -b 20 -e 2 -m lagrange
+        INFO:root:imagem imagens/among.png de dimensões (2000, 1544, 4)
+        INFO:root:transformação em 0.34468913078308105 segundos
+        INFO:root:interpolação em 23.732824563980103 segundos
+    \end{minted}
+
+    Cada método também foi executado com um dos \textit{profilers} padrões de Python, o \texttt{cProfile} \autocite{cprofile}. O profiler é capaz de mostrar o tempo de cada função separadamente e cumulativamente. Por exemplo, uma execução do método \texttt{bicubica}, poderia ter o seguinte resultado:
+
+    \begin{minted}[style=vs]{bash}
+        $ python3 -m cProfile -s cumtime \
+            transforma.py imagens/among.png -o saida.png \
+            -c r -a 22 -b 20 -e 2 -m bicubica
+            149578 function calls (145313 primitive calls) in 46.493 seconds
+
+            Ordered by: cumulative time
+
+            ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+             467/1    0.001    0.000   46.493   46.493 {built-in method builtins.exec}
+                 1    0.000    0.000   46.493   46.493 transforma.py:1(<module>)
+                 1    0.020    0.020   45.205   45.205 interp.py:23(__call__)
+                 1    9.408    9.408   45.185   45.185 interp.py:125(bicubica)
+                32    8.006    0.250   23.462    0.733 interp.py:138(R)
+               128   15.454    0.121   15.455    0.121 interp.py:130(Pe3)
+                16   11.768    0.735   11.768    0.736 idx.py:75(acesso)
+                 1    0.000    0.000    0.685    0.685 inout.py:77(imgwrite)
+        ...
+    \end{minted}
+
+    Os resultados de uma execução estão na \red{tab:?}. Por mais que foi apenas uma execução, outros testes obtiveram resultados similares, oscilando no máximo em $\pm 20\%$. Como os valores são bem distintos, isso é o bastante para a análise.
