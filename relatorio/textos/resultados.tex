@@ -30,7 +30,10 @@
         \centering
         \includegraphics[width=0.27\textwidth]{reconstrucao/original.png}
         \caption{\texttt{baboon128.png} ($128 \times 128$).}
+        \label{fig:baboon128}
     \end{figure}
+
+    Tentando aplicar uma transformação simples, de escala (\cref{fig:rec:x2}) ou de rotação (\cref{fig:rec:45}), seguida da sua inversa podemos ver que as interpolações bilinear e bicúbica causam um efeito de \textit{blur} muito presente. Para valores racionais, como $S_x = S_y = 1.37$, pode ser que o arredondamento acabe causando artefatos maiores no método dos vizinhos mais próximos.
 
     \input{figuras/baboon_x2}
 
