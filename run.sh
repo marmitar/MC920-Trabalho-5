@@ -45,31 +45,30 @@
 # python3 transforma.py imagens/city128.png -o resultados/escala/128_15_lag.png -e 1.5 -m lagrange
 # echo
 
-mkdir -p resultados/reconstrucao
-# escalonamento
-echo -n Reconstrução...
-cp imagens/baboon128.png resultados/reconstrucao/original.png
-echo -n ' ' x2...
-python3 transforma.py imagens/baboon128.png -o - -e 2 -m vizinho | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_x2_viz.png -e 1/2 -m vizinho
-python3 transforma.py imagens/baboon128.png -o - -e 2 -m bilinear | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_x2_bil.png -e 1/2 -m bilinear
-python3 transforma.py imagens/baboon128.png -o - -e 2 -m bicubica | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_x2_bic.png -e 1/2 -m bicubica
-python3 transforma.py imagens/baboon128.png -o - -e 2 -m lagrange | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_x2_lag.png -e 1/2 -m lagrange
-echo -n ' ' rot45...
-python3 transforma.py imagens/baboon128.png -o - -a 45 -m vizinho -c black | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_45_viz.png -a -45 -m vizinho
-python3 transforma.py imagens/baboon128.png -o - -a 45 -m bilinear -c black | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_45_bil.png -a -45 -m bilinear
-python3 transforma.py imagens/baboon128.png -o - -a 45 -m bicubica -c black | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_45_bic.png -a -45 -m bicubica
-python3 transforma.py imagens/baboon128.png -o - -a 45 -m lagrange -c black | \
-  python3 transforma.py - -o resultados/reconstrucao/baboon_45_lag.png -a -45 -m lagrange
-echo
+# mkdir -p resultados/reconstrucao
+# # escalonamento
+# echo -n Reconstrução...
+# echo -n ' ' x2...
+# python3 transforma.py imagens/baboon128.png -o - -e 2 -m vizinho | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_x2_viz.png -e 1/2 -m vizinho
+# python3 transforma.py imagens/baboon128.png -o - -e 2 -m bilinear | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_x2_bil.png -e 1/2 -m bilinear
+# python3 transforma.py imagens/baboon128.png -o - -e 2 -m bicubica | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_x2_bic.png -e 1/2 -m bicubica
+# python3 transforma.py imagens/baboon128.png -o - -e 2 -m lagrange | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_x2_lag.png -e 1/2 -m lagrange
+# echo -n ' ' rot45...
+# python3 transforma.py imagens/baboon128.png -o - -a 45 -m vizinho -c black | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_45_viz.png -a -45 -m vizinho
+# python3 transforma.py imagens/baboon128.png -o - -a 45 -m bilinear -c black | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_45_bil.png -a -45 -m bilinear
+# python3 transforma.py imagens/baboon128.png -o - -a 45 -m bicubica -c black | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_45_bic.png -a -45 -m bicubica
+# python3 transforma.py imagens/baboon128.png -o - -a 45 -m lagrange -c black | \
+#   python3 transforma.py - -o resultados/reconstrucao/baboon_45_lag.png -a -45 -m lagrange
+# echo
 
-# profiling
+# # profiling
 # echo -n Profiling...
 # echo -n ' ' vizinho...
 # python3 -m cProfile -s cumtime transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m vizinho > resultados/vizinho.txt
