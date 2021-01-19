@@ -1,1 +1,7 @@
 \section{Conclusão}
+
+Podemos ver que a diferenças dos métodos de interpolação é grande, tanto em relação ao resultado quanto ao tempo necessário para a aplicação. Os métodos mais custosos são os que tem melhores resultados visuais, no caso as interpolações cúbica e por polinômios de Lagrange. No entanto, o método de Lagrange consegue ser melhor em várias situações, por evitar borramento da imagem, mesmo sendo bem mais eficiente.
+
+Em algumas situações, como no caso de \hyperref[sec:escalonamento]{redução das dimensões da imagem}, a interpolação bicúbica pode ser melhor. O método pode ser melhorado ainda mais com algum filtro de frequência, como um de nitidez. Em aplicações como redes neurais, em que \textit{downsampling} é muito importante, esse método pode ser bem útil.
+
+Em outras situações em que \textit{downsampling} também pe necessário, mas não afeta tanto o resultado, a interpolação por vizinho mais próximo pode ser mais interessante. Isso por sua eficiência, capaz de produzir imagens com 20 mega pixels em poucos segundos.
