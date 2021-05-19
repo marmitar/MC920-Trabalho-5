@@ -1,6 +1,6 @@
 # Trabalho 5
 
-[Enunciado](papers/enunciado.pdf).
+[Enunciado](papers/enunciado.pdf) e [entrega](papers/entrega.pdf).
 
 ## Execuções
 
