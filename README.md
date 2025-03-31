@@ -12,9 +12,9 @@ Operações em uma imagem 1544x2000, resultando em outra de 4112x5160.
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m vizinho
 
 ________________________________________________________
-Executed in    1,99 secs   fish           external
-   usr time    2,32 secs    0,00 micros    2,32 secs
-   sys time    0,41 secs  593,00 micros    0,41 secs
+Executed in  847.79 millis    fish           external
+   usr time    2.99 secs      0.00 millis    2.99 secs
+   sys time    0.14 secs      1.06 millis    0.14 secs
 
 ```
 
@@ -24,9 +24,9 @@ Executed in    1,99 secs   fish           external
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m bilinear
 
 ________________________________________________________
-Executed in    6,16 secs   fish           external
-   usr time    5,79 secs  513,00 micros    5,79 secs
-   sys time    1,12 secs  136,00 micros    1,12 secs
+Executed in    2.74 secs    fish           external
+   usr time    4.70 secs    0.00 millis    4.70 secs
+   sys time    0.35 secs    1.07 millis    0.35 secs
 
 ```
 
@@ -36,9 +36,9 @@ Executed in    6,16 secs   fish           external
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m bicubica
 
 ________________________________________________________
-Executed in   70,94 secs   fish           external
-   usr time   61,12 secs    0,00 micros   61,12 secs
-   sys time   10,30 secs  517,00 micros   10,30 secs
+Executed in   21.64 secs    fish           external
+   usr time   20.38 secs   10.88 millis   20.37 secs
+   sys time    3.51 secs    1.80 millis    3.51 secs
 
 ```
 
@@ -48,8 +48,8 @@ Executed in   70,94 secs   fish           external
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m lagrange
 
 ________________________________________________________
-Executed in   27,04 secs   fish           external
-   usr time   22,18 secs  509,00 micros   22,18 secs
-   sys time    5,53 secs  120,00 micros    5,53 secs
+Executed in   12.11 secs    fish           external
+   usr time   12.54 secs    0.00 millis   12.54 secs
+   sys time    1.85 secs    1.07 millis    1.85 secs
 
 ```
