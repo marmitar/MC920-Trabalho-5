@@ -1,14 +1,35 @@
-# Trabalho 5
+# Image Processing (MC920) - Interpolation
 
-[Enunciado](papers/enunciado.pdf) e [entrega](papers/entrega.pdf).
+- [Requirements](papers/enunciado.pdf)
+- [Report](papers/entrega.pdf)
 
-## Execuções
+A versatile CLI tool that applies affine and projective transformations to images. Beyond simple resizing, you can rotate in-plane (angle α), rotate around the Y-axis with perspective projection (beta), scale by factor or target dimensions, and translate. The script computes the output bounding box, adjusts transformations so the result starts at (0,0), and resamples using your chosen interpolation method.
 
-Operações em uma imagem 1544x2000, resultando em outra de 4112x5160.
+**Transformations:**
 
-### Interpolação pelo Vizinho Mais Próximo
+- In-plane rotation (`--angulo α`)
+- Y-axis rotation with projection (`--beta β`)
+- Uniform scaling (`--escala s`) or explicit dimensions (`--dim H W`)
+- Translation, implicit in correction step
 
-```bash
+**Interpolation methods:**
+
+- nearest neighbor (`vizinho`)
+- bilinear (`bilinear`)
+- bicubic (`bicubica`)
+- Lagrange polynomials (`lagrange`)
+
+![Small cut of city128.png upscaled with Nearest Neighbor](resultados/escala/128_15_viz.png "Nearest Neighbor")
+
+![Small cut of city128.png upscaled with Langrange Polynomials](resultados/escala/128_15_lag.png "Langrange Polynomials")
+
+## Performance check
+
+Operation on a 1544x2000 input image, resulting in a 4112x5160 output.
+
+### Nearest Neighbor Interpolation
+
+```fish
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m vizinho
 
 ________________________________________________________
@@ -18,9 +39,9 @@ Executed in  847.79 millis    fish           external
 
 ```
 
-### Interpolação Bilinear
+### Bilinear Interpolation
 
-```bash
+```fish
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m bilinear
 
 ________________________________________________________
@@ -30,9 +51,9 @@ Executed in    2.74 secs    fish           external
 
 ```
 
-### Interpolação Bicúbiba
+### Bicubic Interpolation
 
-```bash
+```fish
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m bicubica
 
 ________________________________________________________
@@ -42,9 +63,9 @@ Executed in   21.64 secs    fish           external
 
 ```
 
-### Interpolação por Polinômios de Lagrange
+### Interpolation by Lagrange Polynomials
 
-```bash
+```fish
 >>> time python3 transforma.py imagens/among.png -o saida.png -c r -a 22 -e 2 -b 20 -m lagrange
 
 ________________________________________________________
